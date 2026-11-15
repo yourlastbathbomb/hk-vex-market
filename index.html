@@ -358,6 +358,15 @@ function lockTxt(m) {
   return "Locks in " + Math.max(1, Math.ceil(ms / 6e4)) + "m";
 }
 function toast(t) { var el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(function () { el.classList.remove("show"); }, 2600); }
+/* Two-winner markets (Tournament Champion): an alliance of two teams wins and each winning share pays 0.5 pts (API.md, Payout rule). */
+var TWO_NOTE = "Two teams win. Each winning share pays 0.5 pts.", TWO_CHANCE = "chance to be on the winning alliance";
+function nWin(m) { return m && m.winners === 2 ? 2 : 1; }
+function chance(m, p) { return Math.min(1, (Number(p) || 0) * nWin(m)); }
+function winIdx(m) { return m.status !== "resolved" ? [] : Array.isArray(m.winning) && m.winning.length ? m.winning : m.resolution != null ? [m.resolution] : []; }
+function payEach(m, k) { var w = winIdx(m), n = 0; for (var i = 0; i < w.length; i++) if (w[i] === k) n++; return w.length ? n / w.length : 0; }
+function isOther(o) { return /^(none\/)?other$/i.test(String(o == null ? "" : o).trim()); }
+function overHalf(m, k, avg) { return nWin(m) === 2 && !isOther(m.outcomes[k]) && (m.prices[k] >= 0.5 || avg >= 0.5); }   // a team share pays at most 0.5: a sure loss
+function winNames(m, sep) { var w = winIdx(m); return w.length === 2 && w[0] === w[1] ? esc(m.outcomes[w[0]]) + " (both teams)" : w.map(function (i) { return esc(m.outcomes[i]); }).join(sep); }
 function argmax(a) { var j = 0; for (var i = 1; i < a.length; i++) if (a[i] > a[j]) j = i; return j; }
 
 /* ---------- session token ---------- */
@@ -560,12 +569,14 @@ function eventFor(code) {
 function cardHTML(m) {
   var p = m.prices, binary = m.kind === "binary";
   var k = binary ? 0 : argmax(p), label = m.outcomes[k], c = m.change ? m.change[k] : 0, val;
-  if (m.status === "resolved" && m.resolution != null) val = '<span class="big won">✓ ' + esc(m.outcomes[m.resolution]) + "</span><span>won</span>";
+  var two = nWin(m) === 2;
+  if (two) c *= 2;   // the chance moves twice as far as the price
+  if (m.status === "resolved" && winIdx(m).length) val = '<span class="big won">✓ ' + winNames(m, " + ") + "</span><span>won</span>";
   else if (m.status === "void") val = '<span class="big">Void</span><span>stakes refunded</span>';
-  else val = '<span class="big">' + pct(p[k]) + "</span><span>" + esc(label) + "</span>" + (c ? '<span class="chg ' + upDn(c) + '">' + delta(c) + "</span>" : "");
+  else val = '<span class="big"' + (two ? ' title="' + TWO_CHANCE + '"' : "") + ">" + pct(chance(m, p[k])) + "</span><span>" + esc(label) + "</span>" + (c ? '<span class="chg ' + upDn(c) + '">' + delta(c) + "</span>" : "");
   return '<button class="card tap" type="button" data-act="open" data-mid="' + esc(m.marketId) + '">' +
     '<div class="q">' + esc(m.question) + "</div>" +
-    '<div class="row">' + val + "</div>" +
+    '<div class="row">' + val + "</div>" + (two && m.status !== "void" ? '<div class="sub">' + TWO_NOTE + "</div>" : "") +
     '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + "</span>" + (m.held ? '<span class="chip mine">You hold</span>' : "") + '<span class="meta">' + lockTxt(m) + "</span></div></button>";
 }
 var STATUS_ORDER = { open: 0, locked: 1, resolved: 2, void: 3 };
@@ -951,7 +962,7 @@ function spark(vals) {
 function chartSVG(m, k) {
   var W = 440, H = 150, pl = 30, pr = 8, pt = 8, pb = 18;
   var hist = m.history && m.history.length ? m.history : [{ t: new Date().toISOString(), p: m.prices }];
-  var pts = hist.map(function (h) { return h.p[k] || 0; });
+  var pts = hist.map(function (h) { return chance(m, h.p[k]); });
   if (pts.length < 2) pts = [pts[0], pts[0]];
   function x(i) { return pl + (W - pl - pr) * i / (pts.length - 1); }
   function y(v) { return pt + (H - pt - pb) * (1 - v); }
@@ -1001,30 +1012,32 @@ function drawMarket(m) {
   }
   var e = eventFor(m.eventCode), p = m.prices;
   $("#mk-head").innerHTML = '<div style="display:flex;flex-direction:column;gap:6px"><h3>' + esc(e ? e.name + " · " + eventWhen(e) : m.eventCode) + '</h3><h2 style="font-size:24px">' + esc(m.question) + "</h2>" +
-    '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="meta">' + lockTxt(m) + (m.status === "open" ? " · " + esc(hkFull(m.lockAt)) : "") + " · liquidity b = " + esc(m.b) + "</span></div></div>";
+    '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="meta">' + lockTxt(m) + (m.status === "open" ? " · " + esc(hkFull(m.lockAt)) : "") + " · liquidity b = " + esc(m.b) + "</span></div>" +
+    (nWin(m) === 2 ? '<p class="sub" style="margin:0">' + TWO_NOTE + " Percentages are each team's " + TWO_CHANCE + ".</p>" : "") + "</div>";
 
   var bn = "";
-  if (m.status === "resolved" && m.resolution != null) bn = '<div class="banner done">✓ Resolved <b>' + esc(m.outcomes[m.resolution]) + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "official results") + "." : "") + "</div>";
+  if (m.status === "resolved" && winIdx(m).length) bn = '<div class="banner done">✓ Resolved <b>' + winNames(m, " and ") + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "official results") + "." : "") + "</div>";
   else if (m.status === "void") bn = '<div class="banner warn">This market was voided. Everyone\'s stake was refunded.</div>';
   else if (m.status === "locked") bn = '<div class="banner warn">Trading is locked. Waiting for the official result.</div>';
   else if (m.fav != null) bn = '<div class="banner info">This market involves ' + esc(me.team) + ", so you can only back " + esc(m.outcomes[m.fav]) + ".</div>";
   $("#mk-banner").innerHTML = bn;
 
-  var res = m.status === "resolved" && m.resolution != null;
+  var res = m.status === "resolved" && winIdx(m).length > 0;
   $("#mk-outs").innerHTML = m.outcomes.map(function (o, i) {
-    var held = myHold(m, i), cls = res ? (i === m.resolution ? "win" : "") : (m.status === "void" ? "" : (i === tr.k ? "sel" : ""));
-    var shown = res ? (i === m.resolution ? 1 : 0) : p[i];
+    var each = res ? payEach(m, i) : 0, won = each > 0;
+    var held = myHold(m, i), cls = res ? (won ? "win" : "") : (m.status === "void" ? "" : (i === tr.k ? "sel" : ""));
+    var shown = res ? (won ? 1 : 0) : chance(m, p[i]);
     var hold = "";
     if (held > 0) {
       hold = "You hold " + fmtSh(held) + " shares";
-      if (res) hold += i === m.resolution ? " · paid " + fmt(held) + " pts" : " · paid 0";
+      if (res) hold += won ? " · paid " + fmt(held * each) + " pts" : " · paid 0";
       else if (m.status === "void") hold += " · stake refunded";
       else hold += " · worth " + fmt(held * p[i]) + " pts";
       hold = '<span class="hold">' + hold + "</span>";
     }
-    var vals = (m.history || []).map(function (h) { return h.p[i] || 0; });
+    var vals = (m.history || []).map(function (h) { return chance(m, h.p[i]); });
     return '<button class="out ' + cls + '" type="button" data-act="pick" data-k="' + i + '"' + (m.status === "void" ? " disabled" : "") + ' aria-pressed="' + (i === tr.k) + '">' +
-      '<span class="nm">' + (res && i === m.resolution ? "✓ " : "") + esc(o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
+      '<span class="nm">' + (won ? "✓ " : "") + esc(o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
       '<span class="bar"><i style="width:' + (shown * 100).toFixed(1) + '%"></i></span>' + hold + "</button>";
   }).join("");
 
@@ -1069,13 +1082,16 @@ function updateTrade() {
 }
 function updateQuote() {
   var m = curMarket(); if (!m || !$("#quote")) return;
-  var o = m.outcomes[tr.k], bl = blocked(m, tr.k, tr.side), qt = bl ? null : localQuote(m), h;
+  var o = m.outcomes[tr.k], bl = blocked(m, tr.k, tr.side), qt = bl ? null : localQuote(m), h, two = nWin(m) === 2;
   if (bl) h = '<span class="err">' + esc(bl) + "</span>";
   else if (qt.err) h = '<span class="err">' + esc(qt.err) + "</span>";
   else h = "<span>" + (tr.side === "buy" ? "Shares you get" : "You receive") + "</span><span>" + (tr.side === "buy" ? fmtSh(qt.sh) : fmt(qt.cost) + " pts") + "</span>" +
-    "<span>Average price</span><span>" + (qt.avg * 100).toFixed(1) + "%</span>" +
-    "<span>" + esc(o) + " after trade</span><span>" + pct(m.prices[tr.k]) + " → " + pct(qt.after) + "</span>" +
-    (tr.side === "buy" ? "<span>Pays if " + esc(o) + "</span><span>" + fmt(qt.sh) + " pts</span>" : "");
+    (two ? "<span>" + (tr.side === "buy" ? "Break-even chance" : "Average, as a chance") + "</span><span>" + (chance(m, qt.avg) * 100).toFixed(1) + "%</span>"
+      : "<span>Average price</span><span>" + (qt.avg * 100).toFixed(1) + "%</span>") +
+    "<span>" + esc(o) + " after trade</span><span>" + pct(chance(m, m.prices[tr.k])) + " → " + pct(chance(m, qt.after)) + "</span>" +
+    (tr.side === "buy" ? (two ? "<span>Pays if " + esc(o) + " is on the winning alliance</span><span>" + fmt(qt.sh / 2) + " pts" + (isOther(o) ? " (" + fmt(qt.sh) + " if both are)" : "") + "</span>"
+      : "<span>Pays if " + esc(o) + "</span><span>" + fmt(qt.sh) + " pts</span>") : "") +
+    (tr.side === "buy" && overHalf(m, tr.k, qt.avg) ? '<span class="err">Each share pays at most 0.5 pts, so buying above 50% chance-per-share loses points.</span>' : "");
   $("#quote").innerHTML = h;
   var btn = $("#confirm");
   btn.className = "go " + tr.side;
@@ -1111,7 +1127,7 @@ function doTrade() {
 function drawPortfolio(d) {
   var rows = d.open.map(function (r) {
     var pl = r.value - r.costBasis;
-    return '<tr><td><button class="back" type="button" data-act="open" data-mid="' + esc(r.marketId) + '">' + esc(r.question) + '</button><div class="team">' + esc(r.outcome) + " · " + fmtSh(r.shares) + " sh · now " + pct(r.price) + (r.status === "locked" ? " · locked" : "") + "</div></td>" +
+    return '<tr><td><button class="back" type="button" data-act="open" data-mid="' + esc(r.marketId) + '">' + esc(r.question) + '</button><div class="team">' + esc(r.outcome) + " · " + fmtSh(r.shares) + " sh · now " + pct(chance(r, r.price)) + (r.status === "locked" ? " · locked" : "") + "</div></td>" +
       '<td class="num">' + fmt(r.value) + '<div class="chg ' + upDn(pl) + '">' + delta(pl) + "</div></td></tr>";
   }).join("");
   var done = d.closed.map(function (r) {
@@ -1157,7 +1173,7 @@ function drawLeaders(d) {
 /* ---------- Admin ---------- */
 var A = null;   // last adminData
 var TPL = {
-  champion:   { label: "Tournament champion", kind: "multi", inputs: [], auto: true, other: "Other" },
+  champion:   { label: "Tournament champion", kind: "multi", inputs: [], auto: true, other: "Other", two: true },
   excellence: { label: "Excellence Award", kind: "multi", inputs: [], auto: true, other: "None/Other" },
   skills:     { label: "Skills over/under", kind: "binary", inputs: ["a", "n"] },
   worlds:     { label: "Qualifies for Worlds", kind: "binary", inputs: ["a"] },
@@ -1206,6 +1222,7 @@ function buildNewMarket() {
     '<datalist id="nm-teams"></datalist>' +
     '<div class="field"><label for="nm-q">Question</label><textarea id="nm-q" rows="2" style="min-height:60px"></textarea>' + errSpan("question") + "</div>" +
     '<div class="field" id="nmf-outs"><label for="nm-outs">Outcomes, one per line</label><textarea id="nm-outs" rows="5"></textarea><span class="hint" id="nm-outs-hint"></span>' + errSpan("outcomes") + "</div>" +
+    '<div class="field" id="nmf-two"><label class="check"><input type="checkbox" id="nm-two"> Two winners: an alliance of two teams wins (Tournament Champion)</label><span class="hint">' + TWO_NOTE + "</span>" + errSpan("winners") + "</div>" +
     '<div class="field"><label for="nm-rule">Own-team rule</label><input id="nm-rule" class="team" autocomplete="off" placeholder="e.g. 936A=YES, 2011C=NO"><span class="hint" id="nm-rule-hint">TEAM=OUTCOME, comma separated. Those teams may only buy that outcome.</span>' + errSpan("teams") + "</div>" +
     '<div class="grid2"><div class="field"><label for="nm-bl">Liquidity b</label><input id="nm-bl" type="number" inputmode="numeric" min="10" placeholder="default"><span class="hint" id="nm-bl-hint"></span>' + errSpan("b") + "</div>" +
     '<div class="field"><label for="nm-lock">Lock time (HKT)</label><input id="nm-lock" type="datetime-local"><span class="hint" id="nm-lock-hint"></span>' + errSpan("lockAt") + "</div></div>" +
@@ -1249,6 +1266,8 @@ function prefill(changed) {
   $("#nmf-kind").hidden = tk !== "custom";
   var kind = currentKind();
   $("#nmf-outs").hidden = kind !== "multi";
+  $("#nmf-two").hidden = kind !== "multi";
+  if (tk !== "custom" || changed === "tpl" || changed === "approve") $("#nm-two").checked = !!t.two;   // the template decides
   syncNewMarketHints();
   $("#nm-outs-hint").textContent = t.auto ? "Teams registered for this event, plus " + t.other + ". Team outcomes get the own-team rule automatically." : "2 to 24 outcomes. Longer lists are cut to 23 plus Other.";
   if (tk === "custom") {
@@ -1288,6 +1307,7 @@ function submitNewMarket(form) {
   var outcomes = kind === "multi" ? $("#nm-outs").value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean) : ["YES", "NO"];
   var spec = { eventCode: $("#nm-event").value, question: $("#nm-q").value.trim(), kind: kind };
   if (kind === "multi") spec.outcomes = outcomes;
+  if (kind === "multi" && $("#nm-two").checked) spec.winners = 2;
   try { var teams = parseRule($("#nm-rule").value, outcomes); if (Object.keys(teams).length) spec.teams = teams; }
   catch (e) { showErr(form, { field: "teams", message: e.message }); return; }
   if (t.auto || (approving && kind === "multi")) spec.autoTeams = true;   // the server maps only outcomes that are team numbers
@@ -1310,25 +1330,30 @@ function drawAdminMarkets() {
   var closed = A.markets.filter(function (m) { return m.status === "resolved" || m.status === "void"; });
   var h = "<h3>Manage markets</h3>";
   h += active.length ? active.map(function (m) {
-    var p = m.prices, top = m.outcomes.map(function (o, i) { return { o: o, p: p[i] }; }).sort(function (a, b) { return b.p - a.p; }).slice(0, 3)
-      .map(function (x) { return esc(x.o) + " " + pct(x.p); }).join(" · ");
+    var p = m.prices, two = nWin(m) === 2, top = m.outcomes.map(function (o, i) { return { o: o, p: p[i] }; }).sort(function (a, b) { return b.p - a.p; }).slice(0, 3)
+      .map(function (x) { return esc(x.o) + " " + pct(chance(m, x.p)); }).join(" · ");
+    var pk = m.pending ? m.pending.outcomeIdx : null, pkList = Array.isArray(pk) ? pk : pk == null ? [] : [pk];
     var ev = adminEvent(m.eventCode);
-    var pend = m.pending ? '<div class="banner warn">Pending: <b>' + esc(m.outcomes[m.pending.outcomeIdx]) + "</b> proposed by " + esc(m.pending.byName) + " on " + esc(hkFull(m.pending.at)) + ". " + extLink(m.pending.source, "Source") + ". Another admin must confirm by resolving.</div>" : "";
+    var pend = m.pending ? '<div class="banner warn">Pending: <b>' + pkList.map(function (i) { return esc(m.outcomes[i]); }).join(" and ") + "</b> proposed by " + esc(m.pending.byName) + " on " + esc(hkFull(m.pending.at)) + ". " + extLink(m.pending.source, "Source") + ". Another admin must confirm by resolving.</div>" : "";
     return '<div class="item" data-mid="' + esc(m.marketId) + '"><div class="q">' + esc(m.question) + "</div>" +
       '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="sub">' + esc(ev ? ev.name : m.eventCode) + " · b " + esc(m.b) + " · by " + esc(m.createdByName) + "</span></div>" +
-      '<div class="sub">' + top + " · " + esc(lockTxt(m)) + "</div>" + pend +
+      '<div class="sub">' + top + " · " + esc(lockTxt(m)) + (two ? " · two winners, " + TWO_CHANCE : "") + "</div>" + pend +
       '<div class="acts">' + (m.status === "open" ? '<button class="sm" type="button" data-act="lock" data-mid="' + esc(m.marketId) + '">Lock</button>' : "") +
       '<button class="sm prim" type="button" data-act="resolve-open" data-mid="' + esc(m.marketId) + '">Resolve</button>' +
       '<button class="sm danger" type="button" data-act="void" data-mid="' + esc(m.marketId) + '">Void</button></div>' +
       '<form class="rform" data-form="resolve" data-mid="' + esc(m.marketId) + '" novalidate hidden>' +
-      '<div class="field"><label>Winning outcome</label><select name="outcome">' + m.outcomes.map(function (o, i) { return '<option value="' + i + '"' + (m.pending && m.pending.outcomeIdx === i ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>" + errSpan("outcome") + "</div>" +
+      (two ? '<div class="field"><div class="grid2">' + [0, 1].map(function (j) {
+          return '<div class="field"><label>Winning team ' + (j + 1) + '</label><select name="outcome' + (j + 1) + '" required><option value="">Pick a team</option>' +
+            m.outcomes.map(function (o, i) { return '<option value="' + i + '"' + (pkList.length === 2 && pkList[j] === i ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select></div>";
+        }).join("") + '</div><span class="hint">' + TWO_NOTE + " Pick Other twice if both winners are under Other.</span>" + errSpan("outcome") + "</div>"
+      : '<div class="field"><label>Winning outcome</label><select name="outcome">' + m.outcomes.map(function (o, i) { return '<option value="' + i + '"' + (m.pending && m.pending.outcomeIdx === i ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>" + errSpan("outcome") + "</div>") +
       '<div class="field"><label>Results link (events.vex.com)</label><input name="source" type="url" inputmode="url" autocomplete="off" placeholder="https://events.vex.com/..." value="' + esc(m.pending ? m.pending.source : "") + '" required>' + errSpan("source") + "</div>" +
       '<div class="acts"><button class="sm prim" type="submit">Confirm result</button><button class="sm" type="button" data-act="resolve-cancel">Cancel</button></div></form></div>';
   }).join("") : '<p class="sub" style="margin:0">No open or locked markets.</p>';
   if (closed.length) {
     h += "<details><summary>Resolved and void (" + closed.length + ")</summary>" + closed.map(function (m) {
       return '<div class="item" style="margin-top:10px"><div class="q">' + esc(m.question) + '</div><div class="sub">' +
-        (m.status === "void" ? "Void" : "Resolved: <b>" + esc(m.outcomes[m.resolution]) + "</b>") + " · by " + esc(m.createdByName) + "</div></div>";
+        (m.status === "void" ? "Void" : "Resolved: <b>" + winNames(m, " and ") + "</b>") + " · by " + esc(m.createdByName) + "</div></div>";
     }).join("") + "</details>";
   }
   $("#ad-markets").innerHTML = h;
@@ -1459,10 +1484,19 @@ function adminSubmit(form) {
   } else if (form.getAttribute("data-form") === "bk-setup") {
     submitBracket(form);
   } else if (form.getAttribute("data-form") === "resolve") {
-    var mid = form.getAttribute("data-mid"), k = Number(form.elements.outcome.value), src = form.elements.source.value.trim();
+    var mid = form.getAttribute("data-mid"), m = marketById(mid), src = form.elements.source.value.trim(), k, ask;
+    if (nWin(m) === 2) {
+      var k1 = form.elements.outcome1.value, k2 = form.elements.outcome2.value;
+      if (k1 === "" || k2 === "") { showErr(form, { field: "outcome", message: "Pick both winning teams." }); return; }
+      k = [Number(k1), Number(k2)];
+      if (k[0] === k[1] && !isOther(m.outcomes[k[0]])) { showErr(form, { field: "outcome", message: "Pick two different teams. Only Other can be picked twice." }); return; }
+      ask = "Resolve as " + (k[0] === k[1] ? m.outcomes[k[0]] + " (both teams)" : m.outcomes[k[0]] + " and " + m.outcomes[k[1]]) + "? Each winning share pays 0.5 pts now.";
+    } else {
+      k = Number(form.elements.outcome.value);
+      ask = "Resolve as " + m.outcomes[k] + "? Winners are paid now.";
+    }
     if (!/^https:\/\/((www\.)?robotevents\.com|events\.vex\.com)\/\S+$/i.test(src)) { showErr(form, { field: "source", message: "Paste the results link from events.vex.com (https://events.vex.com/...)." }); return; }
-    var m = marketById(mid);
-    if (!confirm("Resolve as " + m.outcomes[k] + "? Winners are paid now.")) return;
+    if (!confirm(ask)) return;
     busyBtn(form.querySelector('[type="submit"]'), call("resolveMarket", token, mid, k, src)).then(function (r) {
       toast(r.pending ? r.message : "Resolved. Paid " + fmt(r.paid) + " pts."); reloadAdmin();
     }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
