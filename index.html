@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.HKVEX_API="https://script.google.com/macros/s/AKfycbw--FU7DvAqxWmOTk5H1OW9BO861AAcH3-L6fl-HqP1xoeOA2w8JNO9smYGFfG7CS5q/exec";</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HK VEX Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout: one phone-width column, sticky balance header, bottom tab bar; blue = buy, red = sell, like alliance colours */
+  --bg:#e9ecf0; --surface:#ffffff; --ink:#13161b; --muted:#5a6370; --line:#d6dbe2;
+  --blue:#1d5bd0; --red:#cf3a31; --soft:#e2eafb; --warn:#9a6200; --good:#1b7f4a;
+  --display:"Barlow Condensed",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --surface:#161a21; --ink:#e7eaef; --muted:#959eab; --line:#29303a;
+    --blue:#5d8ff2; --red:#ef6259; --soft:#1b2944; --warn:#e2a43c; --good:#45c07f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --surface:#161a21; --ink:#e7eaef; --muted:#959eab; --line:#29303a;
+  --blue:#5d8ff2; --red:#ef6259; --soft:#1b2944; --warn:#e2a43c; --good:#45c07f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+a{color:var(--blue)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+header{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.brand{flex:none;font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
+.brand small{display:block;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+.bal{margin-left:auto;text-align:right;min-width:0}
+.bal .n{font-family:var(--mono);font-weight:600;font-size:17px;font-variant-numeric:tabular-nums}
+.bal .l{font-size:11px;color:var(--muted);display:flex;justify-content:flex-end;align-items:center;gap:4px;white-space:nowrap}
+.bal .l #who{min-width:0;overflow:hidden;text-overflow:ellipsis}
+main{flex:1;padding:16px;display:flex;flex-direction:column;gap:20px;padding-bottom:96px}
+h2{font-family:var(--display);font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.03em;margin:0;text-wrap:balance;overflow-wrap:anywhere}
+h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0}
+.event{display:flex;flex-direction:column;gap:10px}
+.evhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.evhead .code{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%}
+.card.tap:hover{border-color:var(--blue)}
+.q{font-weight:600;font-size:15px;text-wrap:balance;overflow-wrap:anywhere}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.big{font-family:var(--mono);font-weight:600;font-size:22px;font-variant-numeric:tabular-nums}
+.chg{font-family:var(--mono);font-size:12px}
+.up{color:var(--good)} .dn{color:var(--red)}
+.chip{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.open{color:var(--good);border-color:currentColor}
+.chip.locked{color:var(--warn);border-color:currentColor}
+.chip.resolved{color:var(--muted)}
+.chip.void{color:var(--muted);text-decoration:line-through}
+.chip.mine{color:var(--blue);border-color:currentColor}
+.chip.bad{color:var(--red);border-color:currentColor;font-size:11px}
+.meta{font-size:12px;color:var(--muted);margin-left:auto}
+.back{background:none;border:0;padding:6px 0;color:var(--blue);font-weight:600;align-self:flex-start;text-align:left}
+.banner{border-radius:8px;padding:10px 12px;font-size:13px;border:1px solid;overflow-wrap:anywhere}
+.banner.warn{color:var(--warn);border-color:currentColor}
+.banner.info{color:var(--blue);border-color:currentColor;background:var(--soft)}
+.banner.done{color:var(--good);border-color:currentColor}
+.outs{display:flex;flex-direction:column;gap:6px}
+.out{display:grid;grid-template-columns:1fr auto auto;gap:2px 10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-align:left;width:100%;min-height:48px}
+.out.sel{border-color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}
+.out.win{border-color:var(--good);box-shadow:inset 3px 0 0 var(--good)}
+.out[disabled]{cursor:default}
+.out .nm{font-weight:600;overflow-wrap:anywhere}
+.out .pc{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
+.out .spk{display:block;width:64px;height:22px;color:var(--muted)}
+.out.sel .spk{color:var(--blue)}
+.out .bar{grid-column:1/-1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.out .bar i{display:block;height:100%;background:var(--blue)}
+.out .hold{grid-column:1/-1;font-size:12px;color:var(--blue)}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.chart svg{display:block;width:100%;height:auto}
+.trade{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:none;border:0;padding:11px;font-weight:600;color:var(--muted)}
+.seg button.on.buy{background:var(--blue);color:#fff}
+.seg button.on.sell{background:var(--red);color:#fff}
+label{font-size:12px;font-weight:600;color:var(--muted)}
+.amt{display:flex;gap:8px;align-items:center}
+.amt input{flex:1;min-width:0;font-family:var(--mono);font-size:18px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.quick button{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:13px;min-width:44px}
+.quote{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:13px;background:var(--bg);border-radius:8px;padding:10px 12px}
+.quote span:nth-child(even){font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.quote .err{grid-column:1/-1;color:var(--red);font-family:var(--body)!important;text-align:left!important}
+.go{border:0;border-radius:8px;padding:12px;font-weight:600;font-size:16px;color:#fff;background:var(--blue);min-height:48px}
+.go.sell{background:var(--red)}
+.go:disabled{opacity:.4;cursor:not-allowed}
+.feed{display:flex;flex-direction:column;font-size:13px}
+.feed div{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+.feed div:last-child{border:0}
+.feed .t{margin-left:auto;color:var(--muted);font-family:var(--mono);font-size:12px;white-space:nowrap}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
+td{padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+tr:last-child td{border:0}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.me td{background:var(--soft)}
+.rank{font-family:var(--display);font-weight:700;font-size:18px;width:36px}
+.team{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.stat .v{font-family:var(--mono);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
+.stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.rules{font-size:13px;color:var(--muted);margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.loading{color:var(--muted);margin:32px 0;text-align:center}
+.stack{display:flex;flex-direction:column;gap:20px}
+.stack>:empty{display:none}
+/* login */
+.login{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:24px 20px;gap:24px;max-width:420px;margin:0 auto}
+.login .mark{font-family:var(--display);font-weight:700;font-size:44px;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
+.login .mark span{color:var(--blue)}
+.login p{margin:0;color:var(--muted)}
+.login form{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field input,.field select,.field textarea{font:inherit;font-size:17px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.field textarea{resize:vertical;min-height:84px;font-size:16px}
+.field input.team{font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em}
+.field input.pin{font-family:var(--mono);letter-spacing:.3em}
+.field .hint{font-size:12px;color:var(--muted)}
+.bad{font-size:12px;color:var(--red)}
+.signout{background:none;border:0;padding:4px 0;font-size:11px;color:var(--blue);font-weight:600}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:5}
+nav.four{grid-template-columns:repeat(4,1fr)}
+nav button{background:none;border:0;padding:12px 4px 16px;font-weight:600;font-size:13px;color:var(--muted);border-top:3px solid transparent}
+nav button.on{color:var(--blue);border-top-color:var(--blue)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;font-weight:500;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;z-index:10}
+.toast.show{opacity:1}
+/* admin */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.panel h3{margin-bottom:2px}
+.sub{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.sm{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px;min-height:42px}
+.sm.prim{background:var(--blue);border-color:var(--blue);color:#fff}
+.sm.danger{color:var(--red);border-color:currentColor}
+.sm:disabled{opacity:.4;cursor:not-allowed}
+.item{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.item:first-of-type{border-top:0;padding-top:0}
+.rform{display:flex;flex-direction:column;gap:10px;background:var(--bg);border-radius:8px;padding:12px}
+details>summary{cursor:pointer;font-weight:600;padding:4px 0;color:var(--blue)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div id="login" hidden></div>
+<div class="app" id="app" hidden>
+  <header>
+    <div class="brand">HK VEX Market<small>Play points</small></div>
+    <div class="bal"><div class="n" id="bal"></div><div class="l"><span id="who"></span> · <button class="signout" id="signout" type="button">Sign out</button></div></div>
+  </header>
+  <main id="main"></main>
+  <nav id="nav">
+    <button id="tab-markets" type="button" class="on">Markets</button>
+    <button id="tab-portfolio" type="button">Portfolio</button>
+    <button id="tab-leaders" type="button">Leaderboard</button>
+    <button id="tab-admin" type="button" hidden>Admin</button>
+  </nav>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- LMSR (copied verbatim from src/lmsr.js; a test compares this block) ---------- */
+/* LMSR-BEGIN */
+/** Cost function, computed with log-sum-exp so large q never overflows. */
+function lmsrCost(q, b) {
+  var m = -Infinity, i, s = 0;
+  for (i = 0; i < q.length; i++) if (q[i] / b > m) m = q[i] / b;
+  for (i = 0; i < q.length; i++) s += Math.exp(q[i] / b - m);
+  return b * (m + Math.log(s));
+}
+
+/** Current price of every outcome. Sums to 1. */
+function lmsrPrices(q, b) {
+  var m = -Infinity, i, s = 0, e = [];
+  for (i = 0; i < q.length; i++) if (q[i] / b > m) m = q[i] / b;
+  for (i = 0; i < q.length; i++) { e.push(Math.exp(q[i] / b - m)); s += e[i]; }
+  return e.map(function (x) { return x / s; });
+}
+
+/** Points it costs to move outcome k by d shares. Negative d is a sale and returns a negative cost. */
+function lmsrCostDelta(q, b, k, d) {
+  var q2 = q.slice();
+  q2[k] += d;
+  return lmsrCost(q2, b) - lmsrCost(q, b);
+}
+
+/** Shares of outcome k that `spend` points buys, by bisection (well inside the 1e-6 tolerance). */
+function lmsrSharesForSpend(q, b, k, spend) {
+  var lo = 0, hi = 1, i, mid;
+  while (lmsrCostDelta(q, b, k, hi) < spend) hi *= 2;
+  for (i = 0; i < 100; i++) {
+    mid = (lo + hi) / 2;
+    if (lmsrCostDelta(q, b, k, mid) < spend) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+/* LMSR-END */
+
+/* ---------- state ---------- */
+var TOKEN_KEY = "hkvex-token";
+var token = null, me = null;
+var view = { name: "markets" }, viewSeq = 0;
+var cache = {};                       // last good response per view key
+var tr = { mid: null, k: 0, side: "buy", amt: "50" };
+var lbMode = "people";
+var trading = false, marketEpoch = 0, refreshing = false, lastRefreshErr = "";
+
+/* ---------- helpers ---------- */
+function $(s) { return document.querySelector(s); }
+function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function pct(p) { return Math.round(p * 100) + "%"; }
+function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+function signed(n) { var r = Math.round(n); return (r > 0 ? "+" : "") + r.toLocaleString("en-US"); }
+function fmtSh(n) { return (Math.round(n * 10) / 10).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
+function upDn(n) { return Math.round(n) >= 0 ? "up" : "dn"; }
+function safeUrl(u) { return /^https?:\/\/[^\s"'<>]+$/i.test(String(u || "")) ? String(u) : null; }
+function extLink(u, text) { var s = safeUrl(u); return s ? '<a href="' + esc(s) + '" target="_blank" rel="noopener">' + esc(text || s) + "</a>" : esc(u || ""); }
+var HK = "Asia/Hong_Kong";
+function hkFmt(iso, opts) {
+  var d = new Date(iso); if (isNaN(d)) return "";
+  var o = { timeZone: HK }; for (var k in opts) o[k] = opts[k];
+  try { return new Intl.DateTimeFormat("en-GB", o).format(d); } catch (e) { return d.toISOString(); }
+}
+function hkDay(iso) { return hkFmt(iso, { weekday: "short", day: "numeric", month: "short", year: "numeric" }); }
+function hkFull(iso) { return hkFmt(iso, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }) + " HKT"; }
+function eventWhen(e) {
+  if (!e || !e.startAt) return "";
+  var a = hkDay(e.startAt), b = e.endAt ? hkDay(e.endAt) : a;
+  return a === b ? a : hkFmt(e.startAt, { weekday: "short", day: "numeric", month: "short" }) + " – " + b;
+}
+function ago(iso) {
+  var s = (Date.now() - Date.parse(iso)) / 1000;
+  if (!(s >= 0)) return "now";
+  if (s < 60) return "now"; if (s < 3600) return Math.floor(s / 60) + "m"; if (s < 86400) return Math.floor(s / 3600) + "h";
+  return Math.floor(s / 86400) + "d";
+}
+/** "2027-01-23T08:30" typed as Hong Kong time -> ISO string, or null if blank. */
+function hkInputToIso(v) {
+  v = String(v || "").trim(); if (!v) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) v += "T00:00";
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) v += ":00";
+  var d = new Date(v + "+08:00");
+  return isNaN(d) ? "invalid" : d.toISOString();
+}
+function statusLabel(s) { return { open: "Open", locked: "Locked", resolved: "Resolved", void: "Void" }[s] || esc(s); }
+function lockTxt(m) {
+  if (m.status === "resolved") return "Resolved";
+  if (m.status === "void") return "Void";
+  var ms = Date.parse(m.lockAt) - Date.now();
+  if (m.status === "locked" || !(ms > 0)) return "Locked";
+  var d = Math.floor(ms / 864e5); if (d > 0) return "Locks in " + d + "d";
+  var h = Math.floor(ms / 36e5); if (h > 0) return "Locks in " + h + "h";
+  return "Locks in " + Math.max(1, Math.ceil(ms / 6e4)) + "m";
+}
+function toast(t) { var el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(function () { el.classList.remove("show"); }, 2600); }
+function argmax(a) { var j = 0; for (var i = 1; i < a.length; i++) if (a[i] > a[j]) j = i; return j; }
+
+/* ---------- session token ---------- */
+function loadToken() { try { return localStorage.getItem(TOKEN_KEY); } catch (e) { return null; } }
+function saveToken(t) { token = t; try { localStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
+function dropSession() { token = null; me = null; cache = {}; try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+
+/* ---------- server calls ---------- */
+/**
+ * call("fn", args...) -> Promise. A result with `error` rejects with {message, field, code}. AUTH drops the session.
+ * Inside Apps Script the call goes through google.script.run. In the copy of this page hosted elsewhere
+ * (window.HKVEX_API is set) it is a plain HTTPS POST with no cookies, so Google sign-in state never matters.
+ */
+function call(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function (resolve, reject) {
+    function done(res) {
+      if (res && res.error) {
+        var e = new Error(res.error); e.field = res.field || null; e.code = res.code || null;
+        if (e.code === "AUTH") { dropSession(); showLogin(); toast(res.error); }
+        reject(e); return;
+      }
+      if (res && res.user) setUser(res.user);
+      resolve(res);
+    }
+    if (window.google && google.script && google.script.run) {
+      var runner = google.script.run
+        .withSuccessHandler(done)
+        .withFailureHandler(function (err) {
+          reject(new Error(err && err.message ? err.message : "Something went wrong. Try again."));
+        });
+      runner[fn].apply(runner, args);
+    } else if (window.HKVEX_API) {
+      fetch(window.HKVEX_API, {
+        method: "POST", credentials: "omit", redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ fn: fn, args: args })
+      }).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      }).then(done, function () {
+        reject(new Error("Can't reach the server. Check your connection and try again."));
+      });
+    } else {
+      reject(new Error("Can't reach the server."));
+    }
+  });
+}
+function fail(e) { if (e && e.code !== "AUTH") toast(e.message || "Something went wrong."); }
+
+function setUser(u) {
+  me = u;
+  $("#bal").textContent = fmt(u.balance) + " pts";
+  $("#who").textContent = u.name + " · " + u.team;
+  $("#tab-admin").hidden = !u.isAdmin;
+  $("#nav").classList.toggle("four", !!u.isAdmin);
+}
+
+/* ---------- navigation ---------- */
+function viewKey(v) { return v.name === "market" ? "market:" + v.id : v.name; }
+function setTab(n) { ["markets", "portfolio", "leaders", "admin"].forEach(function (t) { $("#tab-" + t).classList.toggle("on", t === n); }); }
+
+function go(v) {
+  view = v; viewSeq++;
+  setTab(v.name === "market" ? "markets" : v.name);
+  var c = v.name === "admin" ? null : cache[viewKey(v)];
+  if (c) draw(v, c); else $("#main").innerHTML = '<p class="loading">Loading…</p>';
+  window.scrollTo(0, 0);
+  load(false);
+}
+
+/** Fetch the current view. silent = keep showing what is there, no spinner. */
+function load(silent) {
+  var v = view, seq = viewSeq, epoch = marketEpoch, p;
+  if (v.name === "markets") p = call("listMarkets", token);
+  else if (v.name === "market") p = call("getMarket", token, v.id);
+  else if (v.name === "portfolio") p = call("portfolio", token);
+  else if (v.name === "leaders") p = call("leaderboard", token);
+  else if (v.name === "admin") p = call("adminData", token);
+  else return Promise.resolve();
+  return p.then(function (res) {
+    cache[viewKey(v)] = res;
+    if (v.name === "markets") cache.markets = res;
+    if (seq !== viewSeq || !token) return;
+    if (v.name === "market" && epoch !== marketEpoch) return;   // a trade landed meanwhile; its result is newer
+    draw(v, res);
+    lastRefreshErr = "";
+  }, function (e) {
+    if (e.code === "AUTH" || seq !== viewSeq) return;
+    if (silent) { if (e.message !== lastRefreshErr) toast(e.message); lastRefreshErr = e.message; return; }
+    toast(e.message);
+    if (!cache[viewKey(v)] || v.name === "admin") {
+      $("#main").innerHTML = '<p class="loading">' + esc(e.message) + '</p><button class="sm" type="button" data-act="retry" style="align-self:center">Try again</button>';
+    }
+  });
+}
+
+function draw(v, res) {
+  if (v.name === "markets") drawMarkets(res);
+  else if (v.name === "market") drawMarket(res.market);
+  else if (v.name === "portfolio") drawPortfolio(res);
+  else if (v.name === "leaders") drawLeaders(res);
+  else if (v.name === "admin") drawAdmin(res);
+}
+
+function openMarket(id) { tr.mid = null; go({ name: "market", id: id }); }   // fresh trade panel, like the prototype
+
+/* silent refresh every 15 s while visible (never the admin screen) */
+function refresh() {
+  if (refreshing || !token || !me || view.name === "admin" || document.visibilityState !== "visible") return;
+  refreshing = true;
+  load(true).then(function () { refreshing = false; }, function () { refreshing = false; });
+}
+setInterval(refresh, 15000);
+document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); });
+
+/* ---------- Markets ---------- */
+function eventFor(code) {
+  var evs = cache.markets ? cache.markets.events : [];
+  for (var i = 0; i < evs.length; i++) if (evs[i].eventCode === code) return evs[i];
+  return null;
+}
+function cardHTML(m) {
+  var p = m.prices, binary = m.kind === "binary";
+  var k = binary ? 0 : argmax(p), label = m.outcomes[k], c = m.change ? m.change[k] : 0, val;
+  if (m.status === "resolved" && m.resolution != null) val = '<span class="big">' + esc(m.outcomes[m.resolution]) + "</span><span>won</span>";
+  else if (m.status === "void") val = '<span class="big">Void</span><span>stakes refunded</span>';
+  else val = '<span class="big">' + pct(p[k]) + "</span><span>" + esc(label) + "</span>" + (c ? '<span class="chg ' + (c > 0 ? "up" : "dn") + '">' + (c > 0 ? "+" : "") + c + "</span>" : "");
+  return '<button class="card tap" type="button" data-act="open" data-mid="' + esc(m.marketId) + '">' +
+    '<div class="q">' + esc(m.question) + "</div>" +
+    '<div class="row">' + val + "</div>" +
+    '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + "</span>" + (m.held ? '<span class="chip mine">You hold</span>' : "") + '<span class="meta">' + lockTxt(m) + "</span></div></button>";
+}
+var STATUS_ORDER = { open: 0, locked: 1, resolved: 2, void: 3 };
+function drawMarkets(d) {
+  var by = {}, h = "";
+  d.markets.forEach(function (m) { (by[m.eventCode] = by[m.eventCode] || []).push(m); });
+  function sec(title, code, when, list) {
+    list = list.slice().sort(function (a, b) { return STATUS_ORDER[a.status] - STATUS_ORDER[b.status]; });
+    return '<section class="event"><div class="evhead"><h2>' + esc(title) + '</h2><span class="code">' + esc(code) + "</span></div>" +
+      (when ? "<h3>" + esc(when) + "</h3>" : "") +
+      (list.length ? list.map(cardHTML).join("") : '<p class="sub" style="margin:0">No markets yet.</p>') + "</section>";
+  }
+  // upcoming events first (in startAt order), finished ones after, most recent first
+  var nowMs = Date.now();
+  var live = d.events.filter(function (e) { return !(Date.parse(e.endAt || e.startAt) < nowMs); });
+  var past = d.events.filter(function (e) { return Date.parse(e.endAt || e.startAt) < nowMs; }).reverse();
+  live.concat(past).forEach(function (e) { h += sec(e.name, e.eventCode, eventWhen(e), by[e.eventCode] || []); delete by[e.eventCode]; });
+  var rest = []; for (var c in by) rest = rest.concat(by[c]);
+  if (rest.length) h += sec("Other markets", "", "", rest);
+  if (!d.markets.length && !d.events.length) h += '<p class="loading">No markets yet. Check back soon.</p>';
+  h += '<section class="event"><h3>House rules</h3><ol class="rules"><li>Markets lock when the event starts.</li><li>You can\'t bet against your own team.</li><li>Results come from RobotEvents only.</li><li>Cancelled events refund your stake.</li><li>Hong Kong events only. Points have no cash value.</li></ol></section>';
+  $("#main").innerHTML = h;
+}
+
+/* ---------- Market detail ---------- */
+function myHold(m, k) { for (var i = 0; i < m.positions.length; i++) if (m.positions[i].outcomeIdx === k) return m.positions[i].shares; return 0; }
+function curMarket() { var c = cache["market:" + view.id]; return view.name === "market" && c ? c.market : null; }
+
+function spark(vals) {
+  if (!vals.length) vals = [0];
+  if (vals.length < 2) vals = [vals[0], vals[0]];
+  var W = 64, H = 22, lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+  if (hi - lo < 0.1) { var mid = (hi + lo) / 2; lo = mid - 0.05; hi = mid + 0.05; }
+  var d = vals.map(function (v, i) { return (i ? "L" : "M") + (W * i / (vals.length - 1)).toFixed(1) + " " + (2 + (H - 4) * (1 - (v - lo) / (hi - lo))).toFixed(1); }).join(" ");
+  return '<svg class="spk" viewBox="0 0 ' + W + " " + H + '" aria-hidden="true"><path d="' + d + '" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+}
+function chartSVG(m, k) {
+  var W = 440, H = 150, pl = 30, pr = 8, pt = 8, pb = 18;
+  var hist = m.history && m.history.length ? m.history : [{ t: new Date().toISOString(), p: m.prices }];
+  var pts = hist.map(function (h) { return h.p[k] || 0; });
+  if (pts.length < 2) pts = [pts[0], pts[0]];
+  function x(i) { return pl + (W - pl - pr) * i / (pts.length - 1); }
+  function y(v) { return pt + (H - pt - pb) * (1 - v); }
+  var grid = "";
+  [0, .25, .5, .75, 1].forEach(function (g) { grid += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--line)" stroke-width="1"/><text x="' + (pl - 6) + '" y="' + (y(g) + 4) + '" font-size="10" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono,monospace">' + g * 100 + "</text>"; });
+  var d = pts.map(function (v, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); }).join(" ");
+  var area = d + " L" + x(pts.length - 1) + " " + y(0) + " L" + x(0) + " " + y(0) + " Z";
+  var lx = x(pts.length - 1), ly = y(pts[pts.length - 1]);
+  var first = hkFmt(hist[0].t, { day: "numeric", month: "short" });
+  var last = m.status === "open" ? "now" : hkFmt(hist[hist.length - 1].t, { day: "numeric", month: "short" });
+  return '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Price history for ' + esc(m.outcomes[k]) + '">' + grid +
+    '<path d="' + area + '" fill="var(--blue)" opacity=".1"/><path d="' + d + '" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linejoin="round"/>' +
+    '<circle cx="' + lx + '" cy="' + ly + '" r="4" fill="var(--blue)"/>' +
+    '<text x="' + pl + '" y="' + (H - 3) + '" font-size="10" fill="var(--muted)">' + esc(first) + '</text><text x="' + (W - pr) + '" y="' + (H - 3) + '" font-size="10" fill="var(--muted)" text-anchor="end">' + esc(last) + "</text></svg>";
+}
+
+function blocked(m, k, side) {
+  if (m.fav == null) return null;
+  var f = m.fav;
+  if (side === "buy" && k !== f) return "You're on " + me.team + ", so you can only buy " + m.outcomes[f] + " here.";
+  if (side === "sell" && k === f) return "You're on " + me.team + ", so you can't sell " + m.outcomes[f] + " here.";
+  return null;
+}
+function localQuote(m) {
+  var k = tr.k, a = Number(tr.amt), q2 = m.q.slice(), o = m.outcomes[k];
+  if (!(a > 0) || !isFinite(a)) return { err: "Enter an amount." };
+  if (tr.side === "buy") {
+    if (a > me.balance + 1e-9) return { err: "You only have " + fmt(me.balance) + " pts." };
+    var sh = lmsrSharesForSpend(m.q, m.b, k, a); q2[k] += sh;
+    return { sh: sh, cost: a, avg: a / sh, after: lmsrPrices(q2, m.b)[k] };
+  }
+  var held = myHold(m, k);
+  if (a > held + 1e-9) return { err: held > 0 ? "You hold " + fmtSh(held) + " shares of " + o + "." : "You don't hold any " + o + " shares." };
+  var proceeds = -lmsrCostDelta(m.q, m.b, k, -a); q2[k] -= a;
+  return { sh: a, cost: proceeds, avg: proceeds / a, after: lmsrPrices(q2, m.b)[k] };
+}
+
+function drawMarket(m) {
+  if (tr.mid !== m.marketId) { tr = { mid: m.marketId, k: m.fav != null ? m.fav : 0, side: "buy", amt: "50" }; }
+  if (tr.k >= m.outcomes.length) tr.k = 0;
+  var root = $("#mk");
+  if (!root || root.getAttribute("data-id") !== m.marketId) {
+    $("#main").innerHTML = '<div class="stack" id="mk"><button class="back" type="button" data-act="back">← All markets</button>' +
+      '<div id="mk-head"></div><div id="mk-banner"></div><div class="outs" id="mk-outs"></div><div class="chart" id="mk-chart"></div><div id="mk-trade"></div><div id="mk-feed"></div></div>';
+    $("#mk").setAttribute("data-id", m.marketId);
+  }
+  var e = eventFor(m.eventCode), p = m.prices;
+  $("#mk-head").innerHTML = '<div style="display:flex;flex-direction:column;gap:6px"><h3>' + esc(e ? e.name + " · " + eventWhen(e) : m.eventCode) + '</h3><h2 style="font-size:24px">' + esc(m.question) + "</h2>" +
+    '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="meta">' + lockTxt(m) + (m.status === "open" ? " · " + esc(hkFull(m.lockAt)) : "") + " · liquidity b = " + esc(m.b) + "</span></div></div>";
+
+  var bn = "";
+  if (m.status === "resolved" && m.resolution != null) bn = '<div class="banner done">Resolved <b>' + esc(m.outcomes[m.resolution]) + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "RobotEvents results") + "." : "") + "</div>";
+  else if (m.status === "void") bn = '<div class="banner warn">This market was voided. Everyone\'s stake was refunded.</div>';
+  else if (m.status === "locked") bn = '<div class="banner warn">Trading is locked. Waiting for the result from RobotEvents.</div>';
+  else if (m.fav != null) bn = '<div class="banner info">This market involves ' + esc(me.team) + ", so you can only back " + esc(m.outcomes[m.fav]) + ".</div>";
+  $("#mk-banner").innerHTML = bn;
+
+  var res = m.status === "resolved" && m.resolution != null;
+  $("#mk-outs").innerHTML = m.outcomes.map(function (o, i) {
+    var held = myHold(m, i), cls = res ? (i === m.resolution ? "win" : "") : (m.status === "void" ? "" : (i === tr.k ? "sel" : ""));
+    var shown = res ? (i === m.resolution ? 1 : 0) : p[i];
+    var hold = "";
+    if (held > 0) {
+      hold = "You hold " + fmtSh(held) + " shares";
+      if (res) hold += i === m.resolution ? " · paid " + fmt(held) + " pts" : " · paid 0";
+      else if (m.status === "void") hold += " · stake refunded";
+      else hold += " · worth " + fmt(held * p[i]) + " pts";
+      hold = '<span class="hold">' + hold + "</span>";
+    }
+    var vals = (m.history || []).map(function (h) { return h.p[i] || 0; });
+    return '<button class="out ' + cls + '" type="button" data-act="pick" data-k="' + i + '"' + (m.status === "void" ? " disabled" : "") + ' aria-pressed="' + (i === tr.k) + '">' +
+      '<span class="nm">' + esc(o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
+      '<span class="bar"><i style="width:' + (shown * 100).toFixed(1) + '%"></i></span>' + hold + "</button>";
+  }).join("");
+
+  $("#mk-chart").innerHTML = '<h3 style="margin-bottom:6px">' + esc(m.outcomes[tr.k]) + " chance over time</h3>" + chartSVG(m, tr.k);
+
+  if (m.status === "open") { if (!$("#amt")) buildTrade(); updateTrade(); }
+  else $("#mk-trade").innerHTML = "";
+
+  var trades = m.trades || [];
+  $("#mk-feed").innerHTML = '<div><h3 style="margin-bottom:4px">Recent trades</h3><div class="feed">' +
+    (trades.length ? trades.map(function (t) {
+      return "<div><b>" + esc(t.name) + "</b><span>" + (t.side === "buy" ? "bought" : "sold") + " " + fmtSh(t.shares) + " " + esc(m.outcomes[t.outcomeIdx]) + " · " + fmt(t.cost) + " pts</span><span class=\"t\">" + ago(t.ts) + "</span></div>";
+    }).join("") : '<div><span class="sub">No trades yet. Be the first.</span></div>') + "</div></div>";
+}
+
+function buildTrade() {
+  $("#mk-trade").innerHTML = '<div class="trade">' +
+    '<div class="seg" role="group" aria-label="Buy or sell"><button type="button" id="sbuy" class="buy" data-act="side" data-side="buy">Buy</button><button type="button" id="ssell" class="sell" data-act="side" data-side="sell">Sell</button></div>' +
+    '<div><label for="amt" id="amtlbl"></label><div class="amt"><input id="amt" type="number" inputmode="decimal" min="0" step="any" autocomplete="off"></div></div>' +
+    '<div class="quick" id="quick"></div>' +
+    '<div class="quote" id="quote" aria-live="polite"></div>' +
+    '<button class="go" type="button" id="confirm" data-act="confirm"></button></div>';
+  var inp = $("#amt");
+  inp.value = tr.amt;
+  inp.addEventListener("input", function () { tr.amt = inp.value; updateQuote(); });
+  inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doTrade(); } });
+}
+/** Update the trade panel in place; never touches what is typed in the amount box. */
+function updateTrade() {
+  var m = curMarket(); if (!m || !$("#amt")) return;
+  $("#sbuy").classList.toggle("on", tr.side === "buy");
+  $("#ssell").classList.toggle("on", tr.side === "sell");
+  $("#sbuy").setAttribute("aria-pressed", tr.side === "buy");
+  $("#ssell").setAttribute("aria-pressed", tr.side === "sell");
+  $("#amtlbl").textContent = (tr.side === "buy" ? "Points to spend on " : "Shares to sell of ") + m.outcomes[tr.k];
+  var held = myHold(m, tr.k);
+  var qh = (tr.side === "buy" ? [25, 50, 100, 250] : [10, 25, 50]).map(function (v) { return '<button type="button" data-act="quick" data-q="' + v + '">' + v + "</button>"; }).join("") +
+    (tr.side === "sell" && held > 0 ? '<button type="button" data-act="quick" data-q="' + held + '">All</button>' : "");
+  if ($("#quick").innerHTML !== qh) $("#quick").innerHTML = qh;
+  updateQuote();
+}
+function updateQuote() {
+  var m = curMarket(); if (!m || !$("#quote")) return;
+  var o = m.outcomes[tr.k], bl = blocked(m, tr.k, tr.side), qt = bl ? null : localQuote(m), h;
+  if (bl) h = '<span class="err">' + esc(bl) + "</span>";
+  else if (qt.err) h = '<span class="err">' + esc(qt.err) + "</span>";
+  else h = "<span>" + (tr.side === "buy" ? "Shares you get" : "You receive") + "</span><span>" + (tr.side === "buy" ? fmtSh(qt.sh) : fmt(qt.cost) + " pts") + "</span>" +
+    "<span>Average price</span><span>" + (qt.avg * 100).toFixed(1) + "%</span>" +
+    "<span>" + esc(o) + " after trade</span><span>" + pct(m.prices[tr.k]) + " → " + pct(qt.after) + "</span>" +
+    (tr.side === "buy" ? "<span>Pays if " + esc(o) + "</span><span>" + fmt(qt.sh) + " pts</span>" : "");
+  $("#quote").innerHTML = h;
+  var btn = $("#confirm");
+  btn.className = "go " + tr.side;
+  btn.textContent = trading ? (tr.side === "buy" ? "Buying…" : "Selling…") : (tr.side === "buy" ? "Buy " : "Sell ") + o;
+  btn.disabled = !!(trading || bl || qt.err);
+}
+function setAmt(v) { tr.amt = String(v); var inp = $("#amt"); if (inp) inp.value = tr.amt; }
+
+function doTrade() {
+  var m = curMarket(); if (!m || trading || m.status !== "open") return;
+  if (blocked(m, tr.k, tr.side) || localQuote(m).err) return;
+  var side = tr.side, k = tr.k, id = m.marketId;
+  trading = true; updateQuote();
+  call("trade", token, id, k, side, Number(tr.amt), m.prices).then(function (res) {
+    trading = false; marketEpoch++;
+    cache["market:" + id] = { user: res.user, market: res.market };
+    if (view.name === "market" && view.id === id) drawMarket(res.market);
+    var f = res.fill;
+    toast((f.side === "buy" ? "Bought " : "Sold ") + fmtSh(f.shares) + " " + res.market.outcomes[f.outcomeIdx] + " for " + fmt(f.cost) + " pts");
+  }, function (e) {
+    trading = false;
+    if (e.code === "AUTH") return;
+    toast(e.message);
+    updateQuote();
+    if (e.code === "REQUOTE" && view.name === "market" && view.id === id) { marketEpoch++; load(true); }
+  });
+}
+
+/* ---------- Portfolio ---------- */
+function drawPortfolio(d) {
+  var rows = d.open.map(function (r) {
+    var pl = r.value - r.costBasis;
+    return '<tr><td><button class="back" type="button" data-act="open" data-mid="' + esc(r.marketId) + '">' + esc(r.question) + '</button><div class="team">' + esc(r.outcome) + " · " + fmtSh(r.shares) + " sh · now " + pct(r.price) + (r.status === "locked" ? " · locked" : "") + "</div></td>" +
+      '<td class="num">' + fmt(r.value) + '<div class="chg ' + upDn(pl) + '">' + signed(pl) + "</div></td></tr>";
+  }).join("");
+  var done = d.closed.map(function (r) {
+    var what = r.status === "void" ? "Void · refunded " + fmt(r.payout) : r.won ? "Won · paid " + fmt(r.payout) : "Lost";
+    return '<tr><td><button class="back" type="button" data-act="open" data-mid="' + esc(r.marketId) + '">' + esc(r.question) + '</button><div class="team">' + esc(r.outcome) + " · " + fmtSh(r.shares) + " sh · " + what + "</div></td>" +
+      '<td class="num ' + upDn(r.pnl) + '">' + signed(r.pnl) + "</td></tr>";
+  }).join("");
+  $("#main").innerHTML = "<h2>Portfolio</h2>" +
+    '<div class="stats"><div class="stat"><div class="v">' + fmt(d.netWorth) + '</div><div class="k">Net worth</div></div><div class="stat"><div class="v">' + fmt(d.user.balance) + '</div><div class="k">Free pts</div></div><div class="stat"><div class="v">' + fmt(d.inPositions) + '</div><div class="k">In positions</div></div></div>' +
+    '<div><h3 style="margin-bottom:8px">Open positions</h3><table><thead><tr><th>Market</th><th class="num">Value · P&amp;L</th></tr></thead><tbody>' + (rows || '<tr><td colspan="2">No open positions yet.</td></tr>') + "</tbody></table></div>" +
+    '<div><h3 style="margin-bottom:8px">Closed</h3><table><thead><tr><th>Market</th><th class="num">P&amp;L</th></tr></thead><tbody>' + (done || '<tr><td colspan="2">Nothing resolved yet.</td></tr>') + "</tbody></table></div>" +
+    '<p class="team">Positions are valued at the current market price.</p>';
+}
+
+/* ---------- Leaderboard ---------- */
+function drawLeaders(d) {
+  var body, i = 0;
+  if (lbMode === "people") {
+    body = d.rows.map(function (r) {
+      i++;
+      return '<tr class="' + (me && r.userId === me.userId ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(r.name) + '</b> <span class="team">' + esc(r.team) + '</span></td><td class="num">' + fmt(r.netWorth) + '</td><td class="num"><span class="chg ' + upDn(r.weekChange) + '">' + signed(r.weekChange) + "</span></td></tr>";
+    }).join("");
+  } else {
+    var t = {}, list = [];
+    d.rows.forEach(function (r) { var x = t[r.team]; if (!x) { x = t[r.team] = { team: r.team, v: 0, w: 0, n: 0 }; list.push(x); } x.v += r.netWorth; x.w += r.weekChange; x.n++; });
+    list.sort(function (a, b) { return b.v - a.v; });
+    body = list.map(function (x) {
+      i++;
+      return '<tr class="' + (me && x.team === me.team ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(x.team) + '</b> <span class="team">' + x.n + " trader" + (x.n > 1 ? "s" : "") + '</span></td><td class="num">' + fmt(x.v) + '</td><td class="num"><span class="chg ' + upDn(x.w) + '">' + signed(x.w) + "</span></td></tr>";
+    }).join("");
+  }
+  $("#main").innerHTML = "<h2>Leaderboard</h2><h3>Season " + esc(d.seasonId) + " · net worth</h3>" +
+    '<div class="seg" role="group" aria-label="Leaderboard view"><button type="button" data-act="lb" data-mode="people" class="buy ' + (lbMode === "people" ? "on" : "") + '">People</button><button type="button" data-act="lb" data-mode="teams" class="buy ' + (lbMode === "teams" ? "on" : "") + '">Teams</button></div>' +
+    "<table><thead><tr><th>#</th><th>" + (lbMode === "people" ? "Trader" : "Team") + '</th><th class="num">Pts</th><th class="num">Week</th></tr></thead><tbody>' + (body || '<tr><td colspan="4">No traders yet.</td></tr>') + "</tbody></table>";
+}
+
+/* ---------- Admin ---------- */
+var A = null;   // last adminData
+var TPL = {
+  champion:   { label: "Tournament champion", kind: "multi", inputs: [], auto: true, other: "Other" },
+  excellence: { label: "Excellence Award", kind: "multi", inputs: [], auto: true, other: "None/Other" },
+  skills:     { label: "Skills over/under", kind: "binary", inputs: ["a", "n"] },
+  worlds:     { label: "Qualifies for Worlds", kind: "binary", inputs: ["a"] },
+  h2h:        { label: "Head-to-head", kind: "binary", inputs: ["a", "b"] },
+  custom:     { label: "Custom", kind: null, inputs: [] }
+};
+function adminEvent(code) { if (!A) return null; for (var i = 0; i < A.events.length; i++) if (A.events[i].eventCode === code) return A.events[i]; return null; }
+function eventTeams(code) { return (A ? A.teams : []).filter(function (t) { return (t.events || []).indexOf(code) >= 0; }).map(function (t) { return t.team; }); }
+function errSpan(f) { return '<span class="bad" data-err="' + f + '" hidden></span>'; }
+function clearErrs(scope) { Array.prototype.forEach.call(scope.querySelectorAll("[data-err]"), function (s) { s.hidden = true; s.textContent = ""; }); }
+function showErr(scope, e) {
+  var s = e.field && scope.querySelector('[data-err="' + e.field + '"]');
+  if (s) { s.textContent = e.message; s.hidden = false; } else fail(e);
+}
+function busyBtn(btn, p) {
+  if (btn) btn.disabled = true;
+  return p.then(function (r) { if (btn) btn.disabled = false; return r; }, function (e) { if (btn) btn.disabled = false; throw e; });
+}
+function reloadAdmin() {
+  return call("adminData", token).then(function (res) { if (view.name === "admin") drawAdmin(res, true); }, fail);
+}
+
+function drawAdmin(d, partial) {
+  A = d;
+  if (!me || !me.isAdmin) { go({ name: "markets" }); return; }
+  if (!partial || !$("#ad-new")) {
+    $("#main").innerHTML = '<h2>Admin</h2><div id="ad-stats"></div><div class="panel" id="ad-new"></div><div class="panel" id="ad-markets"></div>' +
+      '<div class="panel" id="ad-events"></div><div class="panel" id="ad-users"></div><div class="panel" id="ad-reset"></div>';
+    buildNewMarket();
+  } else syncNewMarketEvents();
+  var s = d.stats, c = d.config;
+  $("#ad-stats").innerHTML = '<div class="stats"><div class="stat"><div class="v">' + fmt(s.traders) + '</div><div class="k">Traders</div></div><div class="stat"><div class="v">' + fmt(s.subsidyRealised) + '</div><div class="k">Subsidy realised</div></div><div class="stat"><div class="v">' + fmt(s.openExposure) + '</div><div class="k">Open exposure</div></div></div>' +
+    '<p class="sub" style="margin:8px 0 0">Season ' + esc(c.seasonId) + " · start " + fmt(c.startingBalance) + " pts · default b " + esc(c.defaultB) + " / " + esc(c.defaultBMulti) + " · slippage " + esc(c.slippagePts) + " pts · invite code " + (s.inviteSet ? "set" : "not set") + " · RobotEvents token " + (s.robotEventsToken ? "set" : "not set") + "</p>";
+  drawAdminMarkets(); drawAdminEvents(); drawAdminUsers(); drawAdminReset();
+}
+
+function buildNewMarket() {
+  var tplOpts = Object.keys(TPL).map(function (k) { return '<option value="' + k + '">' + TPL[k].label + "</option>"; }).join("");
+  $("#ad-new").innerHTML = '<h3>New market</h3><form id="f-new" novalidate class="stack" style="gap:12px">' +
+    '<div class="grid2"><div class="field"><label for="nm-event">Event</label><select id="nm-event"></select>' + errSpan("eventCode") + "</div>" +
+    '<div class="field"><label for="nm-tpl">Template</label><select id="nm-tpl">' + tplOpts + "</select></div></div>" +
+    '<div class="grid2"><div class="field" id="nmf-a"><label for="nm-a">Team A</label><input id="nm-a" class="team" list="nm-teams" autocapitalize="characters" autocomplete="off"></div>' +
+    '<div class="field" id="nmf-b"><label for="nm-b2">Team B</label><input id="nm-b2" class="team" list="nm-teams" autocapitalize="characters" autocomplete="off"></div>' +
+    '<div class="field" id="nmf-n"><label for="nm-n">Skills score N</label><input id="nm-n" type="number" inputmode="numeric" min="0"></div>' +
+    '<div class="field" id="nmf-kind"><label for="nm-kind">Kind</label><select id="nm-kind"><option value="binary">Binary (YES/NO)</option><option value="multi">Multiple outcomes</option></select></div></div>' +
+    '<datalist id="nm-teams"></datalist>' +
+    '<div class="field"><label for="nm-q">Question</label><textarea id="nm-q" rows="2" style="min-height:60px"></textarea>' + errSpan("question") + "</div>" +
+    '<div class="field" id="nmf-outs"><label for="nm-outs">Outcomes, one per line</label><textarea id="nm-outs" rows="5"></textarea><span class="hint" id="nm-outs-hint"></span>' + errSpan("outcomes") + "</div>" +
+    '<div class="field"><label for="nm-rule">Own-team rule</label><input id="nm-rule" class="team" autocomplete="off" placeholder="e.g. 936A=YES, 2011C=NO"><span class="hint" id="nm-rule-hint">TEAM=OUTCOME, comma separated. Those teams may only buy that outcome.</span>' + errSpan("teams") + "</div>" +
+    '<div class="grid2"><div class="field"><label for="nm-bl">Liquidity b</label><input id="nm-bl" type="number" inputmode="numeric" min="10" placeholder="default"><span class="hint" id="nm-bl-hint"></span>' + errSpan("b") + "</div>" +
+    '<div class="field"><label for="nm-lock">Lock time (HKT)</label><input id="nm-lock" type="datetime-local"><span class="hint" id="nm-lock-hint"></span>' + errSpan("lockAt") + "</div></div>" +
+    '<button class="go" type="submit" id="nm-go">Create market</button></form>';
+  syncNewMarketEvents();
+  prefill("tpl");
+}
+function syncNewMarketEvents() {
+  var sel = $("#nm-event"); if (!sel || !A) return;
+  var cur = sel.value;
+  sel.innerHTML = A.events.map(function (e) { return '<option value="' + esc(e.eventCode) + '">' + esc(e.name) + " · " + esc(hkDay(e.startAt)) + "</option>"; }).join("") || '<option value="">Import an event first</option>';
+  if (cur && adminEvent(cur)) sel.value = cur;
+  else { var up = A.events.filter(function (e) { return Date.parse(e.startAt) > Date.now(); })[0]; if (up) sel.value = up.eventCode; }
+  syncNewMarketHints();
+}
+function syncNewMarketHints() {
+  var code = $("#nm-event").value, ev = adminEvent(code), teams = eventTeams(code);
+  $("#nm-teams").innerHTML = teams.map(function (t) { return '<option value="' + esc(t) + '">'; }).join("");
+  $("#nm-lock-hint").textContent = ev ? "Blank = event start, " + hkFull(ev.startAt) : "Blank = event start";
+  var kind = currentKind();
+  $("#nm-bl-hint").textContent = "Blank = " + (kind === "multi" ? A.config.defaultBMulti : A.config.defaultB);
+}
+function tplKey() { var v = $("#nm-tpl").value; return TPL[v] ? v : "champion"; }
+function currentKind() { return TPL[tplKey()].kind || $("#nm-kind").value || "binary"; }
+/** Fill question / outcomes / own-team rule from the template inputs. Custom keeps whatever was typed. */
+function prefill(changed) {
+  var tk = tplKey(), t = TPL[tk], code = $("#nm-event").value, ev = adminEvent(code);
+  var en = ev ? ev.name : "the event";
+  var a = $("#nm-a").value.trim().toUpperCase() || "TEAM", b = $("#nm-b2").value.trim().toUpperCase() || "TEAM", n = $("#nm-n").value.trim() || "N";
+  $("#nmf-a").hidden = t.inputs.indexOf("a") < 0;
+  $("#nmf-b").hidden = t.inputs.indexOf("b") < 0;
+  $("#nmf-n").hidden = t.inputs.indexOf("n") < 0;
+  $("#nmf-kind").hidden = tk !== "custom";
+  var kind = currentKind();
+  $("#nmf-outs").hidden = kind !== "multi";
+  syncNewMarketHints();
+  $("#nm-outs-hint").textContent = t.auto ? "Teams registered for this event, plus " + t.other + ". Team outcomes get the own-team rule automatically." : "2 to 24 outcomes. Longer lists are cut to 23 plus Other.";
+  if (tk === "custom") {
+    if (changed === "tpl") { $("#nm-q").value = ""; $("#nm-outs").value = ""; $("#nm-rule").value = ""; }
+    return;
+  }
+  var q = "", outs = "", rule = "";
+  if (tk === "champion") { q = "Who wins Tournament Champions at " + en + "?"; }
+  if (tk === "excellence") { q = "Who wins the Excellence Award at " + en + "?"; }
+  if (t.auto) {
+    var teams = eventTeams(code);
+    outs = teams.concat(t.other).join("\n");
+    if (!teams.length) $("#nm-outs-hint").textContent = "No teams registered for this event yet. Import its team list under Events and teams, or type them here.";
+  }
+  if (tk === "skills") { q = "Will " + a + " post ≥ " + n + " combined skills at " + en + "?"; rule = a + "=YES"; }
+  if (tk === "worlds") { q = "Will " + a + " qualify for Worlds at " + en + "?"; rule = a + "=YES"; }
+  if (tk === "h2h") { q = "Will " + a + " rank above " + b + " in qualifications at " + en + "?"; rule = a + "=YES, " + b + "=NO"; }
+  $("#nm-q").value = q; $("#nm-outs").value = outs; $("#nm-rule").value = rule;
+}
+/** "936A=YES, 2011C=NO" -> {"936A":0,"2011C":1}. Throws a message on bad input. */
+function parseRule(text, outcomes) {
+  var map = {};
+  String(text || "").split(/[,;\n]+/).forEach(function (part) {
+    part = part.trim(); if (!part) return;
+    var mm = /^([0-9]{1,5}[A-Za-z]?)\s*[=:]\s*(.+)$/.exec(part);
+    if (!mm) throw new Error('Write each rule as TEAM=OUTCOME, like 936A=YES. Problem: "' + part + '"');
+    var team = mm[1].toUpperCase(), out = mm[2].trim().toLowerCase(), idx = -1;
+    for (var i = 0; i < outcomes.length; i++) if (outcomes[i].toLowerCase() === out) idx = i;
+    if (idx < 0) throw new Error('"' + mm[2].trim() + '" is not one of the outcomes.');
+    map[team] = idx;
+  });
+  return map;
+}
+function submitNewMarket(form) {
+  clearErrs(form);
+  var tk = tplKey(), t = TPL[tk], kind = currentKind();
+  var outcomes = kind === "multi" ? $("#nm-outs").value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean) : ["YES", "NO"];
+  var spec = { eventCode: $("#nm-event").value, question: $("#nm-q").value.trim(), kind: kind };
+  if (kind === "multi") spec.outcomes = outcomes;
+  try { var teams = parseRule($("#nm-rule").value, outcomes); if (Object.keys(teams).length) spec.teams = teams; }
+  catch (e) { showErr(form, { field: "teams", message: e.message }); return; }
+  if (t.auto) spec.autoTeams = true;
+  var bv = $("#nm-bl").value.trim();
+  if (bv) spec.b = Number(bv);
+  var lock = hkInputToIso($("#nm-lock").value);
+  if (lock === "invalid") { showErr(form, { field: "lockAt", message: "Use a valid date and time." }); return; }
+  if (lock) spec.lockAt = lock;
+  busyBtn($("#nm-go"), call("createMarket", token, spec)).then(function (res) {
+    toast("Created: " + res.market.question);
+    $("#nm-lock").value = ""; $("#nm-bl").value = "";
+    prefill("tpl");
+    reloadAdmin();
+  }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+}
+
+function drawAdminMarkets() {
+  var active = A.markets.filter(function (m) { return m.status === "open" || m.status === "locked"; });
+  var closed = A.markets.filter(function (m) { return m.status === "resolved" || m.status === "void"; });
+  var h = "<h3>Manage markets</h3>";
+  h += active.length ? active.map(function (m) {
+    var p = m.prices, top = m.outcomes.map(function (o, i) { return { o: o, p: p[i] }; }).sort(function (a, b) { return b.p - a.p; }).slice(0, 3)
+      .map(function (x) { return esc(x.o) + " " + pct(x.p); }).join(" · ");
+    var ev = adminEvent(m.eventCode);
+    var pend = m.pending ? '<div class="banner warn">Pending: <b>' + esc(m.outcomes[m.pending.outcomeIdx]) + "</b> proposed by " + esc(m.pending.byName) + " on " + esc(hkFull(m.pending.at)) + ". " + extLink(m.pending.source, "Source") + ". Another admin must confirm by resolving.</div>" : "";
+    return '<div class="item" data-mid="' + esc(m.marketId) + '"><div class="q">' + esc(m.question) + "</div>" +
+      '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="sub">' + esc(ev ? ev.name : m.eventCode) + " · b " + esc(m.b) + " · by " + esc(m.createdByName) + "</span></div>" +
+      '<div class="sub">' + top + " · " + esc(lockTxt(m)) + "</div>" + pend +
+      '<div class="acts">' + (m.status === "open" ? '<button class="sm" type="button" data-act="lock" data-mid="' + esc(m.marketId) + '">Lock</button>' : "") +
+      '<button class="sm prim" type="button" data-act="resolve-open" data-mid="' + esc(m.marketId) + '">Resolve</button>' +
+      '<button class="sm danger" type="button" data-act="void" data-mid="' + esc(m.marketId) + '">Void</button></div>' +
+      '<form class="rform" data-form="resolve" data-mid="' + esc(m.marketId) + '" novalidate hidden>' +
+      '<div class="field"><label>Winning outcome</label><select name="outcome">' + m.outcomes.map(function (o, i) { return '<option value="' + i + '"' + (m.pending && m.pending.outcomeIdx === i ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>" + errSpan("outcome") + "</div>" +
+      '<div class="field"><label>RobotEvents results URL</label><input name="source" type="url" inputmode="url" autocomplete="off" placeholder="https://www.robotevents.com/..." value="' + esc(m.pending ? m.pending.source : "") + '" required>' + errSpan("source") + "</div>" +
+      '<div class="acts"><button class="sm prim" type="submit">Confirm result</button><button class="sm" type="button" data-act="resolve-cancel">Cancel</button></div></form></div>';
+  }).join("") : '<p class="sub" style="margin:0">No open or locked markets.</p>';
+  if (closed.length) {
+    h += "<details><summary>Resolved and void (" + closed.length + ")</summary>" + closed.map(function (m) {
+      return '<div class="item" style="margin-top:10px"><div class="q">' + esc(m.question) + '</div><div class="sub">' +
+        (m.status === "void" ? "Void" : "Resolved: <b>" + esc(m.outcomes[m.resolution]) + "</b>") + " · by " + esc(m.createdByName) + "</div></div>";
+    }).join("") + "</details>";
+  }
+  $("#ad-markets").innerHTML = h;
+}
+
+function drawAdminEvents() {
+  var tok = A.stats.robotEventsToken;
+  var h = "<h3>Events and teams</h3>" + (A.events.length ? A.events.map(function (e) {
+    return '<div class="item"><div class="q">' + esc(e.name) + '</div><div class="sub"><span class="team">' + esc(e.eventCode) + "</span> · " + esc(eventWhen(e)) + " · " + esc(e.region) + " · " + eventTeams(e.eventCode).length + " teams</div></div>";
+  }).join("") : '<p class="sub" style="margin:0">No events yet.</p>');
+  h += '<details><summary>Import event</summary><form id="f-import" class="stack" style="gap:10px;margin-top:10px" novalidate>' +
+    '<p class="sub" style="margin:0">' + (tok ? "RobotEvents token is set: the code alone pulls the event and its teams. Fill the other fields to enter it by hand instead." : "No RobotEvents token: enter the details by hand. Region must be Hong Kong.") + "</p>" +
+    '<div class="field"><label for="ie-code">Event code</label><input id="ie-code" class="team" placeholder="RE-V5RC-27-4476" autocomplete="off" autocapitalize="characters">' + errSpan("eventCode") + "</div>" +
+    '<div class="field"><label for="ie-name">Name' + (tok ? " (optional)" : "") + '</label><input id="ie-name" autocomplete="off">' + errSpan("name") + "</div>" +
+    '<div class="grid2"><div class="field"><label for="ie-start">Starts (HKT)</label><input id="ie-start" type="datetime-local">' + errSpan("startAt") + "</div>" +
+    '<div class="field"><label for="ie-end">Ends (HKT)</label><input id="ie-end" type="datetime-local">' + errSpan("endAt") + "</div></div>" +
+    '<div class="field"><label for="ie-region">Region</label><input id="ie-region" value="Hong Kong" autocomplete="off">' + errSpan("region") + "</div>" +
+    '<div class="field"><label for="ie-teams">Teams (optional)</label><textarea id="ie-teams" class="team" placeholder="936A, 2011C, 8823X"></textarea>' + errSpan("teams") + "</div>" +
+    '<button class="sm prim" type="submit" id="ie-go">Import event</button></form></details>';
+  h += '<details><summary>Add team</summary><form id="f-team" class="stack" style="gap:10px;margin-top:10px" novalidate>' +
+    '<div class="grid2"><div class="field"><label for="at-team">Team number</label><input id="at-team" class="team" autocapitalize="characters" autocomplete="off" placeholder="936A">' + errSpan("team") + "</div>" +
+    '<div class="field"><label for="at-name">Team name</label><input id="at-name" autocomplete="off">' + errSpan("name") + "</div></div>" +
+    '<div class="field"><label for="at-org">Organisation</label><input id="at-org" autocomplete="off">' + errSpan("organisation") + "</div>" +
+    '<button class="sm prim" type="submit" id="at-go">Add team</button></form></details>';
+  h += "<details><summary>All teams (" + A.teams.length + ")</summary>" + A.teams.map(function (t) {
+    return '<div class="sub" style="padding:6px 0;border-bottom:1px solid var(--line)"><b class="team">' + esc(t.team) + "</b> " + esc(t.name || "") + (t.organisation ? " · " + esc(t.organisation) : "") + " · " + (t.events || []).length + " events</div>";
+  }).join("") + "</details>";
+  var keep = keepDetails("#ad-events");
+  $("#ad-events").innerHTML = h;
+  restoreDetails("#ad-events", keep);
+}
+/* keep <details> open/closed across admin redraws */
+function keepDetails(sel) { var root = $(sel); return root ? Array.prototype.map.call(root.querySelectorAll("details"), function (d) { return d.open; }) : []; }
+function restoreDetails(sel, keep) { Array.prototype.forEach.call($(sel).querySelectorAll("details"), function (d, i) { if (keep[i]) d.open = true; }); }
+
+function drawAdminUsers() {
+  $("#ad-users").innerHTML = "<h3>Users (" + A.users.length + ")</h3>" + A.users.map(function (u) {
+    var self = me && u.userId === me.userId;
+    return '<div class="item"><div class="row"><b>' + esc(u.name) + '</b><span class="team">' + esc(u.team) + "</span>" + (u.isAdmin ? '<span class="chip mine">Admin</span>' : "") + (u.banned ? '<span class="chip bad">Banned</span>' : "") + '<span class="meta">' + fmt(u.balance) + " pts</span></div>" +
+      '<div class="acts">' + (self ? "" : '<button class="sm' + (u.banned ? "" : " danger") + '" type="button" data-act="ban" data-uid="' + esc(u.userId) + '" data-banned="' + (u.banned ? "1" : "") + '">' + (u.banned ? "Unban" : "Ban") + "</button>") +
+      '<button class="sm" type="button" data-act="pin" data-uid="' + esc(u.userId) + '">Reset PIN</button>' +
+      '<button class="sm" type="button" data-act="team" data-uid="' + esc(u.userId) + '">Change team</button></div></div>';
+  }).join("");
+}
+
+function drawAdminReset() {
+  if ($("#rs-text")) return;   // keep what was typed
+  $("#ad-reset").innerHTML = '<h3>Season reset</h3><p class="sub" style="margin:0">Archives this season and sets every balance back to ' + fmt(A.config.startingBalance) + " pts. This can't be undone from the app.</p>" +
+    '<form id="f-reset" class="stack" style="gap:10px" novalidate><div class="field"><label for="rs-text">Type RESET to confirm</label><input id="rs-text" autocomplete="off" autocapitalize="characters">' + errSpan("confirm") + "</div>" +
+    '<button class="sm danger" type="submit" id="rs-go" disabled>Reset season</button></form>';
+}
+function userById(id) { for (var i = 0; i < A.users.length; i++) if (A.users[i].userId === id) return A.users[i]; return null; }
+function marketById(id) { for (var i = 0; i < A.markets.length; i++) if (A.markets[i].marketId === id) return A.markets[i]; return null; }
+
+function adminAct(act, b) {
+  var mid = b.getAttribute("data-mid"), uid = b.getAttribute("data-uid"), m = mid && marketById(mid), u = uid && userById(uid);
+  if (act === "lock" && m) {
+    if (!confirm('Lock "' + m.question + '" now? Trading stops.')) return;
+    busyBtn(b, call("lockMarket", token, mid)).then(function () { toast("Market locked."); reloadAdmin(); }, fail);
+  } else if (act === "resolve-open") {
+    var f = b.closest(".item").querySelector('[data-form="resolve"]'); f.hidden = !f.hidden;
+    if (!f.hidden) f.querySelector("select").focus();
+  } else if (act === "resolve-cancel") {
+    b.closest("form").hidden = true;
+  } else if (act === "void" && m) {
+    if (!confirm('Void "' + m.question + '"? Every position\'s stake is refunded and the market closes.')) return;
+    var note = prompt("Reason for voiding (optional, kept in the log):", "");
+    if (note === null) return;
+    busyBtn(b, call("voidMarket", token, mid, note)).then(function (r) { toast("Voided. Refunded " + fmt(r.refunded) + " pts."); reloadAdmin(); }, fail);
+  } else if (act === "ban" && u) {
+    var ban = !b.getAttribute("data-banned");
+    if (ban && !confirm("Ban " + u.name + "? They are logged out and left off the leaderboard.")) return;
+    busyBtn(b, call("banUser", token, uid, ban)).then(function () { toast((ban ? "Banned " : "Unbanned ") + u.name + "."); reloadAdmin(); }, fail);
+  } else if (act === "pin" && u) {
+    var pin = prompt("New PIN for " + u.name + " (4 to 6 digits):", "");
+    if (pin === null) return;
+    busyBtn(b, call("resetPin", token, uid, pin.trim())).then(function () { toast("PIN reset for " + u.name + "."); }, fail);
+  } else if (act === "team" && u) {
+    var team = prompt("New team number for " + u.name + ":", u.team);
+    if (team === null) return;
+    busyBtn(b, call("setUserTeam", token, uid, team.trim().toUpperCase())).then(function () { toast(u.name + " is now on " + team.trim().toUpperCase() + "."); reloadAdmin(); }, fail);
+  }
+}
+function adminSubmit(form) {
+  if (form.id === "f-new") return submitNewMarket(form);
+  clearErrs(form);
+  if (form.getAttribute("data-form") === "resolve") {
+    var mid = form.getAttribute("data-mid"), k = Number(form.elements.outcome.value), src = form.elements.source.value.trim();
+    if (!/^https:\/\/www\.robotevents\.com\/\S+$/.test(src)) { showErr(form, { field: "source", message: "Paste the RobotEvents results link (https://www.robotevents.com/...)." }); return; }
+    var m = marketById(mid);
+    if (!confirm("Resolve as " + m.outcomes[k] + "? Winners are paid now.")) return;
+    busyBtn(form.querySelector('[type="submit"]'), call("resolveMarket", token, mid, k, src)).then(function (r) {
+      toast(r.pending ? r.message : "Resolved. Paid " + fmt(r.paid) + " pts."); reloadAdmin();
+    }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+  } else if (form.id === "f-import") {
+    var data = { eventCode: $("#ie-code").value.trim().toUpperCase() };
+    var nm = $("#ie-name").value.trim(); if (nm) data.name = nm;
+    var st = hkInputToIso($("#ie-start").value), en = hkInputToIso($("#ie-end").value);
+    if (st === "invalid") { showErr(form, { field: "startAt", message: "Use a valid date and time." }); return; }
+    if (en === "invalid") { showErr(form, { field: "endAt", message: "Use a valid date and time." }); return; }
+    if (st) data.startAt = st; if (en) data.endAt = en;
+    var rg = $("#ie-region").value.trim(); if (rg && (nm || st)) data.region = rg;
+    var tm = $("#ie-teams").value.trim(); if (tm) data.teams = tm;
+    busyBtn($("#ie-go"), call("importEvent", token, data)).then(function (r) {
+      toast("Imported " + r.event.name + ". " + r.teamsAdded + " new team" + (r.teamsAdded === 1 ? "" : "s") + ".");
+      ["#ie-code", "#ie-name", "#ie-start", "#ie-end", "#ie-teams"].forEach(function (s) { $(s).value = ""; });
+      reloadAdmin();
+    }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+  } else if (form.id === "f-team") {
+    var team = $("#at-team").value.trim().toUpperCase();
+    busyBtn($("#at-go"), call("addTeam", token, team, $("#at-name").value.trim(), $("#at-org").value.trim())).then(function () {
+      toast("Added " + team + ".");
+      ["#at-team", "#at-name", "#at-org"].forEach(function (s) { $(s).value = ""; });
+      reloadAdmin();
+    }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+  } else if (form.id === "f-reset") {
+    var txt = $("#rs-text").value.trim();
+    if (txt !== "RESET") { showErr(form, { field: "confirm", message: "Type RESET in capitals." }); return; }
+    if (!confirm("Really reset the season? Every balance goes back to the start.")) return;
+    busyBtn($("#rs-go"), call("resetSeason", token, txt)).then(function (r) {
+      toast("Season " + r.seasonId + " started."); $("#rs-text").value = ""; $("#rs-go").disabled = true; cache = {}; reloadAdmin();
+    }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+  }
+}
+
+/* ---------- one delegated handler for the app body ---------- */
+$("#main").addEventListener("click", function (e) {
+  var b = e.target.closest("[data-act]"); if (!b || b.disabled) return;
+  var act = b.getAttribute("data-act"), m;
+  if (act === "open") openMarket(b.getAttribute("data-mid"));
+  else if (act === "back") go({ name: "markets" });
+  else if (act === "retry") go(view);
+  else if (act === "lb") { lbMode = b.getAttribute("data-mode"); var c = cache.leaders; if (c) drawLeaders(c); }
+  else if (act === "pick") {
+    m = curMarket(); if (!m || m.status === "void") return;
+    tr.k = Number(b.getAttribute("data-k"));
+    drawMarket(m);
+  }
+  else if (act === "side") {
+    m = curMarket(); if (!m) return;
+    tr.side = b.getAttribute("data-side");
+    if (tr.side === "buy") setAmt(50);
+    else { var held = myHold(m, tr.k); setAmt(held > 0 ? (held < 25 ? held : 25) : 10); }
+    updateTrade();
+  }
+  else if (act === "quick") { setAmt(b.getAttribute("data-q")); updateQuote(); }
+  else if (act === "confirm") doTrade();
+  else adminAct(act, b);
+});
+$("#main").addEventListener("submit", function (e) { e.preventDefault(); adminSubmit(e.target); });
+$("#main").addEventListener("change", function (e) {
+  var id = e.target.id;
+  if (id === "nm-tpl" || id === "nm-event" || id === "nm-kind") prefill(id === "nm-tpl" ? "tpl" : id);
+});
+$("#main").addEventListener("input", function (e) {
+  var id = e.target.id;
+  if (id === "nm-a" || id === "nm-b2" || id === "nm-n") prefill(id);
+  else if (id === "rs-text") $("#rs-go").disabled = e.target.value.trim() !== "RESET";
+});
+
+/* ---------- Login / Join ---------- */
+var loginMode = "join", inviteRequired = true, checkSeq = 0, checkedName = null, checkTimer = null, checkPromise = null;
+var NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 .'_-]{1,19}$/, TEAM_RE = /^\d{1,5}[A-Z]?$/, PIN_RE = /^\d{4,6}$/;
+
+function showLogin() {
+  $("#app").hidden = true;
+  var L = $("#login");
+  if (!L.hidden && $("#lf")) return;   // already showing; keep what is typed
+  L.hidden = false;
+  loginMode = "join"; checkedName = null; checkPromise = null;
+  L.innerHTML = '<div class="login">' +
+    '<div><div class="mark">HK VEX<br><span>Market</span></div><p style="margin-top:10px">Trade play points on Hong Kong V5RC events. Everyone starts the season with 1,000.</p></div>' +
+    '<form id="lf" novalidate>' +
+    '<div class="field"><label for="nm">Your name</label><input id="nm" autocomplete="username" maxlength="20" placeholder="What the group chat calls you" autocapitalize="none" spellcheck="false"><span class="hint" id="hint-name">Shown on the leaderboard and in trade feeds.</span><span class="bad" id="err-name" hidden></span></div>' +
+    '<div class="field" id="f-team"><label for="tm">Team number</label><input id="tm" class="team" autocomplete="off" autocapitalize="characters" maxlength="6" placeholder="e.g. 936A"><span class="hint" id="hint-team">You can\'t bet against this team. Only an admin can change it later.</span><span class="bad" id="err-team" hidden></span></div>' +
+    '<div class="field"><label for="pin">PIN</label><input id="pin" class="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="new-password"><span class="hint" id="hint-pin"></span><span class="bad" id="err-pin" hidden></span></div>' +
+    '<div class="field" id="f-invite"><label for="inv">Invite code</label><input id="inv" autocomplete="off" autocapitalize="none" spellcheck="false"><span class="hint" id="hint-invite">From the group chat.</span><span class="bad" id="err-invite" hidden></span></div>' +
+    '<span class="bad" id="err-form" hidden></span>' +
+    '<button class="go" type="submit" id="lgo"></button>' +
+    "</form>" +
+    '<p class="team">Points have no cash value. Hong Kong V5RC events only.</p></div>';
+  setMode("join");
+  $("#nm").addEventListener("input", function () {
+    loginErr("name", null);
+    clearTimeout(checkTimer);
+    checkTimer = setTimeout(checkNow, 350);
+  });
+  $("#tm").addEventListener("input", function () { loginErr("team", null); });
+  $("#pin").addEventListener("input", function () { var v = $("#pin").value.replace(/\D/g, ""); if (v !== $("#pin").value) $("#pin").value = v; loginErr("pin", null); });
+  $("#inv").addEventListener("input", function () { loginErr("invite", null); });
+  $("#lf").addEventListener("submit", function (e) { e.preventDefault(); submitLogin(); });
+  try { $("#nm").focus(); } catch (e) {}
+}
+function setMode(mode) {
+  loginMode = mode;
+  var join = mode === "join";
+  $("#f-team").hidden = !join;
+  $("#f-invite").hidden = !(join && inviteRequired);
+  $("#lgo").textContent = join ? "Join the market" : "Log in";
+  $("#hint-pin").textContent = join ? "Pick 4 to 6 digits. You'll need it to log in again." : "Welcome back. Enter your PIN.";
+  $("#pin").setAttribute("autocomplete", join ? "new-password" : "current-password");
+}
+function loginErr(field, msg) {
+  var bad = $("#err-" + field), hint = $("#hint-" + field);
+  if (!bad) { if (msg) { $("#err-form").textContent = msg; $("#err-form").hidden = false; } return; }
+  bad.textContent = msg || ""; bad.hidden = !msg;
+  if (hint) hint.hidden = !!msg;
+  if (!msg) $("#err-form").hidden = true;
+}
+/** Look the name up and flip between Join and Log in. Returns a promise that settles when the mode is current. */
+function checkNow() {
+  clearTimeout(checkTimer);
+  var name = $("#nm") ? $("#nm").value.trim() : "";
+  if (name === checkedName && checkPromise) return checkPromise;
+  checkedName = name;
+  var seq = ++checkSeq;
+  if (name.length < 2) { setMode("join"); checkPromise = Promise.resolve(); return checkPromise; }
+  checkPromise = call("checkName", name).then(function (r) {
+    if (seq !== checkSeq || !$("#lf")) return;
+    inviteRequired = !!r.inviteRequired;
+    setMode(r.exists ? "login" : "join");
+  }, function () { if (seq === checkSeq) checkedName = null; });
+  return checkPromise;
+}
+function submitLogin() {
+  var btn = $("#lgo"); if (btn.disabled) return;
+  btn.disabled = true;
+  checkNow().then(function () {
+    ["name", "team", "pin", "invite"].forEach(function (f) { loginErr(f, null); });
+    var name = $("#nm").value.trim(), team = $("#tm").value.trim().toUpperCase().replace(/\s+/g, ""), pin = $("#pin").value, inv = $("#inv").value.trim();
+    var bad = false;
+    if (!NAME_RE.test(name)) { loginErr("name", "Use 2 to 20 letters, numbers or spaces, starting with a letter or number."); bad = true; }
+    if (loginMode === "join" && !TEAM_RE.test(team)) { loginErr("team", "Use a VEX team number like 936A or 2011C."); bad = true; }
+    if (!PIN_RE.test(pin)) { loginErr("pin", "PIN is 4 to 6 digits."); bad = true; }
+    if (loginMode === "join" && inviteRequired && !inv) { loginErr("invite", "Enter the invite code from the group chat."); bad = true; }
+    if (bad) { btn.disabled = false; return; }
+    var joining = loginMode === "join";
+    btn.textContent = joining ? "Joining…" : "Logging in…";
+    var p = joining ? call("register", name, team, pin, inv) : call("login", name, pin);
+    p.then(function (res) {
+      saveToken(res.token); setUser(res.user);
+      $("#login").hidden = true; $("#login").innerHTML = "";
+      enterApp();
+      toast(joining ? "Welcome, " + res.user.name + ". You have " + fmt(res.user.balance) + " pts." : "Welcome back, " + res.user.name + ".");
+    }, function (e) {
+      btn.disabled = false; setMode(loginMode);
+      loginErr(e.field || "form", e.message);
+      var el = e.field && { name: "#nm", team: "#tm", pin: "#pin", invite: "#inv" }[e.field];
+      if (el && $(el)) $(el).focus();
+    });
+  });
+}
+
+/* ---------- app shell ---------- */
+function enterApp() {
+  $("#login").hidden = true;
+  $("#app").hidden = false;
+  go({ name: "markets" });
+}
+$("#signout").addEventListener("click", function () {
+  var t = token;
+  dropSession();
+  if (t) call("logout", t).then(null, function () {});
+  showLogin();
+});
+$("#tab-markets").addEventListener("click", function () { go({ name: "markets" }); });
+$("#tab-portfolio").addEventListener("click", function () { go({ name: "portfolio" }); });
+$("#tab-leaders").addEventListener("click", function () { go({ name: "leaders" }); });
+$("#tab-admin").addEventListener("click", function () { if (me && me.isAdmin) go({ name: "admin" }); });
+
+/* ---------- start ---------- */
+(function start() {
+  var t = loadToken();
+  if (t) { token = t; enterApp(); }   // listMarkets restores the session, or AUTH sends us to login
+  else showLogin();
+})();
+</script>
+</body>
+</html>
