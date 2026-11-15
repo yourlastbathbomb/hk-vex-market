@@ -672,7 +672,7 @@ function buildSgForm() {
     '<option value="">Another event…</option>';
   f.innerHTML = '<form id="f-sg" class="panel" novalidate>' +
     '<div class="field"><label for="sg-event">Event</label><select id="sg-event">' + opts + "</select></div>" +
-    '<div class="field" id="sgf-code" hidden><label for="sg-code">Event code or events.vex.com link</label><input id="sg-code" class="team" autocomplete="off" autocapitalize="characters" placeholder="RE-V5RC-27-0000 or https://events.vex.com/...">' + errSpan("eventCode") + "</div>" +
+    '<div class="field" id="sgf-code" hidden><label for="sg-code">Event code or events.vex.com link</label><input id="sg-code" class="team" autocomplete="off" autocapitalize="characters" placeholder="VE-V5-26-65665 or https://events.vex.com/...">' + errSpan("eventCode") + "</div>" +
     '<div class="field"><label for="sg-q">Question</label><textarea id="sg-q" rows="2" style="min-height:60px" placeholder="e.g. Will 936A reach the finals?"></textarea>' + errSpan("question") + "</div>" +
     '<div class="field"><label for="sg-kind">Answers</label><select id="sg-kind"><option value="binary">Yes / No</option><option value="multi">Which team</option></select>' + errSpan("kind") + "</div>" +
     '<div id="sgf-multi" hidden><label class="check"><input type="checkbox" id="sg-all" checked> All registered teams</label>' +
@@ -1343,7 +1343,7 @@ function drawAdminEvents() {
   }).join("") : '<p class="sub" style="margin:0">No events yet.</p>');
   h += '<details><summary>Import event</summary><form id="f-import" class="stack" style="gap:10px;margin-top:10px" novalidate>' +
     '<p class="sub" style="margin:0">' + (tok ? "VEX events API token is set: the code alone pulls the event and its teams from events.vex.com. Fill the other fields to enter it by hand instead." : "No VEX events API token: enter the details by hand.") + "</p>" +
-    '<div class="field"><label for="ie-code">Event code</label><input id="ie-code" class="team" placeholder="RE-V5RC-27-4476" autocomplete="off" autocapitalize="characters">' + errSpan("eventCode") + "</div>" +
+    '<div class="field"><label for="ie-code">Event code</label><input id="ie-code" class="team" placeholder="VE-V5-26-65665" autocomplete="off" autocapitalize="characters">' + errSpan("eventCode") + "</div>" +
     '<div class="field"><label for="ie-name">Name' + (tok ? " (optional)" : "") + '</label><input id="ie-name" autocomplete="off">' + errSpan("name") + "</div>" +
     '<div class="grid2"><div class="field"><label for="ie-start">Starts (HKT)</label><input id="ie-start" type="datetime-local">' + errSpan("startAt") + "</div>" +
     '<div class="field"><label for="ie-end">Ends (HKT)</label><input id="ie-end" type="datetime-local">' + errSpan("endAt") + "</div></div>" +
