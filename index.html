@@ -3,38 +3,28 @@
 <head><script>window.HKVEX_API="https://script.google.com/macros/s/AKfycbw--FU7DvAqxWmOTk5H1OW9BO861AAcH3-L6fl-HqP1xoeOA2w8JNO9smYGFfG7CS5q/exec";window.HKVEX_GOOGLE_CLIENT_ID="378324152909-fu3t0arghct2f63gre6f755rvp38dg3u.apps.googleusercontent.com";</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
 <title>HK VEX Market</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* layout: one phone-width column, sticky balance header, bottom tab bar; blue = buy, red = sell, like alliance colours */
-  --bg:#e9ecf0; --surface:#ffffff; --ink:#13161b; --muted:#5a6370; --line:#d6dbe2;
-  --blue:#1d5bd0; --red:#cf3a31; --soft:#e2eafb; --warn:#9a6200; --good:#1b7f4a;
+  /* black and white, light only. Colour carries meaning only: green = price up and the winning outcome, red = price down and errors. */
+  --bg:#ffffff; --surface:#ffffff; --ink:#0a0a0a; --muted:#6b6b6b; --line:#e3e3e3; --soft:#f3f3f3;
+  --good:#15803d; --red:#c62828;
   --display:"Barlow Condensed",system-ui,sans-serif;
   --body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --hdr:60px;
   color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0d1015; --surface:#161a21; --ink:#e7eaef; --muted:#959eab; --line:#29303a;
-    --blue:#5d8ff2; --red:#ef6259; --soft:#1b2944; --warn:#e2a43c; --good:#45c07f;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0d1015; --surface:#161a21; --ink:#e7eaef; --muted:#959eab; --line:#29303a;
-  --blue:#5d8ff2; --red:#ef6259; --soft:#1b2944; --warn:#e2a43c; --good:#45c07f;
-  color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
-a{color:var(--blue)}
+a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
 button{font:inherit;color:inherit;cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
 header{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
 .brand{flex:none;font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
@@ -50,54 +40,57 @@ h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;le
 .evhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .evhead .code{font-family:var(--mono);font-size:11px;color:var(--muted)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%}
-.card.tap:hover{border-color:var(--blue)}
+.card.tap:hover{border-color:var(--ink)}
+.card.on{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
 .q{font-weight:600;font-size:15px;text-wrap:balance;overflow-wrap:anywhere}
 .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .big{font-family:var(--mono);font-weight:600;font-size:22px;font-variant-numeric:tabular-nums}
-.chg{font-family:var(--mono);font-size:12px}
-.up{color:var(--good)} .dn{color:var(--red)}
+.chg{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--red)} .won{color:var(--good)}
 .chip{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
-.chip.open{color:var(--good);border-color:currentColor}
-.chip.locked{color:var(--warn);border-color:currentColor}
+.chip.open{color:var(--ink);border-color:var(--ink)}
+.chip.locked{color:#3a3a3a;background:var(--soft);border-color:var(--soft)}
 .chip.resolved{color:var(--muted)}
 .chip.void{color:var(--muted);text-decoration:line-through}
-.chip.mine{color:var(--blue);border-color:currentColor}
+.chip.mine{color:var(--ink);border-color:var(--ink)}
 .chip.bad{color:var(--red);border-color:currentColor;font-size:11px}
 .meta{font-size:12px;color:var(--muted);margin-left:auto}
-.back{background:none;border:0;padding:6px 0;color:var(--blue);font-weight:600;align-self:flex-start;text-align:left}
+.back{background:none;border:0;padding:6px 0;color:var(--ink);font-weight:600;align-self:flex-start;text-align:left;text-decoration:underline;text-underline-offset:2px}
 .banner{border-radius:8px;padding:10px 12px;font-size:13px;border:1px solid;overflow-wrap:anywhere}
-.banner.warn{color:var(--warn);border-color:currentColor}
-.banner.info{color:var(--blue);border-color:currentColor;background:var(--soft)}
+.banner.warn,.banner.info{color:var(--ink);border-color:var(--soft);background:var(--soft);font-weight:600}
 .banner.done{color:var(--good);border-color:currentColor}
 .outs{display:flex;flex-direction:column;gap:6px}
 .out{display:grid;grid-template-columns:1fr auto auto;gap:2px 10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-align:left;width:100%;min-height:48px}
-.out.sel{border-color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}
+.out.sel{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
 .out.win{border-color:var(--good);box-shadow:inset 3px 0 0 var(--good)}
+.out.win .nm{color:var(--good)}
 .out[disabled]{cursor:default}
 .out .nm{font-weight:600;overflow-wrap:anywhere}
 .out .pc{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
-.out .spk{display:block;width:64px;height:22px;color:var(--muted)}
-.out.sel .spk{color:var(--blue)}
-.out .bar{grid-column:1/-1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
-.out .bar i{display:block;height:100%;background:var(--blue)}
-.out .hold{grid-column:1/-1;font-size:12px;color:var(--blue)}
+.out .spk{display:block;width:64px;height:22px;color:#a3a3a3}
+.out.sel .spk{color:var(--ink)}
+.out .bar{grid-column:1/-1;height:4px;background:var(--soft);border-radius:2px;overflow:hidden}
+.out .bar i{display:block;height:100%;background:var(--ink)}
+.out.win .bar i{background:var(--good)}
+.out .hold{grid-column:1/-1;font-size:12px;color:var(--ink);font-weight:500}
 .chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
 .chart svg{display:block;width:100%;height:auto}
 .trade{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px}
-.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button{background:none;border:0;padding:11px;font-weight:600;color:var(--muted)}
-.seg button.on.buy{background:var(--blue);color:#fff}
-.seg button.on.sell{background:var(--red);color:#fff}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;padding:3px;gap:3px}
+.seg button{background:none;border:0;border-radius:6px;padding:9px;font-weight:600;color:var(--muted)}
+.seg button.on.buy{background:var(--ink);color:#fff}
+.seg button.on.sell{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 label{font-size:12px;font-weight:600;color:var(--muted)}
 .amt{display:flex;gap:8px;align-items:center}
-.amt input{flex:1;min-width:0;font-family:var(--mono);font-size:18px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.amt input{flex:1;min-width:0;font-family:var(--mono);font-size:18px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
 .quick{display:flex;gap:6px;flex-wrap:wrap}
-.quick button{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:13px;min-width:44px}
-.quote{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:13px;background:var(--bg);border-radius:8px;padding:10px 12px}
+.quick button{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:13px;min-width:44px}
+.quick button:hover{border-color:var(--ink)}
+.quote{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:13px;background:var(--soft);border-radius:8px;padding:10px 12px}
 .quote span:nth-child(even){font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
 .quote .err{grid-column:1/-1;color:var(--red);font-family:var(--body)!important;text-align:left!important}
-.go{border:0;border-radius:8px;padding:12px;font-weight:600;font-size:16px;color:#fff;background:var(--blue);min-height:48px}
-.go.sell{background:var(--red)}
+.go{border:1.5px solid var(--ink);border-radius:8px;padding:12px;font-weight:600;font-size:16px;color:#fff;background:var(--ink);min-height:48px}
+.go.sell{background:var(--surface);color:var(--ink)}
 .go:disabled{opacity:.4;cursor:not-allowed}
 .feed{display:flex;flex-direction:column;font-size:13px}
 .feed div{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
@@ -119,10 +112,19 @@ tr.me td{background:var(--soft)}
 .loading{color:var(--muted);margin:32px 0;text-align:center}
 .stack{display:flex;flex-direction:column;gap:20px}
 .stack>:empty{display:none}
+/* market detail: phone order is outcomes, chart, trade, feed; wide screens move the trade panel to its own column */
+.mk-cols{display:flex;flex-direction:column;gap:20px}
+.mk-main{display:contents}
+#mk-outs{order:1} #mk-chart{order:2} #mk-trade{order:3} #mk-feed{order:4}
+#mk-trade:empty{display:none}
+.pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--muted);min-height:50vh;padding:24px}
+.pick b{font-family:var(--display);font-size:22px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink)}
+.pick p{margin:0;max-width:340px}
 /* login */
 .login{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:24px 20px;gap:24px;max-width:420px;margin:0 auto}
 .login .mark{font-family:var(--display);font-weight:700;font-size:44px;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
-.login .mark span{color:var(--blue)}
+.login .mark span{color:var(--ink)}
+@supports (-webkit-text-stroke:1px black){.login .mark span{color:transparent;-webkit-text-stroke:1.5px var(--ink)}}
 .login p{margin:0;color:var(--muted)}
 .login form,.login .box{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
 .login .hint{font-size:12px;color:var(--muted)}
@@ -130,17 +132,17 @@ tr.me td{background:var(--soft)}
 .gbtn p{font-size:14px}
 .login .alt{align-self:center;text-align:center;font-size:13px}
 .field{display:flex;flex-direction:column;gap:6px}
-.field input,.field select,.field textarea{font:inherit;font-size:17px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.field input,.field select,.field textarea{font:inherit;font-size:17px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);width:100%;min-width:0}
 .field textarea{resize:vertical;min-height:84px;font-size:16px}
 .field input.team{font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em}
 .field .hint{font-size:12px;color:var(--muted)}
 .bad{font-size:12px;color:var(--red)}
-.signout{background:none;border:0;padding:4px 0;font-size:11px;color:var(--blue);font-weight:600}
+.signout{background:none;border:0;padding:4px 0;font-size:11px;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:5}
 nav.four{grid-template-columns:repeat(4,1fr)}
 nav button{background:none;border:0;padding:12px 4px 16px;font-weight:600;font-size:13px;color:var(--muted);border-top:3px solid transparent}
-nav button.on{color:var(--blue);border-top-color:var(--blue)}
-.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;font-weight:500;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;z-index:10}
+nav button.on{color:var(--ink);border-top-color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:500;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;z-index:10}
 .toast.show{opacity:1}
 /* admin */
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px}
@@ -148,14 +150,40 @@ nav button.on{color:var(--blue);border-top-color:var(--blue)}
 .sub{font-size:12px;color:var(--muted)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
-.sm{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px;min-height:42px}
-.sm.prim{background:var(--blue);border-color:var(--blue);color:#fff}
+.sm{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px;min-height:42px}
+.sm:hover{border-color:var(--ink)}
+.sm.prim{background:var(--ink);border-color:var(--ink);color:#fff}
 .sm.danger{color:var(--red);border-color:currentColor}
 .sm:disabled{opacity:.4;cursor:not-allowed}
 .item{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
 .item:first-of-type{border-top:0;padding-top:0}
-.rform{display:flex;flex-direction:column;gap:10px;background:var(--bg);border-radius:8px;padding:12px}
-details>summary{cursor:pointer;font-weight:600;padding:4px 0;color:var(--blue)}
+.rform{display:flex;flex-direction:column;gap:10px;background:var(--soft);border-radius:8px;padding:12px}
+details>summary{cursor:pointer;font-weight:600;padding:4px 0;color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+
+/* ---------- laptop (>= 900px): .app.wide is set from a matchMedia listener in the script ---------- */
+.app.wide{max-width:none}
+.app.wide header{height:var(--hdr);padding:0 24px;gap:32px}
+.app.wide nav{position:static;transform:none;width:auto;max-width:none;border:0;background:none;display:flex;align-self:stretch;gap:4px;z-index:auto}
+.app.wide nav button{padding:0 14px;font-size:14px;border-top:0;border-bottom:3px solid transparent}
+.app.wide nav button.on{border-bottom-color:var(--ink)}
+.app.wide nav button:hover{color:var(--ink)}
+.app.wide main{width:100%;max-width:960px;margin:0 auto;padding:28px 24px 48px}
+/* Markets: list pane on the left, #detail on the right. Other views can draw into #detail too. */
+.app.wide main.split{flex:none;min-height:0;max-width:none;margin:0;padding:0;gap:0;display:grid;grid-template-columns:380px minmax(0,1fr);grid-template-rows:minmax(0,1fr);height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
+#list,#detail{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+#list{border-right:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:20px}
+#detail{padding:24px 32px 48px}
+#detail>*{max-width:680px;margin-left:auto;margin-right:auto}
+.app.wide #mk>.back{display:none}
+.app.wide ~ .toast{bottom:24px}
+@media (min-width:1200px){
+  #detail>#mk{max-width:1040px}
+  .app.wide .mk-cols{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+  #detail>#mk.notrade{max-width:680px}
+  .app.wide #mk.notrade .mk-cols{grid-template-columns:minmax(0,1fr)}
+  .app.wide .mk-main{display:flex;flex-direction:column;gap:20px;min-width:0}
+  .app.wide #mk-trade{position:sticky;top:0}
+}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 </head>
@@ -228,9 +256,10 @@ function $(s) { return document.querySelector(s); }
 function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 function pct(p) { return Math.round(p * 100) + "%"; }
 function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
-function signed(n) { var r = Math.round(n); return (r > 0 ? "+" : "") + r.toLocaleString("en-US"); }
 function fmtSh(n) { return (Math.round(n * 10) / 10).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
-function upDn(n) { return Math.round(n) >= 0 ? "up" : "dn"; }
+function upDn(n) { var r = Math.round(n); return r > 0 ? "up" : r < 0 ? "dn" : ""; }
+/** A change shown with its direction: "▲ 12", "▼ 40", "0". Colour comes from upDn(). */
+function delta(n) { var r = Math.round(n); return r > 0 ? "▲ " + fmt(r) : r < 0 ? "▼ " + fmt(-r) : "0"; }
 function safeUrl(u) { return /^https?:\/\/[^\s"'<>]+$/i.test(String(u || "")) ? String(u) : null; }
 function extLink(u, text) { var s = safeUrl(u); return s ? '<a href="' + esc(s) + '" target="_blank" rel="noopener">' + esc(text || s) + "</a>" : esc(u || ""); }
 var HK = "Asia/Hong_Kong";
@@ -329,22 +358,74 @@ function setUser(u) {
   $("#nav").classList.toggle("four", !!u.isAdmin);
 }
 
-/* ---------- navigation ---------- */
+/* ---------- navigation and layout ---------- */
+/*
+ * Phone (< 900px): one column, every view draws into #main, bottom nav.
+ * Laptop (>= 900px): .app gets class "wide", the nav moves into the header, and the Markets tab is split:
+ * #main holds #list (market list) and #detail (whatever is selected). Views other than Markets stay one
+ * centred column in #main. To add another right-pane view, draw into detailEl() while splitView() is true.
+ */
+var wideMQ = window.matchMedia ? window.matchMedia("(min-width: 900px)") : null;
+var wide = !!(wideMQ && wideMQ.matches);
 function viewKey(v) { return v.name === "market" ? "market:" + v.id : v.name; }
 function setTab(n) { ["markets", "portfolio", "leaders", "admin"].forEach(function (t) { $("#tab-" + t).classList.toggle("on", t === n); }); }
+function splitView(v) { v = v || view; return wide && (v.name === "markets" || v.name === "market"); }
+function listEl() { return (splitView() && $("#list")) || $("#main"); }
+function detailEl() { return (splitView() && $("#detail")) || $("#main"); }
+/** Where a view's content (or its loading/error message) goes. */
+function paneFor(v) { return v.name === "markets" ? listEl() : v.name === "market" ? detailEl() : $("#main"); }
+var LOADING = '<p class="loading">Loading…</p>';
+
+/** Applies the phone or laptop layout. Moving the nav keeps its click handlers. */
+function applyLayout() {
+  var app = $("#app"), nav = $("#nav");
+  app.classList.toggle("wide", wide);
+  if (wide) $("header").insertBefore(nav, $(".bal"));
+  else app.appendChild(nav);
+}
+function onLayoutChange() {
+  var was = wide;
+  wide = !!wideMQ.matches;
+  if (was === wide) return;
+  applyLayout();
+  // Markets changes shape between the two layouts; the other views are the same markup, restyled.
+  if (token && me && !$("#app").hidden && (view.name === "markets" || view.name === "market")) go(view);
+}
+if (wideMQ) { if (wideMQ.addEventListener) wideMQ.addEventListener("change", onLayoutChange); else if (wideMQ.addListener) wideMQ.addListener(onLayoutChange); }
 
 function go(v) {
   view = v; viewSeq++;
   setTab(v.name === "market" ? "markets" : v.name);
+  var main = $("#main"), split = splitView(v), needList = false;
   var c = v.name === "admin" ? null : cache[viewKey(v)];
-  if (c) draw(v, c); else $("#main").innerHTML = '<p class="loading">Loading…</p>';
-  window.scrollTo(0, 0);
-  load(false);
+  main.classList.toggle("split", split);
+  if (split) {
+    if (!$("#list")) {
+      main.innerHTML = '<div id="list"></div><div id="detail"></div>';
+      if (cache.markets) drawMarkets(cache.markets); else { $("#list").innerHTML = LOADING; needList = true; }
+    }
+    if (v.name === "markets") drawPickPrompt();
+    else if (c) draw(v, c);
+    else $("#detail").innerHTML = LOADING;
+    markSelected();
+    $("#detail").scrollTop = 0;
+    window.scrollTo(0, 0);
+  } else {
+    if ($("#list")) main.innerHTML = "";
+    if (c) draw(v, c); else main.innerHTML = LOADING;
+    window.scrollTo(0, 0);
+  }
+  load(false, needList);
 }
 
-/** Fetch the current view. silent = keep showing what is there, no spinner. */
-function load(silent) {
-  var v = view, seq = viewSeq, epoch = marketEpoch, p;
+/** Fetch the current view; withList also refreshes the market list beside it (laptop Markets tab). silent = no spinner. */
+function load(silent, withList) {
+  var v = view, seq = viewSeq, jobs = [fetchView(v, seq, silent)];
+  if (withList && v.name === "market" && splitView(v)) jobs.push(fetchView({ name: "markets" }, seq, silent));
+  return Promise.all(jobs);
+}
+function fetchView(v, seq, silent) {
+  var epoch = marketEpoch, p;
   if (v.name === "markets") p = call("listMarkets", token);
   else if (v.name === "market") p = call("getMarket", token, v.id);
   else if (v.name === "portfolio") p = call("portfolio", token);
@@ -353,7 +434,6 @@ function load(silent) {
   else return Promise.resolve();
   return p.then(function (res) {
     cache[viewKey(v)] = res;
-    if (v.name === "markets") cache.markets = res;
     if (seq !== viewSeq || !token) return;
     if (v.name === "market" && epoch !== marketEpoch) return;   // a trade landed meanwhile; its result is newer
     draw(v, res);
@@ -363,7 +443,7 @@ function load(silent) {
     if (silent) { if (e.message !== lastRefreshErr) toast(e.message); lastRefreshErr = e.message; return; }
     toast(e.message);
     if (!cache[viewKey(v)] || v.name === "admin") {
-      $("#main").innerHTML = '<p class="loading">' + esc(e.message) + '</p><button class="sm" type="button" data-act="retry" style="align-self:center">Try again</button>';
+      paneFor(v).innerHTML = '<p class="loading">' + esc(e.message) + '</p><button class="sm" type="button" data-act="retry" style="display:block;margin:0 auto">Try again</button>';
     }
   });
 }
@@ -378,11 +458,25 @@ function draw(v, res) {
 
 function openMarket(id) { tr.mid = null; go({ name: "market", id: id }); }   // fresh trade panel, like the prototype
 
-/* silent refresh every 15 s while visible (never the admin screen) */
+/** Right pane of the laptop Markets tab when no market is picked. */
+function drawPickPrompt() {
+  $("#detail").innerHTML = '<div class="pick"><b>Pick a market</b><p>Choose one from the list to see its prices and history and to trade.</p></div>';
+}
+/** Outlines the open market's card in the laptop list. */
+function markSelected() {
+  if (!$("#list")) return;
+  Array.prototype.forEach.call($("#list").querySelectorAll(".card[data-mid]"), function (el) {
+    var on = view.name === "market" && el.getAttribute("data-mid") === view.id;
+    el.classList.toggle("on", on);
+    if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current");
+  });
+}
+
+/* silent refresh every 15 s while visible (never the admin screen); on the laptop Markets tab both panes refresh */
 function refresh() {
   if (refreshing || !token || !me || view.name === "admin" || document.visibilityState !== "visible") return;
   refreshing = true;
-  load(true).then(function () { refreshing = false; }, function () { refreshing = false; });
+  load(true, true).then(function () { refreshing = false; }, function () { refreshing = false; });
 }
 setInterval(refresh, 15000);
 document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); });
@@ -396,9 +490,9 @@ function eventFor(code) {
 function cardHTML(m) {
   var p = m.prices, binary = m.kind === "binary";
   var k = binary ? 0 : argmax(p), label = m.outcomes[k], c = m.change ? m.change[k] : 0, val;
-  if (m.status === "resolved" && m.resolution != null) val = '<span class="big">' + esc(m.outcomes[m.resolution]) + "</span><span>won</span>";
+  if (m.status === "resolved" && m.resolution != null) val = '<span class="big won">✓ ' + esc(m.outcomes[m.resolution]) + "</span><span>won</span>";
   else if (m.status === "void") val = '<span class="big">Void</span><span>stakes refunded</span>';
-  else val = '<span class="big">' + pct(p[k]) + "</span><span>" + esc(label) + "</span>" + (c ? '<span class="chg ' + (c > 0 ? "up" : "dn") + '">' + (c > 0 ? "+" : "") + c + "</span>" : "");
+  else val = '<span class="big">' + pct(p[k]) + "</span><span>" + esc(label) + "</span>" + (c ? '<span class="chg ' + upDn(c) + '">' + delta(c) + "</span>" : "");
   return '<button class="card tap" type="button" data-act="open" data-mid="' + esc(m.marketId) + '">' +
     '<div class="q">' + esc(m.question) + "</div>" +
     '<div class="row">' + val + "</div>" +
@@ -423,7 +517,8 @@ function drawMarkets(d) {
   if (rest.length) h += sec("Other markets", "", "", rest);
   if (!d.markets.length && !d.events.length) h += '<p class="loading">No markets yet. Check back soon.</p>';
   h += '<section class="event"><h3>House rules</h3><ol class="rules"><li>Markets lock when the event starts.</li><li>You can\'t bet against your own team.</li><li>Results come from events.vex.com only.</li><li>Cancelled events refund your stake.</li><li>Hong Kong events only. Points have no cash value.</li></ol></section>';
-  $("#main").innerHTML = h;
+  listEl().innerHTML = h;
+  markSelected();
 }
 
 /* ---------- Market detail ---------- */
@@ -453,8 +548,8 @@ function chartSVG(m, k) {
   var first = hkFmt(hist[0].t, { day: "numeric", month: "short" });
   var last = m.status === "open" ? "now" : hkFmt(hist[hist.length - 1].t, { day: "numeric", month: "short" });
   return '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Price history for ' + esc(m.outcomes[k]) + '">' + grid +
-    '<path d="' + area + '" fill="var(--blue)" opacity=".1"/><path d="' + d + '" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linejoin="round"/>' +
-    '<circle cx="' + lx + '" cy="' + ly + '" r="4" fill="var(--blue)"/>' +
+    '<path d="' + area + '" fill="var(--ink)" opacity=".07"/><path d="' + d + '" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>' +
+    '<circle cx="' + lx + '" cy="' + ly + '" r="4" fill="var(--ink)"/>' +
     '<text x="' + pl + '" y="' + (H - 3) + '" font-size="10" fill="var(--muted)">' + esc(first) + '</text><text x="' + (W - pr) + '" y="' + (H - 3) + '" font-size="10" fill="var(--muted)" text-anchor="end">' + esc(last) + "</text></svg>";
 }
 
@@ -484,8 +579,9 @@ function drawMarket(m) {
   if (tr.k >= m.outcomes.length) tr.k = 0;
   var root = $("#mk");
   if (!root || root.getAttribute("data-id") !== m.marketId) {
-    $("#main").innerHTML = '<div class="stack" id="mk"><button class="back" type="button" data-act="back">← All markets</button>' +
-      '<div id="mk-head"></div><div id="mk-banner"></div><div class="outs" id="mk-outs"></div><div class="chart" id="mk-chart"></div><div id="mk-trade"></div><div id="mk-feed"></div></div>';
+    detailEl().innerHTML = '<div class="stack" id="mk"><button class="back" type="button" data-act="back">← All markets</button>' +
+      '<div id="mk-head"></div><div id="mk-banner"></div>' +
+      '<div class="mk-cols" id="mk-cols"><div class="mk-main"><div class="outs" id="mk-outs"></div><div class="chart" id="mk-chart"></div><div id="mk-feed"></div></div><div id="mk-trade"></div></div></div>';
     $("#mk").setAttribute("data-id", m.marketId);
   }
   var e = eventFor(m.eventCode), p = m.prices;
@@ -493,7 +589,7 @@ function drawMarket(m) {
     '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="meta">' + lockTxt(m) + (m.status === "open" ? " · " + esc(hkFull(m.lockAt)) : "") + " · liquidity b = " + esc(m.b) + "</span></div></div>";
 
   var bn = "";
-  if (m.status === "resolved" && m.resolution != null) bn = '<div class="banner done">Resolved <b>' + esc(m.outcomes[m.resolution]) + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "official results") + "." : "") + "</div>";
+  if (m.status === "resolved" && m.resolution != null) bn = '<div class="banner done">✓ Resolved <b>' + esc(m.outcomes[m.resolution]) + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "official results") + "." : "") + "</div>";
   else if (m.status === "void") bn = '<div class="banner warn">This market was voided. Everyone\'s stake was refunded.</div>';
   else if (m.status === "locked") bn = '<div class="banner warn">Trading is locked. Waiting for the official result.</div>';
   else if (m.fav != null) bn = '<div class="banner info">This market involves ' + esc(me.team) + ", so you can only back " + esc(m.outcomes[m.fav]) + ".</div>";
@@ -513,7 +609,7 @@ function drawMarket(m) {
     }
     var vals = (m.history || []).map(function (h) { return h.p[i] || 0; });
     return '<button class="out ' + cls + '" type="button" data-act="pick" data-k="' + i + '"' + (m.status === "void" ? " disabled" : "") + ' aria-pressed="' + (i === tr.k) + '">' +
-      '<span class="nm">' + esc(o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
+      '<span class="nm">' + (res && i === m.resolution ? "✓ " : "") + esc(o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
       '<span class="bar"><i style="width:' + (shown * 100).toFixed(1) + '%"></i></span>' + hold + "</button>";
   }).join("");
 
@@ -521,6 +617,7 @@ function drawMarket(m) {
 
   if (m.status === "open") { if (!$("#amt")) buildTrade(); updateTrade(); }
   else $("#mk-trade").innerHTML = "";
+  $("#mk").classList.toggle("notrade", m.status !== "open");
 
   var trades = m.trades || [];
   $("#mk-feed").innerHTML = '<div><h3 style="margin-bottom:4px">Recent trades</h3><div class="feed">' +
@@ -580,7 +677,10 @@ function doTrade() {
   call("trade", token, id, k, side, Number(tr.amt), m.prices).then(function (res) {
     trading = false; marketEpoch++;
     cache["market:" + id] = { user: res.user, market: res.market };
-    if (view.name === "market" && view.id === id) drawMarket(res.market);
+    if (view.name === "market" && view.id === id) {
+      drawMarket(res.market);
+      if (splitView()) fetchView({ name: "markets" }, viewSeq, true);   // the list beside it shows the new price
+    }
     var f = res.fill;
     toast((f.side === "buy" ? "Bought " : "Sold ") + fmtSh(f.shares) + " " + res.market.outcomes[f.outcomeIdx] + " for " + fmt(f.cost) + " pts");
   }, function (e) {
@@ -597,12 +697,12 @@ function drawPortfolio(d) {
   var rows = d.open.map(function (r) {
     var pl = r.value - r.costBasis;
     return '<tr><td><button class="back" type="button" data-act="open" data-mid="' + esc(r.marketId) + '">' + esc(r.question) + '</button><div class="team">' + esc(r.outcome) + " · " + fmtSh(r.shares) + " sh · now " + pct(r.price) + (r.status === "locked" ? " · locked" : "") + "</div></td>" +
-      '<td class="num">' + fmt(r.value) + '<div class="chg ' + upDn(pl) + '">' + signed(pl) + "</div></td></tr>";
+      '<td class="num">' + fmt(r.value) + '<div class="chg ' + upDn(pl) + '">' + delta(pl) + "</div></td></tr>";
   }).join("");
   var done = d.closed.map(function (r) {
-    var what = r.status === "void" ? "Void · refunded " + fmt(r.payout) : r.won ? "Won · paid " + fmt(r.payout) : "Lost";
+    var what = r.status === "void" ? "Void · refunded " + fmt(r.payout) : r.won ? "✓ Won · paid " + fmt(r.payout) : "Lost";
     return '<tr><td><button class="back" type="button" data-act="open" data-mid="' + esc(r.marketId) + '">' + esc(r.question) + '</button><div class="team">' + esc(r.outcome) + " · " + fmtSh(r.shares) + " sh · " + what + "</div></td>" +
-      '<td class="num ' + upDn(r.pnl) + '">' + signed(r.pnl) + "</td></tr>";
+      '<td class="num ' + upDn(r.pnl) + '">' + delta(r.pnl) + "</td></tr>";
   }).join("");
   $("#main").innerHTML = "<h2>Portfolio</h2>" +
     '<div class="stats"><div class="stat"><div class="v">' + fmt(d.netWorth) + '</div><div class="k">Net worth</div></div><div class="stat"><div class="v">' + fmt(d.user.balance) + '</div><div class="k">Free pts</div></div><div class="stat"><div class="v">' + fmt(d.inPositions) + '</div><div class="k">In positions</div></div></div>' +
@@ -617,7 +717,7 @@ function drawLeaders(d) {
   if (lbMode === "people") {
     body = d.rows.map(function (r) {
       i++;
-      return '<tr class="' + (me && r.userId === me.userId ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(r.name) + '</b> <span class="team">' + esc(r.team) + '</span></td><td class="num">' + fmt(r.netWorth) + '</td><td class="num"><span class="chg ' + upDn(r.weekChange) + '">' + signed(r.weekChange) + "</span></td></tr>";
+      return '<tr class="' + (me && r.userId === me.userId ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(r.name) + '</b> <span class="team">' + esc(r.team) + '</span></td><td class="num">' + fmt(r.netWorth) + '</td><td class="num"><span class="chg ' + upDn(r.weekChange) + '">' + delta(r.weekChange) + "</span></td></tr>";
     }).join("");
   } else {
     var t = {}, list = [];
@@ -625,7 +725,7 @@ function drawLeaders(d) {
     list.sort(function (a, b) { return b.v - a.v; });
     body = list.map(function (x) {
       i++;
-      return '<tr class="' + (me && x.team === me.team ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(x.team) + '</b> <span class="team">' + x.n + " trader" + (x.n > 1 ? "s" : "") + '</span></td><td class="num">' + fmt(x.v) + '</td><td class="num"><span class="chg ' + upDn(x.w) + '">' + signed(x.w) + "</span></td></tr>";
+      return '<tr class="' + (me && x.team === me.team ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(x.team) + '</b> <span class="team">' + x.n + " trader" + (x.n > 1 ? "s" : "") + '</span></td><td class="num">' + fmt(x.v) + '</td><td class="num"><span class="chg ' + upDn(x.w) + '">' + delta(x.w) + "</span></td></tr>";
     }).join("");
   }
   $("#main").innerHTML = "<h2>Leaderboard</h2><h3>Season " + esc(d.seasonId) + " · net worth</h3>" +
@@ -964,7 +1064,7 @@ var NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 .'_-]{1,19}$/, TEAM_RE = /^\d{1,5}[A-Z]?$/
 
 function loginPage(top, card, after) {
   return '<div class="login"><div><div class="mark">HK VEX<br><span>Market</span></div>' + top + "</div>" + card + (after || "") +
-    '<p class="team">Points have no cash value. Hong Kong V5RC events only. <a href="privacy.html" target="_blank" rel="noopener" style="color:var(--blue)">Privacy</a></p></div>';
+    '<p class="team">Points have no cash value. Hong Kong V5RC events only. <a href="privacy.html" target="_blank" rel="noopener">Privacy</a></p></div>';
 }
 
 /** Sign-in step. msg (optional) is shown under the Google button. */
@@ -1025,7 +1125,7 @@ function renderGoogleButton() {
     box.innerHTML = "";
     var w = Math.floor(box.clientWidth || 0);
     w = w > 0 ? Math.max(200, Math.min(400, w)) : 400;   // Google's button takes 200 to 400 px
-    google.accounts.id.renderButton(box, { theme: "filled_blue", size: "large", type: "standard", shape: "rectangular", text: "signin_with", logo_alignment: "left", width: w });
+    google.accounts.id.renderButton(box, { theme: "outline", size: "large", type: "standard", shape: "rectangular", text: "signin_with", logo_alignment: "left", width: w });
   } catch (e) {
     box.innerHTML = '<p class="sub">Couldn\'t load Google sign-in. Check your connection or try another browser.</p><button class="sm" type="button" id="gretry">Retry</button>';
     $("#gretry").addEventListener("click", setupGoogle);
@@ -1143,6 +1243,7 @@ function submitJoin() {
 
 /* ---------- app shell ---------- */
 function enterApp() {
+  applyLayout();
   $("#login").hidden = true;
   $("#app").hidden = false;
   go({ name: "markets" });
