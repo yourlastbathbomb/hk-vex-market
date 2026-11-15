@@ -422,7 +422,7 @@ function drawMarkets(d) {
   var rest = []; for (var c in by) rest = rest.concat(by[c]);
   if (rest.length) h += sec("Other markets", "", "", rest);
   if (!d.markets.length && !d.events.length) h += '<p class="loading">No markets yet. Check back soon.</p>';
-  h += '<section class="event"><h3>House rules</h3><ol class="rules"><li>Markets lock when the event starts.</li><li>You can\'t bet against your own team.</li><li>Results come from RobotEvents only.</li><li>Cancelled events refund your stake.</li><li>Hong Kong events only. Points have no cash value.</li></ol></section>';
+  h += '<section class="event"><h3>House rules</h3><ol class="rules"><li>Markets lock when the event starts.</li><li>You can\'t bet against your own team.</li><li>Results come from events.vex.com only.</li><li>Cancelled events refund your stake.</li><li>Hong Kong events only. Points have no cash value.</li></ol></section>';
   $("#main").innerHTML = h;
 }
 
@@ -493,9 +493,9 @@ function drawMarket(m) {
     '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + '</span><span class="meta">' + lockTxt(m) + (m.status === "open" ? " · " + esc(hkFull(m.lockAt)) : "") + " · liquidity b = " + esc(m.b) + "</span></div></div>";
 
   var bn = "";
-  if (m.status === "resolved" && m.resolution != null) bn = '<div class="banner done">Resolved <b>' + esc(m.outcomes[m.resolution]) + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "RobotEvents results") + "." : "") + "</div>";
+  if (m.status === "resolved" && m.resolution != null) bn = '<div class="banner done">Resolved <b>' + esc(m.outcomes[m.resolution]) + "</b>." + (m.resolutionSource ? " Source: " + extLink(m.resolutionSource, "official results") + "." : "") + "</div>";
   else if (m.status === "void") bn = '<div class="banner warn">This market was voided. Everyone\'s stake was refunded.</div>';
-  else if (m.status === "locked") bn = '<div class="banner warn">Trading is locked. Waiting for the result from RobotEvents.</div>';
+  else if (m.status === "locked") bn = '<div class="banner warn">Trading is locked. Waiting for the official result.</div>';
   else if (m.fav != null) bn = '<div class="banner info">This market involves ' + esc(me.team) + ", so you can only back " + esc(m.outcomes[m.fav]) + ".</div>";
   $("#mk-banner").innerHTML = bn;
 
@@ -669,7 +669,7 @@ function drawAdmin(d, partial) {
   } else syncNewMarketEvents();
   var s = d.stats, c = d.config;
   $("#ad-stats").innerHTML = '<div class="stats"><div class="stat"><div class="v">' + fmt(s.traders) + '</div><div class="k">Traders</div></div><div class="stat"><div class="v">' + fmt(s.subsidyRealised) + '</div><div class="k">Subsidy realised</div></div><div class="stat"><div class="v">' + fmt(s.openExposure) + '</div><div class="k">Open exposure</div></div></div>' +
-    '<p class="sub" style="margin:8px 0 0">Season ' + esc(c.seasonId) + " · start " + fmt(c.startingBalance) + " pts · default b " + esc(c.defaultB) + " / " + esc(c.defaultBMulti) + " · slippage " + esc(c.slippagePts) + " pts · invite code " + (s.inviteSet ? "set" : "not set") + " · RobotEvents token " + (s.robotEventsToken ? "set" : "not set") + "</p>";
+    '<p class="sub" style="margin:8px 0 0">Season ' + esc(c.seasonId) + " · start " + fmt(c.startingBalance) + " pts · default b " + esc(c.defaultB) + " / " + esc(c.defaultBMulti) + " · slippage " + esc(c.slippagePts) + " pts · invite code " + (s.inviteSet ? "set" : "not set") + " · VEX events API token " + (s.robotEventsToken ? "set" : "not set") + "</p>";
   drawAdminMarkets(); drawAdminEvents(); drawAdminUsers(); drawAdminReset();
 }
 
@@ -792,7 +792,7 @@ function drawAdminMarkets() {
       '<button class="sm danger" type="button" data-act="void" data-mid="' + esc(m.marketId) + '">Void</button></div>' +
       '<form class="rform" data-form="resolve" data-mid="' + esc(m.marketId) + '" novalidate hidden>' +
       '<div class="field"><label>Winning outcome</label><select name="outcome">' + m.outcomes.map(function (o, i) { return '<option value="' + i + '"' + (m.pending && m.pending.outcomeIdx === i ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>" + errSpan("outcome") + "</div>" +
-      '<div class="field"><label>RobotEvents results URL</label><input name="source" type="url" inputmode="url" autocomplete="off" placeholder="https://www.robotevents.com/..." value="' + esc(m.pending ? m.pending.source : "") + '" required>' + errSpan("source") + "</div>" +
+      '<div class="field"><label>Results link (events.vex.com)</label><input name="source" type="url" inputmode="url" autocomplete="off" placeholder="https://events.vex.com/..." value="' + esc(m.pending ? m.pending.source : "") + '" required>' + errSpan("source") + "</div>" +
       '<div class="acts"><button class="sm prim" type="submit">Confirm result</button><button class="sm" type="button" data-act="resolve-cancel">Cancel</button></div></form></div>';
   }).join("") : '<p class="sub" style="margin:0">No open or locked markets.</p>';
   if (closed.length) {
@@ -810,7 +810,7 @@ function drawAdminEvents() {
     return '<div class="item"><div class="q">' + esc(e.name) + '</div><div class="sub"><span class="team">' + esc(e.eventCode) + "</span> · " + esc(eventWhen(e)) + " · " + esc(e.region) + " · " + eventTeams(e.eventCode).length + " teams</div></div>";
   }).join("") : '<p class="sub" style="margin:0">No events yet.</p>');
   h += '<details><summary>Import event</summary><form id="f-import" class="stack" style="gap:10px;margin-top:10px" novalidate>' +
-    '<p class="sub" style="margin:0">' + (tok ? "RobotEvents token is set: the code alone pulls the event and its teams. Fill the other fields to enter it by hand instead." : "No RobotEvents token: enter the details by hand. Region must be Hong Kong.") + "</p>" +
+    '<p class="sub" style="margin:0">' + (tok ? "VEX events API token is set: the code alone pulls the event and its teams from events.vex.com. Fill the other fields to enter it by hand instead." : "No VEX events API token: enter the details by hand. Region must be Hong Kong.") + "</p>" +
     '<div class="field"><label for="ie-code">Event code</label><input id="ie-code" class="team" placeholder="RE-V5RC-27-4476" autocomplete="off" autocapitalize="characters">' + errSpan("eventCode") + "</div>" +
     '<div class="field"><label for="ie-name">Name' + (tok ? " (optional)" : "") + '</label><input id="ie-name" autocomplete="off">' + errSpan("name") + "</div>" +
     '<div class="grid2"><div class="field"><label for="ie-start">Starts (HKT)</label><input id="ie-start" type="datetime-local">' + errSpan("startAt") + "</div>" +
@@ -882,7 +882,7 @@ function adminSubmit(form) {
   clearErrs(form);
   if (form.getAttribute("data-form") === "resolve") {
     var mid = form.getAttribute("data-mid"), k = Number(form.elements.outcome.value), src = form.elements.source.value.trim();
-    if (!/^https:\/\/www\.robotevents\.com\/\S+$/.test(src)) { showErr(form, { field: "source", message: "Paste the RobotEvents results link (https://www.robotevents.com/...)." }); return; }
+    if (!/^https:\/\/((www\.)?robotevents\.com|events\.vex\.com)\/\S+$/i.test(src)) { showErr(form, { field: "source", message: "Paste the results link from events.vex.com (https://events.vex.com/...)." }); return; }
     var m = marketById(mid);
     if (!confirm("Resolve as " + m.outcomes[k] + "? Winners are paid now.")) return;
     busyBtn(form.querySelector('[type="submit"]'), call("resolveMarket", token, mid, k, src)).then(function (r) {
