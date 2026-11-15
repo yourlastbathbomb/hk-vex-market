@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>window.HKVEX_API="https://script.google.com/macros/s/AKfycbw--FU7DvAqxWmOTk5H1OW9BO861AAcH3-L6fl-HqP1xoeOA2w8JNO9smYGFfG7CS5q/exec";</script>
+<head><script>window.HKVEX_API="https://script.google.com/macros/s/AKfycbw--FU7DvAqxWmOTk5H1OW9BO861AAcH3-L6fl-HqP1xoeOA2w8JNO9smYGFfG7CS5q/exec";window.HKVEX_GOOGLE_CLIENT_ID="378324152909-fu3t0arghct2f63gre6f755rvp38dg3u.apps.googleusercontent.com";</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HK VEX Market</title>
@@ -124,12 +124,15 @@ tr.me td{background:var(--soft)}
 .login .mark{font-family:var(--display);font-weight:700;font-size:44px;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
 .login .mark span{color:var(--blue)}
 .login p{margin:0;color:var(--muted)}
-.login form{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.login form,.login .box{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.login .hint{font-size:12px;color:var(--muted)}
+.gbtn{min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+.gbtn p{font-size:14px}
+.login .alt{align-self:center;text-align:center;font-size:13px}
 .field{display:flex;flex-direction:column;gap:6px}
 .field input,.field select,.field textarea{font:inherit;font-size:17px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;min-width:0}
 .field textarea{resize:vertical;min-height:84px;font-size:16px}
 .field input.team{font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em}
-.field input.pin{font-family:var(--mono);letter-spacing:.3em}
 .field .hint{font-size:12px;color:var(--muted)}
 .bad{font-size:12px;color:var(--red)}
 .signout{background:none;border:0;padding:4px 0;font-size:11px;color:var(--blue);font-weight:600}
@@ -836,7 +839,6 @@ function drawAdminUsers() {
     var self = me && u.userId === me.userId;
     return '<div class="item"><div class="row"><b>' + esc(u.name) + '</b><span class="team">' + esc(u.team) + "</span>" + (u.isAdmin ? '<span class="chip mine">Admin</span>' : "") + (u.banned ? '<span class="chip bad">Banned</span>' : "") + '<span class="meta">' + fmt(u.balance) + " pts</span></div>" +
       '<div class="acts">' + (self ? "" : '<button class="sm' + (u.banned ? "" : " danger") + '" type="button" data-act="ban" data-uid="' + esc(u.userId) + '" data-banned="' + (u.banned ? "1" : "") + '">' + (u.banned ? "Unban" : "Ban") + "</button>") +
-      '<button class="sm" type="button" data-act="pin" data-uid="' + esc(u.userId) + '">Reset PIN</button>' +
       '<button class="sm" type="button" data-act="team" data-uid="' + esc(u.userId) + '">Change team</button></div></div>';
   }).join("");
 }
@@ -869,10 +871,6 @@ function adminAct(act, b) {
     var ban = !b.getAttribute("data-banned");
     if (ban && !confirm("Ban " + u.name + "? They are logged out and left off the leaderboard.")) return;
     busyBtn(b, call("banUser", token, uid, ban)).then(function () { toast((ban ? "Banned " : "Unbanned ") + u.name + "."); reloadAdmin(); }, fail);
-  } else if (act === "pin" && u) {
-    var pin = prompt("New PIN for " + u.name + " (4 to 6 digits):", "");
-    if (pin === null) return;
-    busyBtn(b, call("resetPin", token, uid, pin.trim())).then(function () { toast("PIN reset for " + u.name + "."); }, fail);
   } else if (act === "team" && u) {
     var team = prompt("New team number for " + u.name + ":", u.team);
     if (team === null) return;
@@ -956,96 +954,190 @@ $("#main").addEventListener("input", function (e) {
   else if (id === "rs-text") $("#rs-go").disabled = e.target.value.trim() !== "RESET";
 });
 
-/* ---------- Login / Join ---------- */
-var loginMode = "join", inviteRequired = true, checkSeq = 0, checkedName = null, checkTimer = null, checkPromise = null;
-var NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 .'_-]{1,19}$/, TEAM_RE = /^\d{1,5}[A-Z]?$/, PIN_RE = /^\d{4,6}$/;
+/* ---------- Sign in (Google) / Join ---------- */
+var GSI_URL = "https://accounts.google.com/gsi/client";
+var credential = null;                // Google ID token for the join step; memory only, never stored
+var gsiPromise = null, gsiInitDone = false;
+var loginSeq = 0, signingIn = false, joinInvite = false;
+var checkSeq = 0, checkTimer = null, takenName = null;
+var NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 .'_-]{1,19}$/, TEAM_RE = /^\d{1,5}[A-Z]?$/;
 
-function showLogin() {
+function loginPage(top, card, after) {
+  return '<div class="login"><div><div class="mark">HK VEX<br><span>Market</span></div>' + top + "</div>" + card + (after || "") +
+    '<p class="team">Points have no cash value. Hong Kong V5RC events only. <a href="privacy.html" target="_blank" rel="noopener" style="color:var(--blue)">Privacy</a></p></div>';
+}
+
+/** Sign-in step. msg (optional) is shown under the Google button. */
+function showLogin(msg) {
   $("#app").hidden = true;
   var L = $("#login");
-  if (!L.hidden && $("#lf")) return;   // already showing; keep what is typed
-  L.hidden = false;
-  loginMode = "join"; checkedName = null; checkPromise = null;
-  L.innerHTML = '<div class="login">' +
-    '<div><div class="mark">HK VEX<br><span>Market</span></div><p style="margin-top:10px">Trade play points on Hong Kong V5RC events. Everyone starts the season with 1,000.</p></div>' +
+  if (L.hidden || !$("#gbtn")) {
+    loginSeq++; credential = null; signingIn = false;
+    L.hidden = false;
+    L.innerHTML = loginPage('<p style="margin-top:10px">Trade play points on Hong Kong V5RC events. Everyone starts the season with 1,000.</p>',
+      '<div class="box"><div class="gbtn" id="gbtn"></div><p class="sub" id="gbusy" hidden>Signing in…</p>' +
+      '<span class="bad" id="err-google" role="alert" hidden></span>' +
+      '<span class="hint">Use a personal Google account if your school one is blocked.</span></div>');
+    setupGoogle();
+  }
+  if (msg) googleErr(msg);
+}
+function googleErr(msg) { var el = $("#err-google"); if (el) { el.textContent = msg || ""; el.hidden = !msg; } }
+function gsiReady() { return !!(window.google && google.accounts && google.accounts.id); }
+
+/** Loads Google Identity Services once (unless the host already provided it). Rejects on error or after 15 s. */
+function loadGsi() {
+  if (gsiReady()) return Promise.resolve();
+  if (gsiPromise) return gsiPromise;
+  gsiPromise = new Promise(function (resolve, reject) {
+    var s = document.createElement("script"), timer;
+    function bad() { clearTimeout(timer); s.onload = s.onerror = null; if (s.parentNode) s.parentNode.removeChild(s); gsiPromise = null; reject(new Error("gsi")); }
+    s.src = GSI_URL; s.async = true;
+    s.onload = function () { clearTimeout(timer); if (gsiReady()) resolve(); else bad(); };
+    s.onerror = bad;
+    timer = setTimeout(bad, 15000);
+    document.head.appendChild(s);
+  });
+  return gsiPromise;
+}
+
+function setupGoogle() {
+  var box = $("#gbtn"), seq = loginSeq;
+  if (!box) return;
+  if (!window.HKVEX_GOOGLE_CLIENT_ID) { box.innerHTML = '<p class="sub">Google sign-in isn\'t set up yet.</p>'; return; }
+  box.innerHTML = '<p class="sub">Loading…</p>';
+  loadGsi().then(function () {
+    if (seq === loginSeq) renderGoogleButton();
+  }, function () {
+    if (seq !== loginSeq || !$("#gbtn")) return;
+    $("#gbtn").innerHTML = '<p class="sub">Couldn\'t load Google sign-in. Check your connection or try another browser.</p><button class="sm" type="button" id="gretry">Retry</button>';
+    $("#gretry").addEventListener("click", setupGoogle);
+  });
+}
+
+function renderGoogleButton() {
+  var box = $("#gbtn"); if (!box) return;
+  try {
+    if (!gsiInitDone) {
+      google.accounts.id.initialize({ client_id: window.HKVEX_GOOGLE_CLIENT_ID, callback: onCredential, auto_select: false, cancel_on_tap_outside: true });
+      gsiInitDone = true;
+    }
+    box.innerHTML = "";
+    var w = Math.floor(box.clientWidth || 0);
+    w = w > 0 ? Math.max(200, Math.min(400, w)) : 400;   // Google's button takes 200 to 400 px
+    google.accounts.id.renderButton(box, { theme: "filled_blue", size: "large", type: "standard", shape: "rectangular", text: "signin_with", logo_alignment: "left", width: w });
+  } catch (e) {
+    box.innerHTML = '<p class="sub">Couldn\'t load Google sign-in. Check your connection or try another browser.</p><button class="sm" type="button" id="gretry">Retry</button>';
+    $("#gretry").addEventListener("click", setupGoogle);
+  }
+}
+function setSigningIn(on) {
+  signingIn = on;
+  if ($("#gbtn")) $("#gbtn").hidden = on;
+  if ($("#gbusy")) $("#gbusy").hidden = !on;
+}
+
+/** Google Identity Services callback: { credential } is a Google ID token. */
+function onCredential(response) {
+  var cred = response && response.credential;
+  if (signingIn || !$("#gbtn")) return;
+  googleErr(null);
+  if (!cred) { googleErr("Google sign-in didn't work. Try again."); return; }
+  var seq = loginSeq;
+  setSigningIn(true);
+  call("googleSignIn", cred).then(function (res) {
+    if (seq !== loginSeq) return;
+    setSigningIn(false);
+    if (res && res.token) finishSignIn(res, false);
+    else if (res && res.needsProfile) { credential = cred; showJoin(res); }
+    else googleErr("Google sign-in didn't work. Try again.");
+  }, function (e) {
+    if (seq !== loginSeq) return;
+    setSigningIn(false);
+    googleErr(e.message);
+  });
+}
+
+function finishSignIn(res, joined) {
+  loginSeq++; credential = null;
+  saveToken(res.token); setUser(res.user);
+  $("#login").hidden = true; $("#login").innerHTML = "";
+  enterApp();
+  toast(joined ? "Welcome, " + res.user.name + ". You have " + fmt(res.user.balance) + " pts." : "Welcome back, " + res.user.name + ".");
+}
+
+/** Join step, first sign-in only: pick a display name and team (and the invite code if one is set). */
+function showJoin(info) {
+  if (!credential) { showLogin(); return; }
+  loginSeq++; takenName = null; checkSeq++; clearTimeout(checkTimer);
+  joinInvite = !!info.inviteRequired;
+  var L = $("#login");
+  $("#app").hidden = true; L.hidden = false;
+  L.innerHTML = loginPage('<h2 style="margin-top:14px">Almost there</h2><p style="margin-top:6px">Pick the name and team everyone will see. You only do this once.</p>',
     '<form id="lf" novalidate>' +
-    '<div class="field"><label for="nm">Your name</label><input id="nm" autocomplete="username" maxlength="20" placeholder="What the group chat calls you" autocapitalize="none" spellcheck="false"><span class="hint" id="hint-name">Shown on the leaderboard and in trade feeds.</span><span class="bad" id="err-name" hidden></span></div>' +
-    '<div class="field" id="f-team"><label for="tm">Team number</label><input id="tm" class="team" autocomplete="off" autocapitalize="characters" maxlength="6" placeholder="e.g. 936A"><span class="hint" id="hint-team">You can\'t bet against this team. Only an admin can change it later.</span><span class="bad" id="err-team" hidden></span></div>' +
-    '<div class="field"><label for="pin">PIN</label><input id="pin" class="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="new-password"><span class="hint" id="hint-pin"></span><span class="bad" id="err-pin" hidden></span></div>' +
-    '<div class="field" id="f-invite"><label for="inv">Invite code</label><input id="inv" autocomplete="off" autocapitalize="none" spellcheck="false"><span class="hint" id="hint-invite">From the group chat.</span><span class="bad" id="err-invite" hidden></span></div>' +
+    '<div class="field"><label for="nm">Your name</label><input id="nm" autocomplete="nickname" maxlength="20" placeholder="What the group chat calls you" autocapitalize="none" spellcheck="false"><span class="hint" id="hint-name">Shown on the leaderboard and in trade feeds.</span><span class="bad" id="err-name" hidden></span></div>' +
+    '<div class="field"><label for="tm">Team number</label><input id="tm" class="team" autocomplete="off" autocapitalize="characters" maxlength="6" placeholder="e.g. 936A"><span class="hint" id="hint-team">You can\'t bet against this team. Only an admin can change it later.</span><span class="bad" id="err-team" hidden></span></div>' +
+    (joinInvite ? '<div class="field"><label for="inv">Invite code</label><input id="inv" autocomplete="off" autocapitalize="none" spellcheck="false"><span class="hint" id="hint-invite">From the group chat.</span><span class="bad" id="err-invite" hidden></span></div>' : "") +
     '<span class="bad" id="err-form" hidden></span>' +
-    '<button class="go" type="submit" id="lgo"></button>' +
-    "</form>" +
-    '<p class="team">Points have no cash value. Hong Kong V5RC events only.</p></div>';
-  setMode("join");
+    '<button class="go" type="submit" id="lgo">Join the market</button>' +
+    "</form>",
+    '<button class="back alt" type="button" id="lswitch">Use a different Google account</button>');
+  $("#nm").value = info.suggestedName || "";
   $("#nm").addEventListener("input", function () {
     loginErr("name", null);
     clearTimeout(checkTimer);
     checkTimer = setTimeout(checkNow, 350);
   });
   $("#tm").addEventListener("input", function () { loginErr("team", null); });
-  $("#pin").addEventListener("input", function () { var v = $("#pin").value.replace(/\D/g, ""); if (v !== $("#pin").value) $("#pin").value = v; loginErr("pin", null); });
-  $("#inv").addEventListener("input", function () { loginErr("invite", null); });
-  $("#lf").addEventListener("submit", function (e) { e.preventDefault(); submitLogin(); });
-  try { $("#nm").focus(); } catch (e) {}
-}
-function setMode(mode) {
-  loginMode = mode;
-  var join = mode === "join";
-  $("#f-team").hidden = !join;
-  $("#f-invite").hidden = !(join && inviteRequired);
-  $("#lgo").textContent = join ? "Join the market" : "Log in";
-  $("#hint-pin").textContent = join ? "Pick 4 to 6 digits. You'll need it to log in again." : "Welcome back. Enter your PIN.";
-  $("#pin").setAttribute("autocomplete", join ? "new-password" : "current-password");
+  if ($("#inv")) $("#inv").addEventListener("input", function () { loginErr("invite", null); });
+  $("#lf").addEventListener("submit", function (e) { e.preventDefault(); submitJoin(); });
+  $("#lswitch").addEventListener("click", function () {
+    try { if (gsiReady()) google.accounts.id.disableAutoSelect(); } catch (e) {}
+    showLogin();
+  });
+  try { $(info.suggestedName ? "#tm" : "#nm").focus(); } catch (e) {}
 }
 function loginErr(field, msg) {
   var bad = $("#err-" + field), hint = $("#hint-" + field);
-  if (!bad) { if (msg) { $("#err-form").textContent = msg; $("#err-form").hidden = false; } return; }
+  if (!bad) { if (msg && $("#err-form")) { $("#err-form").textContent = msg; $("#err-form").hidden = false; } return; }
   bad.textContent = msg || ""; bad.hidden = !msg;
   if (hint) hint.hidden = !!msg;
-  if (!msg) $("#err-form").hidden = true;
+  if (!msg && $("#err-form")) $("#err-form").hidden = true;
 }
-/** Look the name up and flip between Join and Log in. Returns a promise that settles when the mode is current. */
+/** Debounced "that name is taken" check while the join form is filled in. */
 function checkNow() {
   clearTimeout(checkTimer);
   var name = $("#nm") ? $("#nm").value.trim() : "";
-  if (name === checkedName && checkPromise) return checkPromise;
-  checkedName = name;
   var seq = ++checkSeq;
-  if (name.length < 2) { setMode("join"); checkPromise = Promise.resolve(); return checkPromise; }
-  checkPromise = call("checkName", name).then(function (r) {
+  if (!NAME_RE.test(name)) return;
+  call("checkName", name).then(function (r) {
     if (seq !== checkSeq || !$("#lf")) return;
-    inviteRequired = !!r.inviteRequired;
-    setMode(r.exists ? "login" : "join");
-  }, function () { if (seq === checkSeq) checkedName = null; });
-  return checkPromise;
+    if (r.exists) { takenName = name.toLowerCase(); loginErr("name", "That name is taken."); }
+  }, function () {});
 }
-function submitLogin() {
-  var btn = $("#lgo"); if (btn.disabled) return;
-  btn.disabled = true;
-  checkNow().then(function () {
-    ["name", "team", "pin", "invite"].forEach(function (f) { loginErr(f, null); });
-    var name = $("#nm").value.trim(), team = $("#tm").value.trim().toUpperCase().replace(/\s+/g, ""), pin = $("#pin").value, inv = $("#inv").value.trim();
-    var bad = false;
-    if (!NAME_RE.test(name)) { loginErr("name", "Use 2 to 20 letters, numbers or spaces, starting with a letter or number."); bad = true; }
-    if (loginMode === "join" && !TEAM_RE.test(team)) { loginErr("team", "Use a VEX team number like 936A or 2011C."); bad = true; }
-    if (!PIN_RE.test(pin)) { loginErr("pin", "PIN is 4 to 6 digits."); bad = true; }
-    if (loginMode === "join" && inviteRequired && !inv) { loginErr("invite", "Enter the invite code from the group chat."); bad = true; }
-    if (bad) { btn.disabled = false; return; }
-    var joining = loginMode === "join";
-    btn.textContent = joining ? "Joining…" : "Logging in…";
-    var p = joining ? call("register", name, team, pin, inv) : call("login", name, pin);
-    p.then(function (res) {
-      saveToken(res.token); setUser(res.user);
-      $("#login").hidden = true; $("#login").innerHTML = "";
-      enterApp();
-      toast(joining ? "Welcome, " + res.user.name + ". You have " + fmt(res.user.balance) + " pts." : "Welcome back, " + res.user.name + ".");
-    }, function (e) {
-      btn.disabled = false; setMode(loginMode);
-      loginErr(e.field || "form", e.message);
-      var el = e.field && { name: "#nm", team: "#tm", pin: "#pin", invite: "#inv" }[e.field];
-      if (el && $(el)) $(el).focus();
-    });
+function submitJoin() {
+  var btn = $("#lgo"); if (!btn || btn.disabled) return;
+  ["name", "team", "invite", "form"].forEach(function (f) { loginErr(f, null); });
+  var name = $("#nm").value.trim(), team = $("#tm").value.trim().toUpperCase().replace(/\s+/g, ""), inv = $("#inv") ? $("#inv").value.trim() : "";
+  var bad = false;
+  if (!NAME_RE.test(name)) { loginErr("name", "Use 2 to 20 letters, numbers or spaces, starting with a letter or number."); bad = true; }
+  else if (takenName === name.toLowerCase()) { loginErr("name", "That name is taken."); bad = true; }
+  if (!TEAM_RE.test(team)) { loginErr("team", "Use a VEX team number like 936A or 2011C."); bad = true; }
+  if (joinInvite && !inv) { loginErr("invite", "Enter the invite code from the group chat."); bad = true; }
+  if (bad) return;
+  clearTimeout(checkTimer); checkSeq++;
+  var seq = loginSeq;
+  btn.disabled = true; btn.textContent = "Joining…";
+  call("googleRegister", credential, name, team, inv).then(function (res) {
+    if (seq !== loginSeq) return;
+    finishSignIn(res, true);
+  }, function (e) {
+    if (seq !== loginSeq) return;
+    if (e.field === "google") { showLogin(e.message); return; }
+    btn.disabled = false; btn.textContent = "Join the market";
+    loginErr(e.field || "form", e.message);
+    var el = e.field && { name: "#nm", team: "#tm", invite: "#inv" }[e.field];
+    if (el && $(el)) $(el).focus();
   });
 }
 
@@ -1059,6 +1151,7 @@ $("#signout").addEventListener("click", function () {
   var t = token;
   dropSession();
   if (t) call("logout", t).then(null, function () {});
+  try { if (gsiReady()) google.accounts.id.disableAutoSelect(); } catch (e) {}
   showLogin();
 });
 $("#tab-markets").addEventListener("click", function () { go({ name: "markets" }); });
