@@ -39,6 +39,12 @@ h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;le
 .event{display:flex;flex-direction:column;gap:10px}
 .evhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .evhead .code{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.more-ev ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column}
+.more-ev li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:8px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
+.more-ev li:first-child{border-top:0}
+.more-ev .nm{font-weight:600;font-size:14px}
+.more-ev .code{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.more-ev .sub{width:100%}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%}
 .card.tap:hover{border-color:var(--ink)}
 .card.on{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
@@ -120,6 +126,17 @@ tr.me td{background:var(--soft)}
 .pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--muted);min-height:50vh;padding:24px}
 .pick b{font-family:var(--display);font-size:22px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink)}
 .pick p{margin:0;max-width:340px}
+#ev-sections{display:contents}
+.grp{font-family:var(--display);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:8px 0 -2px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.sg-top{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+.sg-top p{margin:0;color:var(--muted);font-size:14px}
+.sg{display:flex;flex-direction:column;gap:8px}
+.sg .q{font-weight:600;overflow-wrap:anywhere}
+.sg .ev{font-size:12px;color:var(--muted)}
+.sg .foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sg .n{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.sg .why{font-size:12px;color:var(--muted)}
+.sg .sm.on{background:var(--ink);border-color:var(--ink);color:#fff}
 /* login */
 .login{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:24px 20px;gap:24px;max-width:420px;margin:0 auto}
 .login .mark{font-family:var(--display);font-weight:700;font-size:44px;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
@@ -136,6 +153,8 @@ tr.me td{background:var(--soft)}
 .field textarea{resize:vertical;min-height:84px;font-size:16px}
 .field input.team{font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em}
 .field .hint{font-size:12px;color:var(--muted)}
+label.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+label.check input{width:18px;height:18px;accent-color:var(--ink)}
 .bad{font-size:12px;color:var(--red)}
 .signout{background:none;border:0;padding:4px 0;font-size:11px;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:5}
@@ -150,6 +169,10 @@ nav button.on{color:var(--ink);border-top-color:var(--ink)}
 .sub{font-size:12px;color:var(--muted)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.bk{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--line);padding-left:12px}
+.bk .sm.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.bk .al{display:flex;gap:8px;align-items:baseline;font-size:13px}
 .sm{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px;min-height:42px}
 .sm:hover{border-color:var(--ink)}
 .sm.prim{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -159,6 +182,41 @@ nav button.on{color:var(--ink);border-top-color:var(--ink)}
 .item:first-of-type{border-top:0;padding-top:0}
 .rform{display:flex;flex-direction:column;gap:10px;background:var(--soft);border-radius:8px;padding:12px}
 details>summary{cursor:pointer;font-weight:600;padding:4px 0;color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* bracket game: phone shows one round (tabs), laptop shows every round as a column, left to right */
+.evhead .bk-link{margin:-6px 0 -6px auto;padding:6px 0;font-size:13px}
+.evhead .bk-link.on{text-decoration-thickness:2px}
+.bk-tabs{display:flex;gap:3px;border:1px solid var(--line);border-radius:8px;padding:3px}
+.bk-tabs button{flex:1;background:none;border:0;border-radius:6px;padding:9px 4px;font-weight:600;color:var(--muted);min-height:40px}
+.bk-tabs button.on{background:var(--ink);color:#fff}
+.bk-tree{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:12px}
+.app.wide .bk-tree{grid-auto-columns:minmax(150px,1fr);overflow-x:auto;padding-bottom:4px}
+.bk-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.bk-col h3{margin:0}
+.bk-slots{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:10px}
+.bk-m{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:8px;padding:6px;background:var(--surface)}
+.bk-al{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);text-align:left;font-size:13px}
+.bk-al .sd{font-family:var(--mono);font-weight:600;flex:none}
+.bk-al .tm{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere;min-width:0}
+button.bk-al:hover:not([disabled]){border-color:var(--ink)}
+.bk-al.sel{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink);font-weight:600}
+.bk-al.win{border-color:var(--good);box-shadow:inset 3px 0 0 var(--good);color:var(--good)}
+.bk-al.tbd{color:var(--muted);border-style:dashed}
+.bk-al[disabled]{cursor:default}
+div.bk-al{min-height:36px}
+.bk-you{font-size:12px;color:var(--muted);padding:0 2px;overflow-wrap:anywhere}
+.bk-pk{color:var(--ink);font-family:var(--mono)}
+.bk-pk.ok{color:var(--good)}
+.bk-pk.bad{color:var(--red)}
+.bk-save{display:flex;flex-direction:column;gap:8px}
+.bk-who{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.bkw{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;padding:0 6px;border:1px solid var(--ink);border-radius:99px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+#bkv .lnk{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--ink);text-align:left;text-decoration:underline;text-underline-offset:2px}
+.app:not(.wide) .bk-col:not(.on){display:none}
+.app:not(.wide) .bk-col>h3{display:none}
+.app.wide .bk-tabs{display:none}
+.app.wide #bkv>.back{display:none}
+#detail>#bkv{max-width:1040px}
 
 /* ---------- laptop (>= 900px): .app.wide is set from a matchMedia listener in the script ---------- */
 .app.wide{max-width:none}
@@ -305,7 +363,7 @@ function argmax(a) { var j = 0; for (var i = 1; i < a.length; i++) if (a[i] > a[
 /* ---------- session token ---------- */
 function loadToken() { try { return localStorage.getItem(TOKEN_KEY); } catch (e) { return null; } }
 function saveToken(t) { token = t; try { localStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
-function dropSession() { token = null; me = null; cache = {}; try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+function dropSession() { sgOpen = false; bk.code = null; token = null; me = null; cache = {}; try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
 
 /* ---------- server calls ---------- */
 /**
@@ -367,13 +425,15 @@ function setUser(u) {
  */
 var wideMQ = window.matchMedia ? window.matchMedia("(min-width: 900px)") : null;
 var wide = !!(wideMQ && wideMQ.matches);
-function viewKey(v) { return v.name === "market" ? "market:" + v.id : v.name; }
+function viewKey(v) { return v.name === "market" ? "market:" + v.id : v.name === "bracket" ? "bracket:" + v.code : v.name; }
 function setTab(n) { ["markets", "portfolio", "leaders", "admin"].forEach(function (t) { $("#tab-" + t).classList.toggle("on", t === n); }); }
-function splitView(v) { v = v || view; return wide && (v.name === "markets" || v.name === "market"); }
+/** Views that live under the Markets tab: on laptop they draw into #detail beside the market list. */
+function inMarkets(v) { return v.name === "markets" || v.name === "market" || v.name === "bracket"; }
+function splitView(v) { v = v || view; return wide && inMarkets(v); }
 function listEl() { return (splitView() && $("#list")) || $("#main"); }
 function detailEl() { return (splitView() && $("#detail")) || $("#main"); }
 /** Where a view's content (or its loading/error message) goes. */
-function paneFor(v) { return v.name === "markets" ? listEl() : v.name === "market" ? detailEl() : $("#main"); }
+function paneFor(v) { return v.name === "markets" ? listEl() : inMarkets(v) ? detailEl() : $("#main"); }
 var LOADING = '<p class="loading">Loading…</p>';
 
 /** Applies the phone or laptop layout. Moving the nav keeps its click handlers. */
@@ -389,13 +449,13 @@ function onLayoutChange() {
   if (was === wide) return;
   applyLayout();
   // Markets changes shape between the two layouts; the other views are the same markup, restyled.
-  if (token && me && !$("#app").hidden && (view.name === "markets" || view.name === "market")) go(view);
+  if (token && me && !$("#app").hidden && inMarkets(view)) go(view);
 }
 if (wideMQ) { if (wideMQ.addEventListener) wideMQ.addEventListener("change", onLayoutChange); else if (wideMQ.addListener) wideMQ.addListener(onLayoutChange); }
 
 function go(v) {
   view = v; viewSeq++;
-  setTab(v.name === "market" ? "markets" : v.name);
+  setTab(inMarkets(v) ? "markets" : v.name);
   var main = $("#main"), split = splitView(v), needList = false;
   var c = v.name === "admin" ? null : cache[viewKey(v)];
   main.classList.toggle("split", split);
@@ -421,21 +481,24 @@ function go(v) {
 /** Fetch the current view; withList also refreshes the market list beside it (laptop Markets tab). silent = no spinner. */
 function load(silent, withList) {
   var v = view, seq = viewSeq, jobs = [fetchView(v, seq, silent)];
-  if (withList && v.name === "market" && splitView(v)) jobs.push(fetchView({ name: "markets" }, seq, silent));
+  if (withList && v.name !== "markets" && splitView(v)) jobs.push(fetchView({ name: "markets" }, seq, silent));
   return Promise.all(jobs);
 }
 function fetchView(v, seq, silent) {
   var epoch = marketEpoch, p;
-  if (v.name === "markets") p = call("listMarkets", token);
-  else if (v.name === "market") p = call("getMarket", token, v.id);
+  if (v.name === "markets") {
+    p = Promise.all([call("listMarkets", token), call("listSuggestions", token).then(function (r) { return r; }, function (e) { if (e.code === "AUTH") throw e; return null; })])
+      .then(function (r) { if (r[1]) cache.suggestions = r[1]; return r[0]; });
+  } else if (v.name === "market") p = call("getMarket", token, v.id);
+  else if (v.name === "bracket") p = call("getBracket", token, v.code, "");
   else if (v.name === "portfolio") p = call("portfolio", token);
   else if (v.name === "leaders") p = call("leaderboard", token);
   else if (v.name === "admin") p = call("adminData", token);
   else return Promise.resolve();
   return p.then(function (res) {
+    if ((v.name === "market" || v.name === "bracket") && epoch !== marketEpoch) return;   // a trade or saved picks landed meanwhile; that result is newer
     cache[viewKey(v)] = res;
     if (seq !== viewSeq || !token) return;
-    if (v.name === "market" && epoch !== marketEpoch) return;   // a trade landed meanwhile; its result is newer
     draw(v, res);
     lastRefreshErr = "";
   }, function (e) {
@@ -451,6 +514,7 @@ function fetchView(v, seq, silent) {
 function draw(v, res) {
   if (v.name === "markets") drawMarkets(res);
   else if (v.name === "market") drawMarket(res.market);
+  else if (v.name === "bracket") drawBracket(v, res);
   else if (v.name === "portfolio") drawPortfolio(res);
   else if (v.name === "leaders") drawLeaders(res);
   else if (v.name === "admin") drawAdmin(res);
@@ -460,13 +524,19 @@ function openMarket(id) { tr.mid = null; go({ name: "market", id: id }); }   // 
 
 /** Right pane of the laptop Markets tab when no market is picked. */
 function drawPickPrompt() {
-  $("#detail").innerHTML = '<div class="pick"><b>Pick a market</b><p>Choose one from the list to see its prices and history and to trade.</p></div>';
+  $("#detail").innerHTML = '<div id="sg-slot"></div>';
+  drawSuggestions();
 }
 /** Outlines the open market's card in the laptop list. */
 function markSelected() {
   if (!$("#list")) return;
   Array.prototype.forEach.call($("#list").querySelectorAll(".card[data-mid]"), function (el) {
     var on = view.name === "market" && el.getAttribute("data-mid") === view.id;
+    el.classList.toggle("on", on);
+    if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current");
+  });
+  Array.prototype.forEach.call($("#list").querySelectorAll("[data-act=bracket]"), function (el) {
+    var on = view.name === "bracket" && el.getAttribute("data-code") === view.code;
     el.classList.toggle("on", on);
     if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current");
   });
@@ -499,12 +569,18 @@ function cardHTML(m) {
     '<div class="row"><span class="chip ' + esc(m.status) + '">' + statusLabel(m.status) + "</span>" + (m.held ? '<span class="chip mine">You hold</span>' : "") + '<span class="meta">' + lockTxt(m) + "</span></div></button>";
 }
 var STATUS_ORDER = { open: 0, locked: 1, resolved: 2, void: 3 };
+var moreOpen = {};   // "More events" blocks the member opened, by group, kept across refreshes
+/**
+ * An event gets its own section when it has markets or a Bracket link. Upcoming events with neither go
+ * into one collapsed "More events (N)" block at the end of their group; ended ones with neither are hidden.
+ */
 function drawMarkets(d) {
   var by = {}, h = "";
+  Array.prototype.forEach.call(document.querySelectorAll("details[data-more]"), function (x) { moreOpen[x.getAttribute("data-more")] = x.open; });
   d.markets.forEach(function (m) { (by[m.eventCode] = by[m.eventCode] || []).push(m); });
-  function sec(title, code, when, list) {
+  function sec(title, code, when, list, extra) {
     list = list.slice().sort(function (a, b) { return STATUS_ORDER[a.status] - STATUS_ORDER[b.status]; });
-    return '<section class="event"><div class="evhead"><h2>' + esc(title) + '</h2><span class="code">' + esc(code) + "</span></div>" +
+    return '<section class="event"><div class="evhead"><h2>' + esc(title) + '</h2><span class="code">' + esc(code) + "</span>" + (extra || "") + "</div>" +
       (when ? "<h3>" + esc(when) + "</h3>" : "") +
       (list.length ? list.map(cardHTML).join("") : '<p class="sub" style="margin:0">No markets yet.</p>') + "</section>";
   }
@@ -512,13 +588,352 @@ function drawMarkets(d) {
   var nowMs = Date.now();
   var live = d.events.filter(function (e) { return !(Date.parse(e.endAt || e.startAt) < nowMs); });
   var past = d.events.filter(function (e) { return Date.parse(e.endAt || e.startAt) < nowMs; }).reverse();
-  live.concat(past).forEach(function (e) { h += sec(e.name, e.eventCode, eventWhen(e), by[e.eventCode] || []); delete by[e.eventCode]; });
+  var all = live.concat(past), hk = all.filter(function (e) { return e.isHK; }), abroad = all.filter(function (e) { return !e.isHK; });
+  function evWhen(e) {
+    var place = [e.city, e.country].filter(Boolean).join(", "), when = eventWhen(e);
+    if (!e.isHK && place) when = (when ? when + " · " : "") + place;
+    return when;
+  }
+  function evSec(e) {
+    var link = hasBracketLink(e) ? '<button class="back bk-link" type="button" data-act="bracket" data-code="' + esc(e.eventCode) + '">Bracket</button>' : "";
+    var s = sec(e.name, e.eventCode, evWhen(e), by[e.eventCode] || [], link); delete by[e.eventCode]; return s;
+  }
+  function more(key, list) {
+    return '<details class="more-ev" data-more="' + key + '"' + (moreOpen[key] ? " open" : "") + "><summary>More events (" + list.length + ")</summary><ul>" +
+      list.map(function (e) {
+        return '<li><span class="nm">' + esc(e.name) + '</span><span class="code">' + esc(e.eventCode) + '</span><span class="sub">' + esc(evWhen(e)) + " · No markets yet</span></li>";
+      }).join("") + "</ul></details>";
+  }
+  function group(key, title, list) {
+    var out = "", rest = [];
+    list.forEach(function (e) {
+      if ((by[e.eventCode] && by[e.eventCode].length) || hasBracketLink(e)) out += evSec(e);
+      else if (!(Date.parse(e.endAt || e.startAt) < nowMs)) rest.push(e);   // ended with no markets: hidden
+    });
+    if (rest.length) out += more(key, rest);
+    return out ? '<h2 class="grp">' + title + "</h2>" + out : "";
+  }
+  h += group("hk", "Hong Kong", hk) + group("abroad", "Other events", abroad);
   var rest = []; for (var c in by) rest = rest.concat(by[c]);
   if (rest.length) h += sec("Other markets", "", "", rest);
-  if (!d.markets.length && !d.events.length) h += '<p class="loading">No markets yet. Check back soon.</p>';
-  h += '<section class="event"><h3>House rules</h3><ol class="rules"><li>Markets lock when the event starts.</li><li>You can\'t bet against your own team.</li><li>Results come from events.vex.com only.</li><li>Cancelled events refund your stake.</li><li>Hong Kong events only. Points have no cash value.</li></ol></section>';
-  listEl().innerHTML = h;
+  if (!h) h = '<p class="loading">No markets yet. Check back soon.</p>';
+  var rules = '<section class="event"><h3>House rules</h3><ol class="rules"><li>Markets lock when the event starts.</li><li>You can\'t bet against your own team.</li><li>Results come from events.vex.com only.</li><li>Cancelled events refund your stake.</li><li>Hong Kong events, plus any event the group suggests. Points have no cash value.</li></ol></section>';
+  if (splitView()) listEl().innerHTML = h + rules;
+  else if ($("#ev-sections") && $("#sg-slot")) $("#ev-sections").innerHTML = h;   // refresh: the suggestions slot is never detached, so typing keeps its focus
+  else listEl().innerHTML = '<div id="ev-sections">' + h + '</div><div id="sg-slot"></div>' + rules;
   markSelected();
+  if (!splitView() || view.name === "markets") drawSuggestions();
+}
+
+/* ---------- Suggested markets ---------- */
+var sgOpen = false;
+function sgOwn(s) { return !!me && s.by && s.by.name === me.name && s.by.team === me.team; }
+function sgCard(s) {
+  var evl = esc(s.eventName || s.eventCode) + (s.eventStart ? " · " + esc(hkDay(s.eventStart)) : "");
+  var what = s.kind === "multi" ? (s.outcomes && s.outcomes.length ? s.outcomes.length + " outcomes" : "All registered teams") : "Yes / No";
+  return '<div class="card sg" data-sid="' + esc(s.suggestionId) + '"><div class="q">' + esc(s.question) + '</div>' +
+    '<div class="ev">' + evl + ' · ' + esc(what) + ' · ' + esc(s.by.name) + ' <span class="team">' + esc(s.by.team) + '</span></div>' +
+    '<div class="foot"><span class="n">' + fmt(s.backers) + '</span><span class="sub">' + (s.backers === 1 ? "backer" : "backers") + '</span>' +
+    '<button class="sm' + (s.backedByMe ? " on" : "") + '" type="button" data-act="sg-back" aria-pressed="' + !!s.backedByMe + '">' + (s.backedByMe ? "Backed" : "Back") + '</button>' +
+    (sgOwn(s) ? '<button class="sm" type="button" data-act="sg-withdraw">Withdraw</button>' : "") + '</div></div>';
+}
+function sgDecided(s) {
+  var tail = s.status === "approved"
+    ? (s.marketId ? '<button class="back" type="button" data-act="open" data-mid="' + esc(s.marketId) + '">Approved: open the market</button>' : "Approved")
+    : '<span class="why">Declined' + (s.note ? ": " + esc(s.note) : "") + "</span>";
+  return '<div class="card sg"><div class="q">' + esc(s.question) + '</div><div class="ev">' + esc(s.eventName || s.eventCode) + "</div><div>" + tail + "</div></div>";
+}
+/** Draws the section into #sg-slot (phone: under the event sections; laptop: the right pane). Re-draws only the lists, so an open form survives. */
+function drawSuggestions() {
+  var d = cache.suggestions, slot = $("#sg-slot"), sg = $("#sg");
+  if (!sg) {
+    if (!slot) return;
+    slot.innerHTML = '<section class="event" id="sg"><div class="sg-top"><div class="evhead"><h2>Suggested markets</h2></div>' +
+      '<p>Want a market that isn\'t here? Suggest it. Back the ones you\'d trade; admins turn popular ones into markets.</p></div>' +
+      '<div class="acts"><button class="sm prim" type="button" data-act="sg-new" id="sg-newbtn">Suggest a market</button></div>' +
+      '<div id="sg-form"></div><div id="sg-list" class="sg"></div>' +
+      '<details id="sg-decwrap" hidden><summary>Recently decided</summary><div id="sg-dec" class="sg" style="margin-top:10px"></div></details></section>';
+    sg = $("#sg");
+    if (sgOpen) buildSgForm();
+  }
+  if (!d) { $("#sg-list").innerHTML = LOADING; return; }
+  $("#sg-list").innerHTML = d.suggestions.length ? d.suggestions.map(sgCard).join("") : '<p class="sub" style="margin:0">No suggestions yet. Be the first.</p>';
+  $("#sg-decwrap").hidden = !d.decided.length;
+  $("#sg-dec").innerHTML = d.decided.map(sgDecided).join("");
+}
+function sgEvents() {
+  var evs = cache.markets ? cache.markets.events : [], now = Date.now();
+  return evs.filter(function (e) { return e.isHK && Date.parse(e.startAt) > now; });
+}
+function buildSgForm() {
+  var f = $("#sg-form"); if (!f) return;
+  sgOpen = true;
+  var opts = sgEvents().map(function (e) { return '<option value="' + esc(e.eventCode) + '">' + esc(e.name) + "</option>"; }).join("") +
+    '<option value="">Another event…</option>';
+  f.innerHTML = '<form id="f-sg" class="panel" novalidate>' +
+    '<div class="field"><label for="sg-event">Event</label><select id="sg-event">' + opts + "</select></div>" +
+    '<div class="field" id="sgf-code" hidden><label for="sg-code">Event code or events.vex.com link</label><input id="sg-code" class="team" autocomplete="off" autocapitalize="characters" placeholder="RE-V5RC-27-0000 or https://events.vex.com/...">' + errSpan("eventCode") + "</div>" +
+    '<div class="field"><label for="sg-q">Question</label><textarea id="sg-q" rows="2" style="min-height:60px" placeholder="e.g. Will 936A reach the finals?"></textarea>' + errSpan("question") + "</div>" +
+    '<div class="field"><label for="sg-kind">Answers</label><select id="sg-kind"><option value="binary">Yes / No</option><option value="multi">Which team</option></select>' + errSpan("kind") + "</div>" +
+    '<div id="sgf-multi" hidden><label class="check"><input type="checkbox" id="sg-all" checked> All registered teams</label>' +
+    '<div class="field" id="sgf-outs" hidden style="margin-top:8px"><label for="sg-outs">Outcomes, one per line (2 to 24)</label><textarea id="sg-outs" rows="4"></textarea>' + errSpan("outcomes") + "</div></div>" +
+    errSpan("form") +
+    '<div class="acts"><button class="sm prim" type="submit" id="sg-go">Send suggestion</button><button class="sm" type="button" data-act="sg-cancel">Cancel</button></div></form>';
+  sgSync();
+}
+function sgSync() {
+  var ev = $("#sg-event"); if (!ev) return;
+  $("#sgf-code").hidden = ev.value !== "";
+  var multi = $("#sg-kind").value === "multi";
+  $("#sgf-multi").hidden = !multi;
+  $("#sgf-outs").hidden = !(multi && !$("#sg-all").checked);
+}
+function sgClose() { sgOpen = false; var f = $("#sg-form"); if (f) f.innerHTML = ""; }
+function sgReload() {
+  return call("listSuggestions", token).then(function (r) { cache.suggestions = r; drawSuggestions(); }, fail);
+}
+function sgSubmit(form) {
+  clearErrs(form);
+  var spec = { question: $("#sg-q").value.trim(), kind: $("#sg-kind").value }, ev = $("#sg-event").value;
+  if (ev) spec.eventCode = ev;
+  else {
+    var c = $("#sg-code").value.trim();
+    if (/^https?:\/\//i.test(c)) spec.eventLink = c; else spec.eventCode = c.toUpperCase();
+  }
+  if (spec.kind === "multi" && !$("#sg-all").checked) spec.outcomes = $("#sg-outs").value.split("\n").map(function (x) { return x.trim(); }).filter(Boolean);
+  busyBtn($("#sg-go"), call("suggestMarket", token, spec)).then(function () {
+    sgClose(); toast("Suggestion sent."); return sgReload();
+  }, function (e) { if (!e.field && e.code !== "AUTH") e.field = "form"; showErr(form, e); });
+}
+function sgAct(act, b) {
+  var card = b.closest("[data-sid]"), id = card && card.getAttribute("data-sid");
+  if (act === "sg-new") { if ($("#f-sg")) $("#sg-q").focus(); else { buildSgForm(); $("#sg-q").focus(); } }
+  else if (act === "sg-cancel") sgClose();
+  else if (act === "sg-back") busyBtn(b, call("backSuggestion", token, id, b.getAttribute("aria-pressed") !== "true")).then(sgReload, fail);
+  else if (act === "sg-withdraw") { if (confirm("Withdraw this suggestion?")) busyBtn(b, call("withdrawSuggestion", token, id)).then(sgReload, fail); }
+}
+
+/* ---------- Bracket game (Hong Kong events) ---------- */
+/*
+ * View { name: "bracket", code }. Laptop: drawn into #detail beside the market list, every round a column.
+ * Phone: #main with a back link and round tabs. Picks are a local draft until saved; the 15 s refresh keeps
+ * the draft once the member has touched it. Slot R{k+1}-{j} is fed by R{k}-{2j} and R{k}-{2j+1}.
+ */
+var bk = { code: null, picks: {}, touched: false, round: 1, who: "", lockLoad: null };
+function hkYmd(ms) { return new Date(ms + 8 * 36e5).toISOString().slice(0, 10); }
+/**
+ * Heading link on Hong Kong tournaments (eventType "tournament", or "" for events entered by hand), from the
+ * first event day until 3 days after the last one (HKT dates). Whether there is a bracket is only known once opened.
+ */
+function hasBracketLink(e) {
+  var s = Date.parse(e.startAt), en = Date.parse(e.endAt || e.startAt);
+  if (!e.isHK || s !== s || (e.eventType && e.eventType !== "tournament")) return false;
+  if (en !== en || en < s) en = s;
+  var today = hkYmd(Date.now());
+  return hkYmd(s) <= today && today <= hkYmd(en + 3 * 864e5);
+}
+function bkRounds(b) { return Math.round(Math.log(b.size) / Math.LN2); }
+function bkId(k, i) { return "R" + k + "-" + i; }
+function bkIds(b) { var out = []; for (var k = 1; k <= bkRounds(b); k++) for (var i = 0; i < b.size >> k; i++) out.push(bkId(k, i)); return out; }
+function bkRoundName(b, k, short) { var left = bkRounds(b) - k; return (short ? ["Final", "SF", "QF", "R16"] : ["Final", "Semi-finals", "Quarter-finals", "Round of 16"])[left] || "Round " + k; }
+/** The two seeds a pick in slot (k, i) can be: round 1 from the bracket, later rounds from the picks feeding it. */
+function bkOptions(b, picks, k, i) {
+  if (k === 1) { var s = b.slots[bkId(1, i)] || {}; return [s.a, s.b]; }
+  return [picks[bkId(k - 1, 2 * i)], picks[bkId(k - 1, 2 * i + 1)]];
+}
+/** Copy of picks without the ones that no longer fit, so changing an early pick clears the later picks built on it. */
+function bkClean(b, picks) {
+  var out = {};
+  bkIds(b).forEach(function (id) {
+    var m = /^R(\d+)-(\d+)$/.exec(id), v = picks ? picks[id] : null;
+    if (typeof v === "number" && bkOptions(b, out, Number(m[1]), Number(m[2])).indexOf(v) >= 0) out[id] = v;
+  });
+  return out;
+}
+function bkRoundDone(b, picks, k) { for (var i = 0; i < b.size >> k; i++) if (picks[bkId(k, i)] == null) return false; return true; }
+function bkSame(x, y) { x = x || {}; y = y || {}; var kx = Object.keys(x), ky = Object.keys(y); return kx.length === ky.length && kx.every(function (k) { return x[k] === y[k]; }); }
+/** Seeds already knocked out. */
+function bkOut(b) {
+  var out = {};
+  bkIds(b).forEach(function (id) { var x = b.slots[id]; if (x.winner == null) return; [x.a, x.b].forEach(function (sd) { if (sd != null && sd !== x.winner) out[sd] = true; }); });
+  return out;
+}
+/** "ok" = the pick won, "bad" = it lost (or its alliance is already out), "" = still to play. */
+function bkMark(b, id, seed, out) { var x = b.slots[id]; if (seed == null) return ""; if (x.winner != null) return x.winner === seed ? "ok" : "bad"; return out[seed] ? "bad" : ""; }
+function bkTeams(b, seed) { var a = (b.alliances || []).filter(function (x) { return x.seed === seed; })[0]; return a ? a.teams.join(" ") : ""; }
+function bkAl(b, seed) { return '<span class="sd">#' + esc(seed) + '</span><span class="tm">' + esc(bkTeams(b, seed)) + "</span>"; }
+function bkPickTxt(b, seed, mark) {
+  var t = esc("#" + seed + " " + bkTeams(b, seed));
+  if (mark === "ok") return '<span class="bk-pk ok"><span aria-hidden="true">✓ </span>' + t + '<span class="vh"> (correct)</span></span>';
+  if (mark === "bad") return '<span class="bk-pk bad"><s>' + t + '</s><span aria-hidden="true"> ✗</span><span class="vh"> (wrong)</span></span>';
+  return '<span class="bk-pk">' + t + "</span>";
+}
+function bkIsMe(r) { return !!me && r.name === me.name && r.team === me.team; }
+function bkKey(r) { return r.name + "\n" + r.team; }
+
+/** One match: pick buttons while picks are open, otherwise the result with the shown picks marked. */
+function bkSlot(b, k, i, open, picks, out) {
+  var id = bkId(k, i), h = '<div class="bk-m" role="group" aria-label="' + esc(bkRoundName(b, k) + ", match " + (i + 1)) + '">';
+  if (open) {
+    h += bkOptions(b, picks, k, i).map(function (sd) {
+      if (sd == null) return '<button class="bk-al tbd" type="button" disabled>' + (k === 1 ? "To be decided" : "Pick " + esc(bkRoundName(b, k - 1, true)) + " first") + "</button>";
+      var on = picks[id] === sd;
+      return '<button class="bk-al' + (on ? " sel" : "") + '" type="button" data-act="bkp-pick" data-slot="' + id + '" data-seed="' + sd + '" aria-pressed="' + on + '">' + bkAl(b, sd) + "</button>";
+    }).join("");
+  } else {
+    var x = b.slots[id];
+    h += [x.a, x.b].map(function (sd) {
+      if (sd == null) return '<div class="bk-al tbd">To be decided</div>';
+      var w = x.winner === sd;
+      return '<div class="bk-al' + (w ? " win" : "") + '">' + bkAl(b, sd) + (w ? '<span class="vh"> (won)</span>' : "") + "</div>";
+    }).join("");
+    if (picks && picks[id] != null) h += '<div class="bk-you">Pick: ' + bkPickTxt(b, picks[id], bkMark(b, id, picks[id], out)) + "</div>";
+  }
+  return h + "</div>";
+}
+
+function bkHTML(v, res) {
+  var e = eventFor(v.code), b = res.bracket;
+  var h = '<button class="back" type="button" data-act="back">← All markets</button>' +
+    '<div style="display:flex;flex-direction:column;gap:6px"><h3>' + esc(e ? e.name + " · " + eventWhen(e) : v.code) + '</h3><h2 style="font-size:24px">Elimination bracket</h2>';
+  if (!b) return h + '</div><div class="banner info">No bracket yet. Once the alliances for eliminations are known, the bracket shows up here and you can pick a winner for every match.</div>';
+
+  var st = b.status, open = st === "open", rounds = bkRounds(b), ids = bkIds(b), out = bkOut(b), rows = res.standings || [], k, i;
+  var chip = { open: ["open", "Picks open"], locked: ["locked", "Picks closed"], done: ["resolved", "Finished"], missed: ["resolved", "Missed"] }[st] || ["", st];
+  var meta = b.size + " alliances" + (b.division && b.division !== "1" ? " · division " + esc(b.division) : "");
+  if (open) meta += b.lockAt ? " · picks close " + esc(hkFull(b.lockAt)) + ' <span id="bk-count"></span>' : " · picks close when eliminations start";
+  h += '<div class="row"><span class="chip ' + chip[0] + '">' + chip[1] + '</span><span class="meta">' + meta + "</span></div></div>";
+
+  var pts = []; for (k = 1; k <= rounds; k++) pts.push(bkRoundName(b, k, true) + " " + Math.pow(2, k - 1));
+  var fin = b.slots[bkId(rounds, 0)], mine = null;
+  rows.forEach(function (r) { if (bkIsMe(r)) mine = r; });
+  if (open) h += '<div class="banner info">Pick the winner of every match, through to the final. ' + (res.myPicks ? "Your picks are saved; you can change them until picks close." : "Your picks stay private until picks close.") + "</div>";
+  else if (st === "missed") h += '<div class="banner warn">Picks never opened for this bracket: eliminations had already started when it was set up. The results are shown, but nobody is scored.</div>';
+  else if (st === "done" && fin.winner != null) h += '<div class="banner done"><span aria-hidden="true">✓ </span>Finished. Champions: <b>' + esc("#" + fin.winner + " " + bkTeams(b, fin.winner)) + "</b>.</div>";
+  else h += '<div class="banner warn">Picks are closed. Everyone\'s picks are visible now; points come in as matches finish.</div>';
+  if (st !== "missed") h += '<p class="sub" style="margin:0">Points per correct pick: ' + pts.join(" · ") + ".</p>";
+
+  // whose picks the tree shows: the draft while open; afterwards yours, or a standings row the member tapped
+  var picks = open ? bk.picks : res.myPicks, whoRow = null;
+  if (!open && bk.who) rows.forEach(function (r) { if (bkKey(r) === bk.who && !bkIsMe(r)) whoRow = r; });
+  if (whoRow) picks = whoRow.picks;
+  if (!open && st !== "missed") {
+    h += '<div class="bk-who">' + (whoRow ? "<span>Showing <b>" + esc(whoRow.name) + "</b>'s picks</span>" + '<button class="lnk" type="button" data-act="bkp-who" data-who="">' + (res.myPicks ? "Show mine" : "Hide picks") + "</button>"
+      : res.myPicks ? "<span>Showing your picks" + (mine ? ": <b>" + fmt(mine.score) + "</b> pts so far, up to " + fmt(mine.maxScore) + " possible" : "") + "</span>"
+      : "<span>You didn't enter this bracket. Tap a name in the standings to see their picks.</span>") + "</div>";
+  }
+
+  if (rounds > 1) {
+    h += '<div class="bk-tabs" role="group" aria-label="Round">';
+    for (k = 1; k <= rounds; k++) {
+      var n = b.size >> k, got = 0;
+      for (i = 0; i < n; i++) if (bk.picks[bkId(k, i)] != null) got++;
+      h += '<button type="button" data-act="bkp-round" data-r="' + k + '" class="' + (k === bk.round ? "on" : "") + '" aria-pressed="' + (k === bk.round) + '">' + bkRoundName(b, k, true) + (open ? ' <span class="mono">' + got + "/" + n + "</span>" : "") + "</button>";
+    }
+    h += "</div>";
+  }
+  h += '<div class="bk-tree" id="bk-tree">';
+  for (k = 1; k <= rounds; k++) {
+    h += '<div class="bk-col' + (k === bk.round ? " on" : "") + '"><h3>' + bkRoundName(b, k) + '</h3><div class="bk-slots">';
+    for (i = 0; i < b.size >> k; i++) h += bkSlot(b, k, i, open, picks, out);
+    h += "</div></div>";
+  }
+  h += "</div>";
+
+  if (open) {
+    var total = ids.length, have = ids.filter(function (id) { return bk.picks[id] != null; }).length, saved = !!res.myPicks && bkSame(bk.picks, res.myPicks);
+    var hint = have < total ? "Pick " + (total - have) + " more to save (" + have + " of " + total + " picked)." : saved ? "Saved. You can change picks until they close." : "All " + total + " picked.";
+    h += '<div class="bk-save" id="bk-save"><button class="go" type="button" data-act="bkp-save"' + (have < total || saved ? " disabled" : "") + ">" + (saved ? "Saved" : res.myPicks ? "Save changes" : "Save picks") + "</button>" +
+      '<span class="sub">' + hint + "</span>" + errSpan("picks") + "</div>";
+  }
+
+  if (st !== "missed") {
+    if (!res.picksVisible) {
+      h += '<div><h3 style="margin-bottom:8px">Entered (' + rows.length + ')</h3><table><thead><tr><th>Name</th><th>Team</th></tr></thead><tbody>' +
+        (rows.length ? rows.map(function (r) { return '<tr class="' + (bkIsMe(r) ? "me" : "") + '"><td>' + esc(r.name) + '</td><td class="team">' + esc(r.team) + "</td></tr>"; }).join("") : '<tr><td colspan="2">Nobody yet. Be the first.</td></tr>') +
+        '</tbody></table><p class="sub" style="margin:6px 0 0">Everyone\'s picks show once picks close.</p></div>';
+    } else {
+      var fid = bkId(rounds, 0);
+      h += '<div><h3 style="margin-bottom:8px">Standings</h3><table><thead><tr><th>#</th><th>Name</th><th>Champion pick</th><th class="num">Pts</th><th class="num" title="Most points still possible">Max</th></tr></thead><tbody>' +
+        (rows.length ? rows.map(function (r, j) {
+          var cp = r.picks ? r.picks[fid] : null, cm = r.champion ? "ok" : bkMark(b, fid, cp, out);
+          var on = whoRow ? bkKey(r) === bkKey(whoRow) : bkIsMe(r);
+          return '<tr class="' + (bkIsMe(r) ? "me" : "") + '"><td class="rank">' + (j + 1) + '</td><td><button class="lnk" type="button" data-act="bkp-who" data-who="' + esc(bkIsMe(r) ? "" : bkKey(r)) + '" aria-pressed="' + on + '">' + esc(r.name) + '</button> <span class="team">' + esc(r.team) + "</span></td>" +
+            "<td>" + (cp != null ? bkPickTxt(b, cp, cm) : "") + '</td><td class="num">' + fmt(r.score) + '</td><td class="num">' + fmt(r.maxScore) + "</td></tr>";
+        }).join("") : '<tr><td colspan="5">Nobody entered this bracket.</td></tr>') + "</tbody></table>" +
+        (rows.length ? '<p class="sub" style="margin:6px 0 0">Tap a name to see their picks. Ties go to a correct champion pick, then the earlier save.</p>' : "") + "</div>";
+    }
+  }
+  return h;
+}
+
+function drawBracket(v, res) {
+  var b = res.bracket, el = detailEl();
+  if (bk.code !== v.code) {
+    bk = { code: v.code, picks: {}, touched: false, round: 1, who: "", lockLoad: null };
+    // phone: once picks are closed, open on the earliest round still being played (the final when it's all done)
+    if (b && b.status !== "open") bk.round = bkRounds(b);
+    if (b && b.status !== "open") for (var k = bkRounds(b); k >= 1; k--) for (var i = 0; i < b.size >> k; i++) if (b.slots[bkId(k, i)].winner == null) bk.round = k;
+  }
+  if (b) {
+    if (b.status !== "open" && bk.touched) { bk.touched = false; toast("Picks closed before you saved. Your changes weren't kept."); }
+    bk.picks = bkClean(b, bk.touched ? bk.picks : res.myPicks);
+    bk.round = Math.max(1, Math.min(bk.round, bkRounds(b)));
+  }
+  var html = bkHTML(v, res), root = $("#bkv");
+  if (root && root.parentNode === el && root.getAttribute("data-code") === v.code && root._h === html) return;   // a refresh with nothing new
+  var same = root && root.getAttribute("data-code") === v.code, tree = $("#bk-tree"), sx = same && tree ? tree.scrollLeft : 0, f = document.activeElement, sel = null;
+  if (same && f && root.contains(f) && f.getAttribute("data-act")) {
+    sel = '[data-act="' + f.getAttribute("data-act") + '"]' + ["data-slot", "data-seed", "data-r", "data-who"].map(function (a) { return f.hasAttribute(a) ? "[" + a + '="' + f.getAttribute(a).replace(/["\\\n]/g, "\\$&") + '"]' : ""; }).join("");
+  }
+  el.innerHTML = '<div class="stack" id="bkv" data-code="' + esc(v.code) + '">' + html + "</div>";
+  root = $("#bkv"); root._h = html;
+  if (sx && $("#bk-tree")) $("#bk-tree").scrollLeft = sx;
+  if (sel) { var n = null; try { n = root.querySelector(sel); } catch (e) {} if (n && !n.disabled && n.offsetParent) n.focus(); }
+  bkTick();
+}
+
+/** Live countdown to lockAt; when it passes, reload so the view turns read-only. */
+function bkTick() {
+  var el = $("#bk-count"); if (!el || view.name !== "bracket") return;
+  var c = cache[viewKey(view)], b = c && c.bracket; if (!b || !b.lockAt) return;
+  var s = Math.floor((Date.parse(b.lockAt) - Date.now()) / 1000);
+  function two(n) { return (n < 10 ? "0" : "") + n; }
+  if (!(s > 0)) { el.textContent = "(closing…)"; if (bk.lockLoad !== b.lockAt) { bk.lockLoad = b.lockAt; load(true); } return; }
+  var d = Math.floor(s / 86400), hr = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+  el.textContent = "(in " + (d ? d + "d " + hr + "h" : hr ? hr + "h " + two(m) + "m" : m + "m " + two(s % 60) + "s") + ")";
+}
+setInterval(bkTick, 1000);
+
+function bkAct(act, btn) {
+  var c = cache[viewKey(view)], b = c && c.bracket; if (view.name !== "bracket" || !b) return;
+  if (act === "bkp-pick") {
+    if (b.status !== "open") return;
+    var id = btn.getAttribute("data-slot"), k = Number(/^R(\d+)-/.exec(id)[1]), was = bkRoundDone(b, bk.picks, k);
+    bk.picks[id] = Number(btn.getAttribute("data-seed"));
+    bk.picks = bkClean(b, bk.picks); bk.touched = true;
+    var next = !wide && !was && k < bkRounds(b) && bkRoundDone(b, bk.picks, k);   // phone: a finished round moves on to the next
+    if (next) bk.round = k + 1;
+    drawBracket(view, c);
+    if (next) { var t = $(".bk-tabs"); if (t) { t.scrollIntoView({ block: "nearest" }); var on = t.querySelector(".on"); if (on) on.focus(); } }
+  } else if (act === "bkp-round") { bk.round = Number(btn.getAttribute("data-r")); drawBracket(view, c); }
+  else if (act === "bkp-who") { bk.who = btn.getAttribute("data-who") || ""; drawBracket(view, c); }
+  else if (act === "bkp-save") bkSave(btn, b);
+}
+function bkSave(btn, b) {
+  var code = bk.code, picks = bkClean(b, bk.picks), scope = $("#bk-save");
+  if (scope) clearErrs(scope);
+  busyBtn(btn, call("savePicks", token, code, b.division, picks)).then(function (r) {
+    marketEpoch++;   // a refresh already in flight carries the old picks
+    cache["bracket:" + code] = r;
+    if (view.name === "bracket" && view.code === code) { bk.touched = false; drawBracket(view, r); }
+    toast("Picks saved.");
+  }, function (e) {
+    if (e.code === "AUTH") return;
+    var sc = $("#bk-save");
+    if (sc) showErr(sc, e); else fail(e);
+    if (e.field === "picks" && /locked/i.test(e.message)) load(true);
+  });
 }
 
 /* ---------- Market detail ---------- */
@@ -712,12 +1127,18 @@ function drawPortfolio(d) {
 }
 
 /* ---------- Leaderboard ---------- */
+/** Small count badge for brackets this member topped. */
+function bkBadge(n) {
+  n = Number(n) || 0; if (n <= 0) return "";
+  var t = n + " bracket win" + (n === 1 ? "" : "s");
+  return '<span class="bkw" role="img" aria-label="' + t + '" title="' + t + '">★' + n + "</span>";
+}
 function drawLeaders(d) {
   var body, i = 0;
   if (lbMode === "people") {
     body = d.rows.map(function (r) {
       i++;
-      return '<tr class="' + (me && r.userId === me.userId ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(r.name) + '</b> <span class="team">' + esc(r.team) + '</span></td><td class="num">' + fmt(r.netWorth) + '</td><td class="num"><span class="chg ' + upDn(r.weekChange) + '">' + delta(r.weekChange) + "</span></td></tr>";
+      return '<tr class="' + (me && r.userId === me.userId ? "me" : "") + '"><td class="rank">' + i + "</td><td><b>" + esc(r.name) + "</b>" + bkBadge(r.bracketWins) + ' <span class="team">' + esc(r.team) + '</span></td><td class="num">' + fmt(r.netWorth) + '</td><td class="num"><span class="chg ' + upDn(r.weekChange) + '">' + delta(r.weekChange) + "</span></td></tr>";
     }).join("");
   } else {
     var t = {}, list = [];
@@ -763,19 +1184,19 @@ function drawAdmin(d, partial) {
   A = d;
   if (!me || !me.isAdmin) { go({ name: "markets" }); return; }
   if (!partial || !$("#ad-new")) {
-    $("#main").innerHTML = '<h2>Admin</h2><div id="ad-stats"></div><div class="panel" id="ad-new"></div><div class="panel" id="ad-markets"></div>' +
+    $("#main").innerHTML = '<h2>Admin</h2><div id="ad-stats"></div><div class="panel" id="ad-sugg"></div><div class="panel" id="ad-auto"></div><div class="panel" id="ad-new"></div><div class="panel" id="ad-markets"></div>' +
       '<div class="panel" id="ad-events"></div><div class="panel" id="ad-users"></div><div class="panel" id="ad-reset"></div>';
     buildNewMarket();
   } else syncNewMarketEvents();
   var s = d.stats, c = d.config;
   $("#ad-stats").innerHTML = '<div class="stats"><div class="stat"><div class="v">' + fmt(s.traders) + '</div><div class="k">Traders</div></div><div class="stat"><div class="v">' + fmt(s.subsidyRealised) + '</div><div class="k">Subsidy realised</div></div><div class="stat"><div class="v">' + fmt(s.openExposure) + '</div><div class="k">Open exposure</div></div></div>' +
     '<p class="sub" style="margin:8px 0 0">Season ' + esc(c.seasonId) + " · start " + fmt(c.startingBalance) + " pts · default b " + esc(c.defaultB) + " / " + esc(c.defaultBMulti) + " · slippage " + esc(c.slippagePts) + " pts · invite code " + (s.inviteSet ? "set" : "not set") + " · VEX events API token " + (s.robotEventsToken ? "set" : "not set") + "</p>";
-  drawAdminMarkets(); drawAdminEvents(); drawAdminUsers(); drawAdminReset();
+  drawAdminSugg(); drawAdminAuto(); drawAdminMarkets(); drawAdminEvents(); drawAdminUsers(); drawAdminReset();
 }
 
 function buildNewMarket() {
   var tplOpts = Object.keys(TPL).map(function (k) { return '<option value="' + k + '">' + TPL[k].label + "</option>"; }).join("");
-  $("#ad-new").innerHTML = '<h3>New market</h3><form id="f-new" novalidate class="stack" style="gap:12px">' +
+  $("#ad-new").innerHTML = '<h3>New market</h3><div class="banner warn" id="nm-appr" hidden></div><form id="f-new" novalidate class="stack" style="gap:12px">' +
     '<div class="grid2"><div class="field"><label for="nm-event">Event</label><select id="nm-event"></select>' + errSpan("eventCode") + "</div>" +
     '<div class="field"><label for="nm-tpl">Template</label><select id="nm-tpl">' + tplOpts + "</select></div></div>" +
     '<div class="grid2"><div class="field" id="nmf-a"><label for="nm-a">Team A</label><input id="nm-a" class="team" list="nm-teams" autocapitalize="characters" autocomplete="off"></div>' +
@@ -791,9 +1212,17 @@ function buildNewMarket() {
     '<button class="go" type="submit" id="nm-go">Create market</button></form>';
   syncNewMarketEvents();
   prefill("tpl");
+  if (approving) startApprove(approving, true);
 }
 function syncNewMarketEvents() {
   var sel = $("#nm-event"); if (!sel || !A) return;
+  if (approving) {   // the event is fixed by the suggestion; an overseas one is imported by the server on approval
+    var ae = adminEvent(approving.eventCode);
+    sel.innerHTML = '<option value="' + esc(approving.eventCode) + '">' + esc(ae ? ae.name : approving.eventName) + (ae ? " · " + esc(hkDay(ae.startAt)) : "") + "</option>";
+    sel.value = approving.eventCode; sel.disabled = true;
+    syncNewMarketHints(); return;
+  }
+  sel.disabled = false;
   var cur = sel.value;
   sel.innerHTML = A.events.map(function (e) { return '<option value="' + esc(e.eventCode) + '">' + esc(e.name) + " · " + esc(hkDay(e.startAt)) + "</option>"; }).join("") || '<option value="">Import an event first</option>';
   if (cur && adminEvent(cur)) sel.value = cur;
@@ -861,7 +1290,8 @@ function submitNewMarket(form) {
   if (kind === "multi") spec.outcomes = outcomes;
   try { var teams = parseRule($("#nm-rule").value, outcomes); if (Object.keys(teams).length) spec.teams = teams; }
   catch (e) { showErr(form, { field: "teams", message: e.message }); return; }
-  if (t.auto) spec.autoTeams = true;
+  if (t.auto || (approving && kind === "multi")) spec.autoTeams = true;   // the server maps only outcomes that are team numbers
+  if (approving) spec.suggestionId = approving.suggestionId;
   var bv = $("#nm-bl").value.trim();
   if (bv) spec.b = Number(bv);
   var lock = hkInputToIso($("#nm-lock").value);
@@ -870,7 +1300,7 @@ function submitNewMarket(form) {
   busyBtn($("#nm-go"), call("createMarket", token, spec)).then(function (res) {
     toast("Created: " + res.market.question);
     $("#nm-lock").value = ""; $("#nm-bl").value = "";
-    prefill("tpl");
+    if (approving) endApprove(); else prefill("tpl");
     reloadAdmin();
   }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
 }
@@ -907,15 +1337,19 @@ function drawAdminMarkets() {
 function drawAdminEvents() {
   var tok = A.stats.robotEventsToken;
   var h = "<h3>Events and teams</h3>" + (A.events.length ? A.events.map(function (e) {
-    return '<div class="item"><div class="q">' + esc(e.name) + '</div><div class="sub"><span class="team">' + esc(e.eventCode) + "</span> · " + esc(eventWhen(e)) + " · " + esc(e.region) + " · " + eventTeams(e.eventCode).length + " teams</div></div>";
+    return '<div class="item"><div class="q">' + esc(e.name) + '</div><div class="sub"><span class="team">' + esc(e.eventCode) + "</span> · " + esc(eventWhen(e)) + " · " + esc(e.region) + " · " + eventTeams(e.eventCode).length + ' teams</div>' +
+      (e.isHK ? '<div class="acts"><button class="sm" type="button" data-act="bk-open" data-code="' + esc(e.eventCode) + '" aria-expanded="' + !!bkOpen[e.eventCode] + '">' + (bkOpen[e.eventCode] ? "Hide bracket" : "Bracket") + "</button></div>" +
+        (bkOpen[e.eventCode] ? bracketHtml(e.eventCode) : "") : "") + "</div>";
   }).join("") : '<p class="sub" style="margin:0">No events yet.</p>');
   h += '<details><summary>Import event</summary><form id="f-import" class="stack" style="gap:10px;margin-top:10px" novalidate>' +
-    '<p class="sub" style="margin:0">' + (tok ? "VEX events API token is set: the code alone pulls the event and its teams from events.vex.com. Fill the other fields to enter it by hand instead." : "No VEX events API token: enter the details by hand. Region must be Hong Kong.") + "</p>" +
+    '<p class="sub" style="margin:0">' + (tok ? "VEX events API token is set: the code alone pulls the event and its teams from events.vex.com. Fill the other fields to enter it by hand instead." : "No VEX events API token: enter the details by hand.") + "</p>" +
     '<div class="field"><label for="ie-code">Event code</label><input id="ie-code" class="team" placeholder="RE-V5RC-27-4476" autocomplete="off" autocapitalize="characters">' + errSpan("eventCode") + "</div>" +
     '<div class="field"><label for="ie-name">Name' + (tok ? " (optional)" : "") + '</label><input id="ie-name" autocomplete="off">' + errSpan("name") + "</div>" +
     '<div class="grid2"><div class="field"><label for="ie-start">Starts (HKT)</label><input id="ie-start" type="datetime-local">' + errSpan("startAt") + "</div>" +
     '<div class="field"><label for="ie-end">Ends (HKT)</label><input id="ie-end" type="datetime-local">' + errSpan("endAt") + "</div></div>" +
-    '<div class="field"><label for="ie-region">Region</label><input id="ie-region" value="Hong Kong" autocomplete="off">' + errSpan("region") + "</div>" +
+    '<div class="grid2"><div class="field"><label for="ie-region">Region</label><input id="ie-region" value="Hong Kong" autocomplete="off">' + errSpan("region") + "</div>" +
+    '<div class="field"><label for="ie-country">Country (optional)</label><input id="ie-country" autocomplete="off" placeholder="Hong Kong">' + errSpan("country") + "</div></div>" +
+    '<div class="field"><label for="ie-level">Level (optional)</label><input id="ie-level" autocomplete="off" placeholder="e.g. Regional Championship">' + errSpan("level") + "</div>" +
     '<div class="field"><label for="ie-teams">Teams (optional)</label><textarea id="ie-teams" class="team" placeholder="936A, 2011C, 8823X"></textarea>' + errSpan("teams") + "</div>" +
     '<button class="sm prim" type="submit" id="ie-go">Import event</button></form></details>';
   h += '<details><summary>Add team</summary><form id="f-team" class="stack" style="gap:10px;margin-top:10px" novalidate>' +
@@ -924,11 +1358,12 @@ function drawAdminEvents() {
     '<div class="field"><label for="at-org">Organisation</label><input id="at-org" autocomplete="off">' + errSpan("organisation") + "</div>" +
     '<button class="sm prim" type="submit" id="at-go">Add team</button></form></details>';
   h += "<details><summary>All teams (" + A.teams.length + ")</summary>" + A.teams.map(function (t) {
-    return '<div class="sub" style="padding:6px 0;border-bottom:1px solid var(--line)"><b class="team">' + esc(t.team) + "</b> " + esc(t.name || "") + (t.organisation ? " · " + esc(t.organisation) : "") + " · " + (t.events || []).length + " events</div>";
+    return '<div class="sub" style="padding:6px 0;border-bottom:1px solid var(--line)"><b class="team">' + esc(t.team) + "</b> " + esc(t.name || "") + (t.organisation ? " · " + esc(t.organisation) : "") + " · " + (t.events || []).length + " events" + (t.manual ? " · added by hand (may join)" : "") + "</div>";
   }).join("") + "</details>";
   var keep = keepDetails("#ad-events");
   $("#ad-events").innerHTML = h;
   restoreDetails("#ad-events", keep);
+  Array.prototype.forEach.call($("#ad-events").querySelectorAll('[data-form="bk-setup"]'), bkRows);
 }
 /* keep <details> open/closed across admin redraws */
 function keepDetails(sel) { var root = $(sel); return root ? Array.prototype.map.call(root.querySelectorAll("details"), function (d) { return d.open; }) : []; }
@@ -971,6 +1406,40 @@ function adminAct(act, b) {
     var ban = !b.getAttribute("data-banned");
     if (ban && !confirm("Ban " + u.name + "? They are logged out and left off the leaderboard.")) return;
     busyBtn(b, call("banUser", token, uid, ban)).then(function () { toast((ban ? "Banned " : "Unbanned ") + u.name + "."); reloadAdmin(); }, fail);
+  } else if (act === "asg-approve") { var sa = sugById(b.getAttribute("data-sid")); if (sa) startApprove(sa);
+  } else if (act === "asg-decline-open") {
+    var df = b.closest(".item").querySelector('[data-form="decline"]'); df.hidden = !df.hidden;
+    if (!df.hidden) df.elements.note.focus();
+  } else if (act === "asg-decline-cancel") { b.closest("form").hidden = true;
+  } else if (act === "asg-remove") {
+    var sr = sugById(b.getAttribute("data-sid")); if (!sr) return;
+    if (!confirm('Remove "' + sr.question + '"? It disappears for everyone and is not shown as declined.')) return;
+    busyBtn(b, call("decideSuggestion", token, sr.suggestionId, "remove", "")).then(function () {
+      if (approving && approving.suggestionId === sr.suggestionId) endApprove();
+      toast("Suggestion removed."); reloadAdmin();
+    }, fail);
+  } else if (act === "appr-cancel") { endApprove();
+  } else if (act === "sync-now") {
+    busyBtn(b, call("syncNow", token)).then(function (r) { syncMsg = syncSummary(r); reloadAdmin(); }, function (e) { syncMsg = e.code === "AUTH" ? "" : e.message; if (e.code !== "AUTH") drawAdminAuto(); });
+  } else if (act === "bk-open") {
+    var bc = b.getAttribute("data-code");
+    if (bkOpen[bc]) { bkOpen[bc] = false; drawAdminEvents(); return; }
+    busyBtn(b, call("getBracket", token, bc, BK_DIV)).then(function (r) { BK[bc] = r.bracket || null; bkOpen[bc] = true; drawAdminEvents(); }, fail);
+  } else if (act === "bk-lock") {
+    var lc = b.getAttribute("data-code");
+    if (!confirm("Close bracket picks now? Nobody can change their picks afterwards.")) return;
+    busyBtn(b, call("lockBracket", token, lc, BK_DIV)).then(function (r) { BK[lc] = r.bracket; toast("Bracket picks are locked."); drawAdminEvents(); }, fail);
+  } else if (act === "bk-win") {
+    var wc = b.getAttribute("data-code"), wslot = b.getAttribute("data-slot"), wseed = Number(b.getAttribute("data-seed"));
+    var wcur = b.getAttribute("data-cur");
+    if (wcur !== "") {
+      if (Number(wcur) === wseed) return;
+      if (!confirm("Change the winner of " + wslot + " to #" + wseed + "? Later rounds that depended on it will be cleared, and everyone's scores are recalculated.")) return;
+    }
+    if (BK[wc] && BK[wc].status === "open" && !confirm("Setting a winner closes picks for everyone. Continue?")) return;
+    busyBtn(b, call("setBracketWinner", token, wc, BK_DIV, wslot, wseed)).then(function (r) { BK[wc] = r.bracket; toast("Winner saved for " + wslot + "."); drawAdminEvents(); }, fail);
+  } else if (act === "bk-replace") {
+    var rf = b.closest(".bk").querySelector('[data-form="bk-setup"]'); rf.hidden = !rf.hidden;
   } else if (act === "team" && u) {
     var team = prompt("New team number for " + u.name + ":", u.team);
     if (team === null) return;
@@ -980,7 +1449,16 @@ function adminAct(act, b) {
 function adminSubmit(form) {
   if (form.id === "f-new") return submitNewMarket(form);
   clearErrs(form);
-  if (form.getAttribute("data-form") === "resolve") {
+  if (form.getAttribute("data-form") === "decline") {
+    var sd = sugById(form.getAttribute("data-sid")), note = form.elements.note.value.trim();
+    if (note.length < 3 || note.length > 200) { showErr(form, { field: "note", message: "Give a reason of 3 to 200 characters. Members see it." }); return; }
+    busyBtn(form.querySelector('[type="submit"]'), call("decideSuggestion", token, sd.suggestionId, "decline", note)).then(function () {
+      if (approving && approving.suggestionId === sd.suggestionId) endApprove();
+      toast("Suggestion declined."); reloadAdmin();
+    }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+  } else if (form.getAttribute("data-form") === "bk-setup") {
+    submitBracket(form);
+  } else if (form.getAttribute("data-form") === "resolve") {
     var mid = form.getAttribute("data-mid"), k = Number(form.elements.outcome.value), src = form.elements.source.value.trim();
     if (!/^https:\/\/((www\.)?robotevents\.com|events\.vex\.com)\/\S+$/i.test(src)) { showErr(form, { field: "source", message: "Paste the results link from events.vex.com (https://events.vex.com/...)." }); return; }
     var m = marketById(mid);
@@ -996,10 +1474,12 @@ function adminSubmit(form) {
     if (en === "invalid") { showErr(form, { field: "endAt", message: "Use a valid date and time." }); return; }
     if (st) data.startAt = st; if (en) data.endAt = en;
     var rg = $("#ie-region").value.trim(); if (rg && (nm || st)) data.region = rg;
+    var cn = $("#ie-country").value.trim(); if (cn) data.country = cn;
+    var lv = $("#ie-level").value.trim(); if (lv) data.level = lv;
     var tm = $("#ie-teams").value.trim(); if (tm) data.teams = tm;
     busyBtn($("#ie-go"), call("importEvent", token, data)).then(function (r) {
       toast("Imported " + r.event.name + ". " + r.teamsAdded + " new team" + (r.teamsAdded === 1 ? "" : "s") + ".");
-      ["#ie-code", "#ie-name", "#ie-start", "#ie-end", "#ie-teams"].forEach(function (s) { $(s).value = ""; });
+      ["#ie-code", "#ie-name", "#ie-start", "#ie-end", "#ie-teams", "#ie-country", "#ie-level"].forEach(function (s) { $(s).value = ""; });
       reloadAdmin();
     }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
   } else if (form.id === "f-team") {
@@ -1017,6 +1497,128 @@ function adminSubmit(form) {
       toast("Season " + r.seasonId + " started."); $("#rs-text").value = ""; $("#rs-go").disabled = true; cache = {}; reloadAdmin();
     }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
   }
+}
+
+
+/* ---------- Admin: suggestions, automatic markets, brackets ---------- */
+var approving = null;   // suggestion being approved through the new-market form
+var syncMsg = "";
+var BK = {}, bkOpen = {}, BK_DIV = "1";   // loaded brackets by event code; one division per Hong Kong event
+function sugById(id) { var l = (A && A.suggestions) || []; for (var i = 0; i < l.length; i++) if (l[i].suggestionId === id) return l[i]; return null; }
+
+function drawAdminSugg() {
+  var list = ((A.suggestions || []).slice()).sort(function (a, b) { return b.backers - a.backers; });
+  var keepForms = {};
+  Array.prototype.forEach.call($("#ad-sugg").querySelectorAll('[data-form="decline"]'), function (f) { keepForms[f.getAttribute("data-sid")] = { open: !f.hidden, note: f.elements.note.value }; });
+  $("#ad-sugg").innerHTML = "<h3>Open suggestions (" + list.length + ")</h3>" + (list.length ? list.map(function (s) {
+    var outs = s.kind === "multi" ? (s.outcomes && s.outcomes.length ? s.outcomes.map(esc).join(", ") : "all registered teams") : "YES / NO";
+    return '<div class="item" data-sid="' + esc(s.suggestionId) + '"><div class="q">' + esc(s.question) + "</div>" +
+      '<div class="sub">' + esc(s.eventName) + (s.eventStart ? " · " + esc(hkDay(s.eventStart)) : "") + " · " + (s.kind === "multi" ? "multiple outcomes" : "binary") + (s.isHK ? "" : " · overseas, imported on approval") + "</div>" +
+      '<div class="sub">' + outs + '</div><div class="sub">by ' + esc(s.by.name) + ' <span class="team">' + esc(s.by.team) + '</span> · <span class="mono">' + fmt(s.backers) + "</span> backer" + (s.backers === 1 ? "" : "s") + "</div>" +
+      '<div class="acts"><button class="sm prim" type="button" data-act="asg-approve" data-sid="' + esc(s.suggestionId) + '">Approve</button>' +
+      '<button class="sm" type="button" data-act="asg-decline-open">Decline</button>' +
+      '<button class="sm danger" type="button" data-act="asg-remove" data-sid="' + esc(s.suggestionId) + '">Remove</button></div>' +
+      '<form class="rform" data-form="decline" data-sid="' + esc(s.suggestionId) + '" novalidate hidden>' +
+      '<div class="field"><label>Reason (members see it, 3 to 200 characters)</label><input name="note" maxlength="200" autocomplete="off">' + errSpan("note") + "</div>" +
+      '<div class="acts"><button class="sm prim" type="submit">Decline suggestion</button><button class="sm" type="button" data-act="asg-decline-cancel">Cancel</button></div></form></div>';
+  }).join("") : '<p class="sub" style="margin:0">No open suggestions.</p>');
+  Array.prototype.forEach.call($("#ad-sugg").querySelectorAll('[data-form="decline"]'), function (f) {
+    var k = keepForms[f.getAttribute("data-sid")]; if (k) { f.hidden = !k.open; f.elements.note.value = k.note; }
+  });
+  if (approving && !sugById(approving.suggestionId)) endApprove();
+}
+function startApprove(s, rebuilding) {
+  approving = s;
+  s.allTeams = s.kind === "multi" && !(s.outcomes && s.outcomes.length);
+  $("#nm-tpl").value = "custom"; $("#nm-tpl").disabled = true;
+  $("#nm-kind").value = s.kind; $("#nm-kind").disabled = true;
+  syncNewMarketEvents(); prefill("approve");
+  $("#nm-q").value = s.question;
+  if (s.kind === "multi") {
+    var outs = s.outcomes && s.outcomes.length ? s.outcomes : eventTeams(s.eventCode).concat("Other");
+    $("#nm-outs").value = outs.join("\n");
+    if (s.allTeams) $("#nm-outs-hint").textContent = eventTeams(s.eventCode).length ? "All teams registered for this event, plus Other. Team outcomes get the own-team rule automatically." : "Teams for this event aren't known yet. Type the outcomes here, one per line.";
+  } else $("#nm-outs").value = "";
+  $("#nm-rule").value = "";
+  var ev = adminEvent(s.eventCode);
+  var box = $("#nm-appr"); box.hidden = false;
+  box.innerHTML = "Approving the suggestion from <b>" + esc(s.by.name) + "</b> for " + esc(ev ? ev.name : s.eventName) + (ev ? "" : ". The event is imported when you create the market") + '. <button class="sm" type="button" data-act="appr-cancel">Cancel</button>';
+  if (!rebuilding) { $("#ad-new").scrollIntoView({ behavior: "smooth", block: "start" }); $("#nm-q").focus(); }
+}
+function endApprove() {
+  approving = null;
+  var box = $("#nm-appr"); if (!box) return;
+  box.hidden = true; box.innerHTML = "";
+  $("#nm-tpl").disabled = false; $("#nm-kind").disabled = false; $("#nm-tpl").value = "champion"; $("#nm-kind").value = "binary";
+  syncNewMarketEvents(); prefill("tpl");
+}
+
+var JOBS = [["syncHongKongEvents", "Events, teams and standard markets", "daily at 05:00 HKT"], ["syncBrackets", "Brackets", "every 5 minutes on event days"]];
+function syncSummary(r) {
+  var bits = [];
+  if (r.eventsAdded !== undefined) bits.push(fmt(r.eventsAdded) + " events added, " + fmt(r.eventsUpdated || 0) + " updated, " + fmt(r.teamsLinked || 0) + " teams linked, " + fmt(r.marketsCreated || 0) + " markets created");
+  return (r.message ? r.message + (bits.length ? " " : "") : "") + (bits.length ? bits.join("") + "." : "") || "Sync finished.";
+}
+function drawAdminAuto() {
+  var jobs = A.jobs || {};
+  $("#ad-auto").innerHTML = "<h3>Automatic markets</h3>" + JOBS.map(function (j) {
+    var r = jobs[j[0]];
+    return '<div class="item"><div class="row"><b>' + esc(j[1]) + "</b>" + (r ? '<span class="chip ' + (r.ok ? "open" : "bad") + '">' + (r.ok ? "ok" : "failed") + "</span>" : "") + "</div>" +
+      '<div class="sub">' + (r ? "Last run " + esc(hkFull(r.ts)) + (r.message ? " · " + esc(r.message) : "") : "Not run yet") + " · " + esc(j[2]) + "</div></div>";
+  }).join("") + '<div class="acts"><button class="sm prim" type="button" data-act="sync-now">Sync now</button></div>' +
+    (syncMsg ? '<div class="banner info" role="status">' + esc(syncMsg) + "</div>" : "");
+}
+
+function allianceLabel(b, seed) {
+  var al = (b.alliances || []).filter(function (a) { return a.seed === seed; })[0];
+  return "#" + seed + (al ? " " + al.teams.join(" ") : "");
+}
+function bracketHtml(code) {
+  var b = BK[code], h = '<div class="bk" data-code="' + esc(code) + '">';
+  if (b) {
+    h += '<div class="row"><b>Division ' + esc(b.division) + '</b><span class="chip ' + (b.status === "open" ? "open" : b.status === "locked" ? "locked" : "resolved") + '">' + esc(b.status) + '</span><span class="meta mono">' + b.size + " alliances" + (b.lockAt ? " · picks close " + esc(hkFull(b.lockAt)) : "") + "</span></div>";
+    h += (b.alliances || []).map(function (a) { return '<div class="al"><span class="mono">#' + a.seed + '</span><span class="team">' + a.teams.map(esc).join(" · ") + "</span></div>"; }).join("");
+    if (b.status === "open") h += '<div class="acts"><button class="sm" type="button" data-act="bk-lock" data-code="' + esc(code) + '">Lock picks now</button></div>';
+    var rounds = Math.round(Math.log(b.size) / Math.LN2), slots = Object.keys(b.slots || {}).sort(function (x, y) {
+      var px = /^R(\d+)-(\d+)$/.exec(x) || [], py = /^R(\d+)-(\d+)$/.exec(y) || [];
+      return (px[1] - py[1]) || (px[2] - py[2]);
+    });
+    var ready = slots.filter(function (k) { var s = b.slots[k]; return s.a != null && s.b != null; });
+    h += "<div><b>Winners</b></div>";
+    h += ready.length ? ready.map(function (k) {
+      var s = b.slots[k], rn = Number(/^R(\d+)/.exec(k)[1]);
+      return '<div class="item"><div class="sub"><span class="mono">' + esc(k) + "</span> · " + (rn === rounds ? "Final" : "Round " + rn) + (s.winner == null ? "" : " · tap the other alliance to change") + '</div><div class="acts">' +
+        [s.a, s.b].map(function (sd) { return '<button class="sm' + (s.winner === sd ? " on" : "") + '" type="button" aria-pressed="' + (s.winner === sd) + '" data-act="bk-win" data-code="' + esc(code) + '" data-slot="' + esc(k) + '" data-seed="' + sd + '" data-cur="' + (s.winner == null ? "" : s.winner) + '">' + esc(allianceLabel(b, sd)) + "</button>"; }).join("") + "</div></div>";
+    }).join("") : '<p class="sub" style="margin:0">No match has both alliances known yet.</p>';
+    h += '<div class="acts"><button class="sm" type="button" data-act="bk-replace">Replace setup</button></div>';
+  } else h += '<p class="sub" style="margin:0">No bracket yet for this event.</p>';
+  h += '<form data-form="bk-setup" data-code="' + esc(code) + '" class="rform" novalidate' + (b ? " hidden" : "") + ">" +
+    '<div class="grid2"><div class="field"><label>Alliances</label><select name="size" data-bk-size><option value="2">2</option><option value="4" selected>4</option><option value="8">8</option><option value="16">16</option></select></div>' +
+    '<div class="field"><label>Picks close (HKT)</label><input name="lockAt" type="datetime-local">' + errSpan("lockAt") + "</div></div>" +
+    '<div class="stack" data-rows style="gap:8px"></div>' + errSpan("alliances") +
+    '<div class="acts"><button class="sm prim" type="submit">' + (b ? "Replace bracket" : "Set up bracket") + "</button></div></form></div>";
+  return h;
+}
+function bkRows(form) {
+  var n = Number(form.elements.size.value), box = form.querySelector("[data-rows]"), old = {};
+  Array.prototype.forEach.call(box.querySelectorAll("input"), function (i) { old[i.name] = i.value; });
+  var h = "";
+  for (var i = 1; i <= n; i++) h += '<div class="field"><label>Seed ' + i + ' teams (1 to 3, separated by spaces or commas)</label><input class="team" name="seed' + i + '" autocomplete="off" autocapitalize="characters" value="' + esc(old["seed" + i] || "") + '"></div>';
+  box.innerHTML = h;
+}
+function submitBracket(form) {
+  clearErrs(form);
+  var code = form.getAttribute("data-code"), n = Number(form.elements.size.value), al = [];
+  for (var i = 1; i <= n; i++) {
+    var teams = form.elements["seed" + i].value.toUpperCase().split(/[\s,;]+/).filter(Boolean);
+    if (teams.length < 1 || teams.length > 3) { showErr(form, { field: "alliances", message: "Seed " + i + " needs 1 to 3 team numbers." }); return; }
+    al.push({ seed: i, teams: teams });
+  }
+  var lock = hkInputToIso(form.elements.lockAt.value);
+  if (!lock || lock === "invalid") { showErr(form, { field: "lockAt", message: "Pick a valid close time." }); return; }
+  busyBtn(form.querySelector('[type="submit"]'), call("setBracket", token, code, BK_DIV, al, lock)).then(function (r) {
+    BK[code] = r.bracket; toast("Bracket saved."); drawAdminEvents();
+  }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
 }
 
 /* ---------- one delegated handler for the app body ---------- */
@@ -1041,11 +1643,16 @@ $("#main").addEventListener("click", function (e) {
   }
   else if (act === "quick") { setAmt(b.getAttribute("data-q")); updateQuote(); }
   else if (act === "confirm") doTrade();
+  else if (act === "bracket") go({ name: "bracket", code: b.getAttribute("data-code") });
+  else if (act.indexOf("bkp-") === 0) bkAct(act, b);
+  else if (act.indexOf("sg-") === 0) sgAct(act, b);
   else adminAct(act, b);
 });
-$("#main").addEventListener("submit", function (e) { e.preventDefault(); adminSubmit(e.target); });
+$("#main").addEventListener("submit", function (e) { e.preventDefault(); if (e.target.id === "f-sg") sgSubmit(e.target); else adminSubmit(e.target); });
 $("#main").addEventListener("change", function (e) {
   var id = e.target.id;
+  if (id === "sg-event" || id === "sg-kind" || id === "sg-all") { sgSync(); return; }
+  if (e.target.getAttribute && e.target.getAttribute("data-bk-size") !== null) { bkRows(e.target.closest("form")); return; }
   if (id === "nm-tpl" || id === "nm-event" || id === "nm-kind") prefill(id === "nm-tpl" ? "tpl" : id);
 });
 $("#main").addEventListener("input", function (e) {
@@ -1064,7 +1671,7 @@ var NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 .'_-]{1,19}$/, TEAM_RE = /^\d{1,5}[A-Z]?$/
 
 function loginPage(top, card, after) {
   return '<div class="login"><div><div class="mark">HK VEX<br><span>Market</span></div>' + top + "</div>" + card + (after || "") +
-    '<p class="team">Points have no cash value. Hong Kong V5RC events only. <a href="privacy.html" target="_blank" rel="noopener">Privacy</a></p></div>';
+    '<p class="team">Hong Kong events, plus any event the group suggests. Points have no cash value. <a href="privacy.html" target="_blank" rel="noopener">Privacy</a></p></div>';
 }
 
 /** Sign-in step. msg (optional) is shown under the Google button. */
