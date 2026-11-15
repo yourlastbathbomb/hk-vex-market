@@ -72,6 +72,7 @@ h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;le
 .out.win .nm{color:var(--good)}
 .out[disabled]{cursor:default}
 .out .nm{font-weight:600;overflow-wrap:anywhere}
+.out .who{display:block;font-weight:400;font-size:12px;line-height:1.3;color:var(--muted);margin-top:1px}
 .out .pc{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
 .out .spk{display:block;width:64px;height:22px;color:#a3a3a3}
 .out.sel .spk{color:var(--ink)}
@@ -311,6 +312,13 @@ var trading = false, marketEpoch = 0, refreshing = false, lastRefreshErr = "";
 
 /* ---------- helpers ---------- */
 function $(s) { return document.querySelector(s); }
+/** Team name and organisation under a team-number outcome, from the market's teamInfo; "" when unknown. */
+function teamWho(m, o) {
+  var t = m.teamInfo && m.teamInfo[o];
+  if (!t) return "";
+  var bits = [t.name, t.org].filter(function (x) { return x; });
+  return bits.length ? '<span class="who">' + esc(bits.join(" · ")) + "</span>" : "";
+}
 function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 function pct(p) { return Math.round(p * 100) + "%"; }
 function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
@@ -1037,7 +1045,7 @@ function drawMarket(m) {
     }
     var vals = (m.history || []).map(function (h) { return chance(m, h.p[i]); });
     return '<button class="out ' + cls + '" type="button" data-act="pick" data-k="' + i + '"' + (m.status === "void" ? " disabled" : "") + ' aria-pressed="' + (i === tr.k) + '">' +
-      '<span class="nm">' + (won ? "✓ " : "") + esc(o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
+      '<span class="nm">' + (won ? "✓ " : "") + esc(o) + teamWho(m, o) + "</span>" + spark(vals) + '<span class="pc">' + pct(shown) + "</span>" +
       '<span class="bar"><i style="width:' + (shown * 100).toFixed(1) + '%"></i></span>' + hold + "</button>";
   }).join("");
 
