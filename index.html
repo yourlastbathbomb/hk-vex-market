@@ -158,8 +158,9 @@ label.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--i
 label.check input{width:18px;height:18px;accent-color:var(--ink)}
 .bad{font-size:12px;color:var(--red)}
 .signout{background:none;border:0;padding:4px 0;font-size:11px;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:5}
-nav.four{grid-template-columns:repeat(4,1fr)}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:5}
+nav.five{grid-template-columns:repeat(5,1fr)}
+nav.five button{font-size:12px;padding-left:2px;padding-right:2px}
 nav button{background:none;border:0;padding:12px 4px 16px;font-weight:600;font-size:13px;color:var(--muted);border-top:3px solid transparent}
 nav button.on{color:var(--ink);border-top-color:var(--ink)}
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:500;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;z-index:10}
@@ -231,6 +232,7 @@ div.bk-al{min-height:36px}
 .app.wide main.split{flex:none;min-height:0;max-width:none;margin:0;padding:0;gap:0;display:grid;grid-template-columns:380px minmax(0,1fr);grid-template-rows:minmax(0,1fr);height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
 #list,#detail{min-height:0;overflow-y:auto;overscroll-behavior:contain}
 #list{border-right:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:20px}
+#list>*{flex-shrink:0}
 #detail{padding:24px 32px 48px}
 #detail>*{max-width:680px;margin-left:auto;margin-right:auto}
 .app.wide #mk>.back{display:none}
@@ -243,6 +245,65 @@ div.bk-al{min-height:36px}
   .app.wide .mk-main{display:flex;flex-direction:column;gap:20px;min-width:0}
   .app.wide #mk-trade{position:sticky;top:0}
 }
+/* teams */
+.lnk{background:none;border:0;padding:0;font:inherit;color:var(--ink);text-align:left;text-decoration:underline;text-underline-offset:2px}
+.lnk.mono{font-family:var(--mono);font-size:.92em}
+.evhead .bk-link+.bk-link{margin-left:14px}
+.tsearch{display:flex;gap:8px}
+.tsearch input{flex:1;min-width:0;font-family:var(--mono);font-size:17px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);text-transform:uppercase}
+.tsearch input::placeholder{text-transform:none;font-family:var(--body);font-size:15px}
+.trow .tnm{font-weight:600;overflow-wrap:anywhere;min-width:0}
+.trow .chip{margin-left:auto}
+.tst{display:flex;gap:4px 14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.tst b{font-family:var(--mono);color:var(--ink);font-weight:600}
+.opts{border:0;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.opts legend{font-size:12px;font-weight:600;color:var(--muted);padding:0;margin-bottom:6px}
+.opt{position:relative;color:var(--ink)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt span{display:inline-flex;align-items:center;min-height:40px;border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-weight:600;font-size:14px;background:var(--surface);cursor:pointer}
+.opt input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
+.opt input:focus-visible+span{outline:2px solid var(--ink);outline-offset:2px}
+.opts .oth{flex-basis:100%;font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.opts .bad{flex-basis:100%}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:14px}
+.kv dt{color:var(--muted);font-size:12px;font-weight:600;align-self:center}
+.kv dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.rr-notes{margin:0;font-size:14px;overflow-wrap:anywhere}
+.aw ul{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.aw li{overflow-wrap:anywhere}
+.mtg{border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.mtg>summary{text-decoration:none}
+.mlist{display:flex;flex-direction:column;margin-top:6px}
+.mrow{display:grid;grid-template-columns:44px minmax(0,1fr) 14px minmax(0,1fr) 18px;gap:6px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
+.mrow .ml{font-size:12px;color:var(--muted)}
+.mrow .vs{color:var(--muted);text-align:center}
+.mal{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:baseline;min-width:0}
+.mal .sc{margin-left:auto;font-family:var(--mono)}
+.mal.w .sc{font-weight:700}
+.res{font-family:var(--mono);font-weight:700;text-align:right}
+.pd{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pd-al{display:flex;flex-direction:column;gap:8px;min-width:0}
+.pd-al input{font-family:var(--mono);font-size:17px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);text-transform:uppercase;width:100%;min-width:0}
+.pd-al input::placeholder{text-transform:none;font-family:var(--body);font-size:15px}
+.bar2{height:8px;background:var(--soft);border-radius:4px;overflow:hidden}
+.bar2 i{display:block;height:100%;background:var(--ink)}
+.mt-h{margin-top:4px}
+.mt{gap:4px}
+.mt-al{display:grid;grid-template-columns:40px 1fr auto;gap:8px;align-items:baseline;font-size:14px}
+.mt-al .k{font-size:12px;color:var(--muted);font-weight:600}
+.mt-al .tms{display:flex;flex-wrap:wrap;gap:2px 8px;min-width:0}
+.mt-al .sc{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.mt-al.w .sc{font-weight:700}
+.app.wide #tm>.back,.app.wide #pdv>.back{display:none}
+.evhead .wbtn{margin-left:auto;min-height:36px;padding:6px 12px}
+.sm.wbtn.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.wn{display:flex;flex-direction:column;gap:6px}
+.wn input{text-transform:none;font-family:var(--body);font-size:16px}
+.wwrap{display:flex;flex-direction:column;gap:4px}
+.wwrap>.bk-link{align-self:flex-start;margin:0 0 0 4px;font-size:13px}
+.wkv{font-size:13px}
+.wkv dd{font-weight:500}
+.wnote{font-size:13px;border-left:2px solid var(--ink);padding-left:8px;overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 </head>
@@ -256,6 +317,7 @@ div.bk-al{min-height:36px}
   <main id="main"></main>
   <nav id="nav">
     <button id="tab-markets" type="button" class="on">Markets</button>
+    <button id="tab-teams" type="button">Teams</button>
     <button id="tab-portfolio" type="button">Portfolio</button>
     <button id="tab-leaders" type="button">Leaderboard</button>
     <button id="tab-admin" type="button" hidden>Admin</button>
@@ -300,6 +362,46 @@ function lmsrSharesForSpend(q, b, k, spend) {
   return (lo + hi) / 2;
 }
 /* LMSR-END */
+
+/* ---------- match prediction (copied verbatim from src/predict.js; a test compares this block) ---------- */
+/* PREDICT-BEGIN */
+function predNormCdf(x) {
+  // Abramowitz and Stegun 7.1.26, error below 1.5e-7
+  if (x === 0) return 0.5;
+  var s = x < 0 ? -1 : 1, z = Math.abs(x) / Math.SQRT2;
+  var t = 1 / (1 + 0.3275911 * z);
+  var y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z);
+  return 0.5 * (1 + s * y);
+}
+
+/** model: { opr: { team: x }, mean, sigma }. Unknown teams count the mean. */
+function predOpr(model, red, blue) {
+  function sum(list) {
+    var s = 0;
+    for (var i = 0; i < list.length; i++) {
+      var v = model.opr[list[i]];
+      s += typeof v === 'number' && isFinite(v) ? v : model.mean;
+    }
+    return s;
+  }
+  var r = sum(red), b = sum(blue), sg = model.sigma > 0 ? model.sigma : 1;
+  return { red: r, blue: b, pRed: predNormCdf((r - b) / sg) };
+}
+
+/** model: { elo: { team: x }, eloStart }. Unknown teams count eloStart. */
+function predElo(model, red, blue) {
+  function avg(list) {
+    if (!list.length) return model.eloStart;
+    var s = 0;
+    for (var i = 0; i < list.length; i++) {
+      var v = model.elo[list[i]];
+      s += typeof v === 'number' && isFinite(v) ? v : model.eloStart;
+    }
+    return s / list.length;
+  }
+  return { pRed: 1 / (1 + Math.pow(10, (avg(blue) - avg(red)) / 400)) };
+}
+/* PREDICT-END */
 
 /* ---------- state ---------- */
 var TOKEN_KEY = "hkvex-token";
@@ -430,7 +532,7 @@ function setUser(u) {
   $("#bal").textContent = fmt(u.balance) + " pts";
   $("#who").textContent = u.name + " · " + u.team;
   $("#tab-admin").hidden = !u.isAdmin;
-  $("#nav").classList.toggle("four", !!u.isAdmin);
+  $("#nav").classList.toggle("five", !!u.isAdmin);
 }
 
 /* ---------- navigation and layout ---------- */
@@ -442,15 +544,27 @@ function setUser(u) {
  */
 var wideMQ = window.matchMedia ? window.matchMedia("(min-width: 900px)") : null;
 var wide = !!(wideMQ && wideMQ.matches);
-function viewKey(v) { return v.name === "market" ? "market:" + v.id : v.name === "bracket" ? "bracket:" + v.code : v.name; }
-function setTab(n) { ["markets", "portfolio", "leaders", "admin"].forEach(function (t) { $("#tab-" + t).classList.toggle("on", t === n); }); }
+function viewKey(v) {
+  if (v.name === "market") return "market:" + v.id;
+  if (v.name === "bracket") return "bracket:" + v.code;
+  if (v.name === "team") return "team:" + v.team;
+  if (v.name === "matches") return "matches:" + v.code;
+  return v.name;
+}
+function setTab(n) { ["markets", "teams", "portfolio", "leaders", "admin"].forEach(function (t) { $("#tab-" + t).classList.toggle("on", t === n); }); }
 /** Views that live under the Markets tab: on laptop they draw into #detail beside the market list. */
-function inMarkets(v) { return v.name === "markets" || v.name === "market" || v.name === "bracket"; }
-function splitView(v) { v = v || view; return wide && inMarkets(v); }
+function inMarkets(v) { return v.name === "markets" || v.name === "market" || v.name === "bracket" || (v.name === "matches" && v.tab === "markets"); }
+/** Views under the Teams tab: on laptop they draw into #detail beside the team list. */
+function inTeams(v) { return v.name === "teams" || v.name === "team" || v.name === "predict" || (v.name === "matches" && v.tab !== "markets"); }
+function tabOf(v) { return inMarkets(v) ? "markets" : inTeams(v) ? "teams" : v.name; }
+/** The list view drawn in the left pane of a split tab. */
+function listViewOf(v) { return inMarkets(v) ? { name: "markets" } : { name: "teams" }; }
+function isList(v) { return v.name === "markets" || v.name === "teams"; }
+function splitView(v) { v = v || view; return wide && (inMarkets(v) || inTeams(v)); }
 function listEl() { return (splitView() && $("#list")) || $("#main"); }
 function detailEl() { return (splitView() && $("#detail")) || $("#main"); }
 /** Where a view's content (or its loading/error message) goes. */
-function paneFor(v) { return v.name === "markets" ? listEl() : inMarkets(v) ? detailEl() : $("#main"); }
+function paneFor(v) { return isList(v) ? listEl() : splitView(v) ? detailEl() : $("#main"); }
 var LOADING = '<p class="loading">Loading…</p>';
 
 /** Applies the phone or laptop layout. Moving the nav keeps its click handlers. */
@@ -466,29 +580,32 @@ function onLayoutChange() {
   if (was === wide) return;
   applyLayout();
   // Markets changes shape between the two layouts; the other views are the same markup, restyled.
-  if (token && me && !$("#app").hidden && inMarkets(view)) go(view);
+  if (token && me && !$("#app").hidden && (inMarkets(view) || inTeams(view))) go(view);
 }
 if (wideMQ) { if (wideMQ.addEventListener) wideMQ.addEventListener("change", onLayoutChange); else if (wideMQ.addListener) wideMQ.addListener(onLayoutChange); }
 
 function go(v) {
   view = v; viewSeq++;
-  setTab(inMarkets(v) ? "markets" : v.name);
+  setTab(tabOf(v));
   var main = $("#main"), split = splitView(v), needList = false;
   var c = v.name === "admin" ? null : cache[viewKey(v)];
   main.classList.toggle("split", split);
   if (split) {
-    if (!$("#list")) {
+    var lv = listViewOf(v);
+    if (!$("#list") || main.getAttribute("data-split") !== lv.name) {
       main.innerHTML = '<div id="list"></div><div id="detail"></div>';
-      if (cache.markets) drawMarkets(cache.markets); else { $("#list").innerHTML = LOADING; needList = true; }
+      main.setAttribute("data-split", lv.name);
+      if (cache[lv.name]) draw(lv, cache[lv.name]); else { $("#list").innerHTML = LOADING; needList = true; }
     }
     if (v.name === "markets") drawPickPrompt();
+    else if (v.name === "teams") drawTeamPrompt();
     else if (c) draw(v, c);
     else $("#detail").innerHTML = LOADING;
     markSelected();
     $("#detail").scrollTop = 0;
     window.scrollTo(0, 0);
   } else {
-    if ($("#list")) main.innerHTML = "";
+    if ($("#list")) { main.innerHTML = ""; main.removeAttribute("data-split"); }
     if (c) draw(v, c); else main.innerHTML = LOADING;
     window.scrollTo(0, 0);
   }
@@ -498,7 +615,8 @@ function go(v) {
 /** Fetch the current view; withList also refreshes the market list beside it (laptop Markets tab). silent = no spinner. */
 function load(silent, withList) {
   var v = view, seq = viewSeq, jobs = [fetchView(v, seq, silent)];
-  if (withList && v.name !== "markets" && splitView(v)) jobs.push(fetchView({ name: "markets" }, seq, silent));
+  var lv = listViewOf(v);
+  if (withList && v.name !== lv.name && splitView(v)) jobs.push(fetchView(lv, seq, silent));
   return Promise.all(jobs);
 }
 function fetchView(v, seq, silent) {
@@ -511,11 +629,16 @@ function fetchView(v, seq, silent) {
   else if (v.name === "portfolio") p = call("portfolio", token);
   else if (v.name === "leaders") p = call("leaderboard", token);
   else if (v.name === "admin") p = call("adminData", token);
+  else if (v.name === "teams") p = Promise.all([call("listTeams", token), call("getWatchlist", token)]).then(function (r) { r[0].watch = r[1].teams; return r[0]; });
+  else if (v.name === "team") p = call("getTeam", token, v.team);
+  else if (v.name === "predict") p = call("getPredictor", token);
+  else if (v.name === "matches") p = call("getEventMatches", token, v.code);
   else return Promise.resolve();
   return p.then(function (res) {
     if ((v.name === "market" || v.name === "bracket") && epoch !== marketEpoch) return;   // a trade or saved picks landed meanwhile; that result is newer
     cache[viewKey(v)] = res;
     if (seq !== viewSeq || !token) return;
+    if (isList(v) && v.name !== view.name && splitView() && $("#main").getAttribute("data-split") !== v.name) return;   // the other tab's list
     draw(v, res);
     lastRefreshErr = "";
   }, function (e) {
@@ -535,6 +658,10 @@ function draw(v, res) {
   else if (v.name === "portfolio") drawPortfolio(res);
   else if (v.name === "leaders") drawLeaders(res);
   else if (v.name === "admin") drawAdmin(res);
+  else if (v.name === "teams") drawTeams(res);
+  else if (v.name === "team") drawTeam(res);
+  else if (v.name === "predict") drawPredict(res);
+  else if (v.name === "matches") drawMatches(res);
 }
 
 function openMarket(id) { tr.mid = null; go({ name: "market", id: id }); }   // fresh trade panel, like the prototype
@@ -547,6 +674,11 @@ function drawPickPrompt() {
 /** Outlines the open market's card in the laptop list. */
 function markSelected() {
   if (!$("#list")) return;
+  Array.prototype.forEach.call($("#list").querySelectorAll("[data-act=team],[data-act=predict]"), function (el) {
+    var on = el.getAttribute("data-act") === "predict" ? view.name === "predict" : view.name === "team" && el.getAttribute("data-team") === view.team;
+    el.classList.toggle("on", on);
+    if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current");
+  });
   Array.prototype.forEach.call($("#list").querySelectorAll(".card[data-mid]"), function (el) {
     var on = view.name === "market" && el.getAttribute("data-mid") === view.id;
     el.classList.toggle("on", on);
@@ -562,8 +694,10 @@ function markSelected() {
 /* silent refresh every 15 s while visible (never the admin screen); on the laptop Markets tab both panes refresh */
 function refresh() {
   if (refreshing || !token || !me || view.name === "admin" || document.visibilityState !== "visible") return;
+  var liveMatches = view.name === "matches" && cache[viewKey(view)] && cache[viewKey(view)].live;
+  if ((inTeams(view) || view.name === "matches") && !liveMatches) return;   // team research changes slowly, and redrawing would eat a half-typed report
   refreshing = true;
-  load(true, true).then(function () { refreshing = false; }, function () { refreshing = false; });
+  load(true, inMarkets(view) && view.name !== "matches").then(function () { refreshing = false; }, function () { refreshing = false; });
 }
 setInterval(refresh, 15000);
 document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); });
@@ -615,6 +749,7 @@ function drawMarkets(d) {
   }
   function evSec(e) {
     var link = hasBracketLink(e) ? '<button class="back bk-link" type="button" data-act="bracket" data-code="' + esc(e.eventCode) + '">Bracket</button>' : "";
+    if (e.isHK && Date.parse(e.startAt) - nowMs < 864e5) link += '<button class="back bk-link" type="button" data-act="matches" data-code="' + esc(e.eventCode) + '">Matches</button>';
     var s = sec(e.name, e.eventCode, evWhen(e), by[e.eventCode] || [], link); delete by[e.eventCode]; return s;
   }
   function more(key, list) {
@@ -1452,6 +1587,8 @@ function adminAct(act, b) {
       toast("Suggestion removed."); reloadAdmin();
     }, fail);
   } else if (act === "appr-cancel") { endApprove();
+  } else if (act === "sync-stats") {
+    busyBtn(b, call("syncStatsNow", token)).then(function (r) { syncMsg = r.message || "Ratings sync finished."; reloadAdmin(); }, function (e) { syncMsg = e.code === "AUTH" ? "" : e.message; if (e.code !== "AUTH") drawAdminAuto(); });
   } else if (act === "sync-now") {
     busyBtn(b, call("syncNow", token)).then(function (r) { syncMsg = syncSummary(r); reloadAdmin(); }, function (e) { syncMsg = e.code === "AUTH" ? "" : e.message; if (e.code !== "AUTH") drawAdminAuto(); });
   } else if (act === "bk-open") {
@@ -1595,7 +1732,8 @@ function endApprove() {
   syncNewMarketEvents(); prefill("tpl");
 }
 
-var JOBS = [["syncHongKongEvents", "Events, teams and standard markets", "daily at 05:00 HKT"], ["syncBrackets", "Brackets", "every 5 minutes on event days"]];
+var JOBS = [["syncHongKongEvents", "Events, teams and standard markets", "daily at 05:00 HKT"], ["syncBrackets", "Brackets", "every 5 minutes on event days"],
+  ["syncTeamStats", "Match data and team ratings", "daily at 05:30 HKT"]];
 function syncSummary(r) {
   var bits = [];
   if (r.eventsAdded !== undefined) bits.push(fmt(r.eventsAdded) + " events added, " + fmt(r.eventsUpdated || 0) + " updated, " + fmt(r.teamsLinked || 0) + " teams linked, " + fmt(r.marketsCreated || 0) + " markets created");
@@ -1607,7 +1745,7 @@ function drawAdminAuto() {
     var r = jobs[j[0]];
     return '<div class="item"><div class="row"><b>' + esc(j[1]) + "</b>" + (r ? '<span class="chip ' + (r.ok ? "open" : "bad") + '">' + (r.ok ? "ok" : "failed") + "</span>" : "") + "</div>" +
       '<div class="sub">' + (r ? "Last run " + esc(hkFull(r.ts)) + (r.message ? " · " + esc(r.message) : "") : "Not run yet") + " · " + esc(j[2]) + "</div></div>";
-  }).join("") + '<div class="acts"><button class="sm prim" type="button" data-act="sync-now">Sync now</button></div>' +
+  }).join("") + '<div class="acts"><button class="sm prim" type="button" data-act="sync-now">Sync now</button><button class="sm" type="button" data-act="sync-stats">Sync ratings now</button></div>' +
     (syncMsg ? '<div class="banner info" role="status">' + esc(syncMsg) + "</div>" : "");
 }
 
@@ -1663,6 +1801,370 @@ function submitBracket(form) {
   }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
 }
 
+/* ---------- Teams: research, robot reports, predictor, event matches ---------- */
+var tmFilter = "";                                  // team list filter, kept across redraws
+var tmMode = "all";                                 // Teams list: "all" Hong Kong teams or the member's "watch"list
+var rf = null;                                      // open robot report form: { team, reportId, v: { field: value } }
+var pd = { red: ["", ""], blue: ["", ""] }, pdSort = "opr";   // predictor picks and table order
+var mtOpen = {};                                    // match groups opened on team pages, by event code
+var ROUND_NAMES = { 2: "Qualifications", 6: "Round of 16", 3: "Quarter-finals", 4: "Semi-finals", 5: "Finals" };
+
+function num1(x) { return (Math.round(Number(x) * 10) / 10).toFixed(1); }
+function recTxt(r) { return r ? r.wins + "-" + r.losses + "-" + r.ties : "–"; }
+function agoTxt(iso) { var a = ago(iso); return a === "now" ? "just now" : a + " ago"; }
+function tmLink(t, cls) { return '<button class="lnk mono' + (cls ? " " + cls : "") + '" type="button" data-act="tm-open" data-team="' + esc(t) + '">' + esc(t) + "</button>"; }
+function shortLabel(l) {
+  return String(l || "").replace(/Qualifier\s*#?/i, "Q").replace(/Quarterfinal\s*#?/i, "QF").replace(/Semifinal\s*#?/i, "SF")
+    .replace(/Round\s*of\s*16\s*#?/i, "R16-").replace(/^Final\s*#?/i, "F").replace(/\s+/g, "");
+}
+function normT(x) { var t = String(x || "").toUpperCase().replace(/\s+/g, ""); return TEAM_RE.test(t) ? t : ""; }
+
+/* list */
+function teamRow(t) {
+  var r = t.rating;
+  return '<button class="card tap trow" type="button" data-act="tm-open" data-team="' + esc(t.team) + '">' +
+    '<div class="row"><b class="mono">' + esc(t.team) + '</b><span class="tnm">' + esc(t.name) + "</span>" +
+    (t.reports ? '<span class="chip">' + t.reports + " robot report" + (t.reports === 1 ? "" : "s") + "</span>" : "") + "</div>" +
+    (t.organisation ? '<div class="sub">' + esc(t.organisation) + "</div>" : "") +
+    '<div class="tst">' + (r ? "<span>OPR <b>" + num1(r.opr) + "</b></span><span>Elo <b>" + fmt(r.elo) + "</b></span><span>W-L-T <b>" + recTxt(r) + "</b></span>"
+      : "<span>Not rated yet</span>") + "</div></button>";
+}
+function watchRow(w) {
+  var r = w.rating, rep = w.report, ne = w.nextEvent, nowMs = Date.now();
+  var robot = rep ? [rep.lift, rep.intake, rep.drivetrain, rep.tech].filter(Boolean).join(" · ") : "";
+  var soon = ne && Date.parse(ne.startAt) - nowMs < 864e5;
+  return '<div class="wwrap"><button class="card tap trow" type="button" data-act="tm-open" data-team="' + esc(w.team) + '">' +
+    '<div class="row"><b class="mono">★ ' + esc(w.team) + '</b><span class="tnm">' + esc(w.name) + "</span></div>" +
+    (w.organisation ? '<div class="sub">' + esc(w.organisation) + "</div>" : "") +
+    '<div class="tst">' + (r ? "<span>OPR <b>" + num1(r.opr) + "</b></span><span>Elo <b>" + fmt(r.elo) + "</b></span><span>W-L-T <b>" + recTxt(r) + "</b></span>" : "<span>Not rated yet</span>") + "</div>" +
+    '<dl class="kv wkv"><dt>Next</dt><dd>' + (ne ? esc(ne.name) + ' <span class="sub">' + esc(eventWhen(ne)) + "</span>" : '<span class="sub">No upcoming event we know of</span>') + "</dd>" +
+    "<dt>Robot</dt><dd>" + (rep ? esc(robot) + ' <span class="sub">' + esc(rep.eventName || rep.eventCode) + "</span>" : '<span class="sub">No robot info yet</span>') + "</dd></dl>" +
+    (w.note ? '<div class="wnote"><span class="vh">Your note: </span>' + esc(w.note) + "</div>" : "") + "</button>" +
+    (soon ? '<button class="back bk-link" type="button" data-act="matches" data-code="' + esc(ne.eventCode) + '">' + esc(ne.name) + " matches</button>" : "") + "</div>";
+}
+function teamSegHTML(d) {
+  var n = (d.watch || []).length;
+  return '<button type="button" data-act="tm-mode" data-mode="all" class="buy ' + (tmMode === "all" ? "on" : "") + '" aria-pressed="' + (tmMode === "all") + '">All teams</button>' +
+    '<button type="button" data-act="tm-mode" data-mode="watch" class="buy ' + (tmMode === "watch" ? "on" : "") + '" aria-pressed="' + (tmMode === "watch") + '">Watchlist' + (n ? " (" + n + ")" : "") + "</button>";
+}
+function teamListHTML(d) {
+  var q = tmFilter.toUpperCase().replace(/\s+/g, "");
+  if (tmMode === "watch") {
+    var w = (d.watch || []).filter(function (t) { return !q || t.team.indexOf(q) === 0 || (t.name + " " + t.organisation + " " + t.note).toUpperCase().replace(/\s+/g, "").indexOf(q) >= 0; });
+    if (!(d.watch || []).length) return '<p class="sub" style="margin:0">No teams yet. Open a team and tap ☆ Watch to keep it here. Only you see your watchlist.</p>';
+    return w.length ? w.map(watchRow).join("") : '<p class="sub" style="margin:0">No watched team matches that.</p>';
+  }
+  var list = d.teams.filter(function (t) {
+    return !q || t.team.indexOf(q) === 0 || (t.name + " " + t.organisation).toUpperCase().replace(/\s+/g, "").indexOf(q) >= 0;
+  });
+  var hint = q && TEAM_RE.test(q) && !list.some(function (t) { return t.team === q; })
+    ? '<button class="card tap" type="button" data-act="tm-open" data-team="' + esc(q) + '"><b>Look up ' + esc(q) + '</b><span class="sub">Any team number, from events.vex.com</span></button>' : "";
+  return hint + (list.length ? list.map(teamRow).join("") : q ? "" : '<p class="sub" style="margin:0">No Hong Kong teams yet.</p>');
+}
+function drawTeams(d) {
+  var el = listEl();
+  if (el.querySelector("#tm-list") && el.querySelector("#ts-q")) {
+    el.querySelector("#tm-seg").innerHTML = teamSegHTML(d);
+    el.querySelector("#tm-head").textContent = tmMode === "watch" ? "Your watchlist" : "Hong Kong teams";
+    el.querySelector("#tm-list").innerHTML = teamListHTML(d); markSelected(); return;
+  }
+  el.innerHTML = "<h2>Teams</h2>" +
+    '<form id="f-ts" class="tsearch" role="search" novalidate><label class="vh" for="ts-q">Team number or name</label>' +
+    '<input id="ts-q" class="team" autocomplete="off" autocapitalize="characters" placeholder="Team number or name" value="' + esc(tmFilter) + '">' +
+    '<button class="sm prim" type="submit">Open</button></form>' +
+    '<button class="card tap" type="button" data-act="predict"><b>Match predictor</b><span class="sub">Pick 2 v 2 and see who the models favour</span></button>' +
+    '<div class="seg" id="tm-seg" role="group" aria-label="Which teams">' + teamSegHTML(d) + "</div>" +
+    '<h2 class="grp" id="tm-head">' + (tmMode === "watch" ? "Your watchlist" : "Hong Kong teams") + '</h2><div id="tm-list" class="stack" style="gap:8px">' + teamListHTML(d) + "</div>";
+  markSelected();
+}
+function drawTeamPrompt() {
+  $("#detail").innerHTML = '<div class="pick"><b>Pick a team</b><p>Look up awards, rankings and matches, and what people saw each robot run. Or try the match predictor.</p>' +
+    '<button class="sm prim" type="button" data-act="predict">Match predictor</button></div>';
+}
+function teamSearch(form) {
+  var raw = form.querySelector("#ts-q").value, t = normT(raw);
+  if (t) { go({ name: "team", team: t }); return; }
+  var d = cache.teams, q = raw.toUpperCase().replace(/\s+/g, "");
+  var hit = d && d.teams.filter(function (x) { return (x.team + x.name + x.organisation).toUpperCase().replace(/\s+/g, "").indexOf(q) >= 0; });
+  if (hit && hit.length === 1) go({ name: "team", team: hit[0].team });
+  else toast(q ? "Type a team number, like 2011C." : "Type a team number.");
+}
+
+/* team page */
+var rrOptions = { lift: [], intake: [], drivetrain: [] };
+var RR_FIELDS = [["lift", "Lift", "liftOther"], ["intake", "Intake", "intakeOther"], ["drivetrain", "Drivetrain", "driveOther"]];
+function rrOptsHTML(f, v) {
+  var list = rrOptions[f[0]] || [], val = v[f[0]] || "";
+  return '<fieldset class="opts"><legend>' + f[1] + "</legend>" + list.map(function (o) {
+    return '<label class="opt"><input type="radio" name="' + f[0] + '" value="' + esc(o) + '"' + (val === o ? " checked" : "") + "><span>" + esc(o) + "</span></label>";
+  }).join("") + '<input class="oth" name="' + f[2] + '" maxlength="30" autocomplete="off" placeholder="Which ' + f[1].toLowerCase() + '?" aria-label="Other ' + f[1].toLowerCase() + '" value="' + esc(v[f[2]] || "") + '"' + (val === "Other" ? "" : " hidden") + ">" +
+    errSpan(f[0]) + "</fieldset>";
+}
+function rrEvents(t) {
+  if (t.events.length) return t.events;
+  var evs = cache.markets ? cache.markets.events : [];
+  return evs.filter(function (e) { return Date.parse(e.startAt) - Date.now() < 30 * 864e5; }).slice().reverse();
+}
+function rrFormHTML(t) {
+  var v = rf.v, evs = rrEvents(t);
+  if (!evs.length) return '<div class="rform"><p class="sub" style="margin:0">This team\'s events can\'t be loaded right now, so there\'s nothing to attach a report to. Try again later.</p><div class="acts"><button class="sm" type="button" data-act="rr-cancel">Close</button></div></div>';
+  return '<form id="f-rr" class="rform" novalidate><b>' + (rf.reportId ? "Edit robot info" : "Add robot info") + " · " + esc(t.team) + "</b>" +
+    '<div class="field"><label for="rr-ev">Seen at</label><select id="rr-ev" name="eventCode"><option value="">Pick an event</option>' +
+    evs.map(function (e) { return '<option value="' + esc(e.eventCode) + '"' + (v.eventCode === e.eventCode ? " selected" : "") + ">" + esc(e.name) + " · " + esc(hkDay(e.startAt)) + "</option>"; }).join("") +
+    "</select>" + errSpan("event") + "</div>" +
+    RR_FIELDS.map(function (f) { return rrOptsHTML(f, v); }).join("") +
+    '<div class="field"><label for="rr-tech">Tech (optional)</label><input id="rr-tech" name="tech" maxlength="60" autocomplete="off" placeholder="e.g. odometry, PID, LemLib" value="' + esc(v.tech || "") + '"></div>' +
+    '<div class="field"><label for="rr-notes">Notes (optional)</label><textarea id="rr-notes" name="notes" maxlength="300" placeholder="Anything else worth knowing">' + esc(v.notes || "") + "</textarea></div>" +
+    '<p class="sub" style="margin:0">Everyone can see robot info. Your name isn\'t shown.</p>' +
+    '<div class="acts"><button class="sm prim" type="submit">Save</button><button class="sm" type="button" data-act="rr-cancel">Cancel</button></div></form>';
+}
+function rrCard(r) {
+  var kv = [["Lift", r.lift], ["Intake", r.intake], ["Drivetrain", r.drivetrain]];
+  if (r.tech) kv.push(["Tech", r.tech]);
+  var acts = r.mine ? '<button class="sm" type="button" data-act="rr-edit" data-rid="' + esc(r.reportId) + '">Edit</button><button class="sm danger" type="button" data-act="rr-del" data-rid="' + esc(r.reportId) + '">Delete</button>'
+    : me && me.isAdmin ? '<button class="sm danger" type="button" data-act="rr-del" data-rid="' + esc(r.reportId) + '">Remove</button>' : "";
+  return '<div class="card rr"><div class="row"><b>' + esc(r.eventName || r.eventCode) + "</b>" + (r.mine ? '<span class="chip mine">Yours</span>' : "") +
+    '<span class="meta">' + (r.updatedAt && r.updatedAt !== r.ts ? "edited " : "") + agoTxt(r.updatedAt || r.ts) + "</span></div>" +
+    '<dl class="kv">' + kv.map(function (x) { return "<dt>" + x[0] + "</dt><dd>" + esc(x[1]) + "</dd>"; }).join("") + "</dl>" +
+    (r.notes ? '<p class="rr-notes">' + esc(r.notes) + "</p>" : "") +
+    (r.by ? '<div class="sub">By ' + esc(r.by.name) + " · " + esc(r.by.team) + " (only admins see this)</div>" : "") +
+    (acts ? '<div class="acts">' + acts + "</div>" : "") + "</div>";
+}
+function mResult(m, team) {
+  if (!m.scored) return "";
+  var onRed = m.red.indexOf(team) >= 0, us = onRed ? m.redScore : m.blueScore, them = onRed ? m.blueScore : m.redScore;
+  return us > them ? '<span class="res up">W</span>' : us < them ? '<span class="res dn">L</span>' : '<span class="res">T</span>';
+}
+function mSide(list, score, won, me2) {
+  return '<span class="mal' + (won ? " w" : "") + '">' + list.map(function (x) { return x === me2 ? '<b class="mono">' + esc(x) + "</b>" : tmLink(x); }).join(" ") +
+    '<span class="sc">' + (score == null ? "" : esc(score)) + "</span></span>";
+}
+function teamMatchesHTML(t) {
+  if (!t.matches.length) return "";
+  var groups = [], by = {};
+  t.matches.forEach(function (m) { var k = m.eventCode || m.eventName; if (!by[k]) { by[k] = { code: m.eventCode, name: m.eventName, list: [] }; groups.push(by[k]); } by[k].list.push(m); });
+  return "<section class=\"stack\" style=\"gap:8px\"><h3>Matches this season</h3>" + groups.reverse().map(function (g, i) {
+    var w = 0, l = 0, ti = 0;
+    g.list.forEach(function (m) { var r = mResult(m, t.team); if (/>W</.test(r)) w++; else if (/>L</.test(r)) l++; else if (/>T</.test(r)) ti++; });
+    var key = t.team + "|" + (g.code || g.name), open = mtOpen[key] === undefined ? i === 0 : mtOpen[key];
+    return '<details class="mtg" data-mt="' + esc(key) + '"' + (open ? " open" : "") + "><summary>" + esc(g.name) + ' <span class="team">' + w + "-" + l + "-" + ti + "</span></summary>" +
+      '<div class="mlist">' + g.list.map(function (m) {
+        var red = m.scored && m.redScore > m.blueScore, blue = m.scored && m.blueScore > m.redScore;
+        return '<div class="mrow"><span class="ml mono">' + esc(shortLabel(m.label)) + "</span>" + mSide(m.red, m.scored ? m.redScore : null, red, t.team) +
+          '<span class="vs">v</span>' + mSide(m.blue, m.scored ? m.blueScore : null, blue, t.team) + (mResult(m, t.team) || '<span class="res">–</span>') + "</div>";
+      }).join("") + "</div></details>";
+  }).join("") + "</section>";
+}
+function drawTeam(res) {
+  var t = res.team, r = t.rating;
+  rrOptions = res.options || rrOptions;
+  if (rf && rf.team !== t.team) rf = null;
+  var place = [t.city, t.region && t.region !== t.city ? t.region : "", t.country && t.country !== t.region ? t.country : ""].filter(Boolean).join(", ");
+  var who = [t.name, t.organisation].filter(Boolean).join(" · "), more = [place, t.grade, t.robotName ? "Robot: " + t.robotName : ""].filter(Boolean).join(" · ");
+  var stats = '<div class="stats">' + [
+    [r ? num1(r.opr) : "–", "OPR"], [r ? num1(r.dpr) : "–", "DPR"], [r ? num1(r.ccwm) : "–", "CCWM"],
+    [r ? fmt(r.elo) : "–", "Elo"], [recTxt(r), "W-L-T"], [t.skills ? fmt(t.skills.total) : "–", "Best skills"]
+  ].map(function (x) { return '<div class="stat"><div class="v">' + esc(x[0]) + '</div><div class="k">' + x[1] + "</div></div>"; }).join("") + "</div>";
+  var robot = '<section class="stack" style="gap:10px"><div class="evhead"><h3>Robot</h3>' + (rf ? "" : '<button class="back bk-link" type="button" data-act="rr-new">Add robot info</button>') + "</div>" +
+    (rf ? rrFormHTML(t) : "") +
+    (t.reports.length ? t.reports.map(rrCard).join("") : rf ? "" : '<p class="sub" style="margin:0">No robot info yet. Saw this robot at a competition? Add what it runs.</p>') + "</section>";
+  var events = t.events.length ? '<section class="stack" style="gap:8px"><h3>Events this season</h3><table><thead><tr><th>Event</th><th class="num">Rank</th><th class="num">W-L-T</th></tr></thead><tbody>' +
+    t.events.map(function (e) {
+      var nm = e.tracked ? '<button class="lnk" type="button" data-act="matches" data-code="' + esc(e.eventCode) + '">' + esc(e.name) + "</button>" : esc(e.name);
+      var sub = [hkDay(e.startAt), e.division, e.rank ? "WP " + e.wp + " · AP " + e.ap + " · SP " + e.sp : ""].filter(Boolean).join(" · ");
+      return "<tr><td>" + nm + '<div class="team">' + esc(sub) + '</div></td><td class="num">' + (e.rank || "–") + '</td><td class="num">' + (e.rank ? e.wins + "-" + e.losses + "-" + e.ties : "–") + "</td></tr>";
+    }).join("") + "</tbody></table></section>" : "";
+  var seasons = [], bySeason = {};
+  t.awards.forEach(function (a) { var k = a.season || "Earlier"; if (!bySeason[k]) { bySeason[k] = []; seasons.push(k); } bySeason[k].push(a); });
+  var awards = '<section class="stack" style="gap:8px"><h3>Awards</h3>' + (seasons.length ? seasons.map(function (k) {
+    return '<div class="aw"><div class="sub">' + esc(k) + "</div><ul>" + bySeason[k].map(function (a) { return "<li><b>" + esc(a.title) + '</b> <span class="sub">' + esc(a.eventName) + "</span></li>"; }).join("") + "</ul></div>";
+  }).join("") : '<p class="sub" style="margin:0">' + (t.found ? "No awards yet." : "–") + "</p>") + "</section>";
+  detailEl().innerHTML = '<div id="tm" class="stack">' +
+    '<button class="back" type="button" data-act="teams-back">← Teams</button>' +
+    '<div><div class="evhead"><h2>' + esc(t.team) + "</h2>" + (t.hk ? '<span class="chip">Hong Kong</span>' : "") +
+    '<button class="sm wbtn' + (t.watching ? " on" : "") + '" type="button" data-act="wl-toggle" aria-pressed="' + !!t.watching + '">' + (t.watching ? "★ Watching" : "☆ Watch") + "</button></div>" +
+    (who ? '<div class="q">' + esc(who) + "</div>" : "") + (more ? '<div class="sub">' + esc(more) + "</div>" : "") + "</div>" +
+    (t.watching ? '<form id="f-wn" class="wn" novalidate><label for="wn-t">Your note (only you see it)</label><div class="tsearch"><input id="wn-t" name="note" maxlength="200" autocomplete="off" placeholder="e.g. good alliance pick, weak auton" value="' + esc(t.note) + '"><button class="sm" type="submit">Save</button></div></form>' : "") +
+    (t.liveError ? '<div class="banner info">' + esc(t.liveError) + "</div>" : "") +
+    stats + '<p class="sub" style="margin:-12px 0 0">' + (r ? "Ratings from " + r.played + " scored match" + (r.played === 1 ? "" : "es") + " this season. " : "Not rated yet: no scored matches at the events we track. ") +
+    '<button class="lnk" type="button" data-act="predict">Predictor</button></p>' +
+    robot + events + awards + teamMatchesHTML(t) + "</div>";
+  markSelected();
+}
+function rrRead(form) {
+  var v = {};
+  ["eventCode", "lift", "liftOther", "intake", "intakeOther", "drivetrain", "driveOther", "tech", "notes"].forEach(function (k) {
+    var el = form.elements[k];
+    if (!el) return;
+    v[k] = el.length !== undefined && el.tagName !== "SELECT" ? (Array.prototype.filter.call(el, function (x) { return x.checked; })[0] || {}).value || "" : el.value;
+  });
+  return v;
+}
+function rrSync(form, target) {
+  if (!rf) return;
+  rf.v = rrRead(form);
+  var f = target && target.closest && target.closest("fieldset,.field"), err = f && f.querySelector("[data-err]");
+  if (err) { err.hidden = true; err.textContent = ""; }
+  RR_FIELDS.forEach(function (f) {
+    var o = form.elements[f[2]]; if (!o) return;
+    var show = rf.v[f[0]] === "Other";
+    if (o.hidden === show) { o.hidden = !show; if (show) o.focus(); }
+  });
+}
+function rrSubmit(form) {
+  clearErrs(form);
+  var t = view.team, v = rrRead(form);
+  var spec = { team: t, eventCode: v.eventCode, lift: v.lift, liftOther: v.liftOther, intake: v.intake, intakeOther: v.intakeOther,
+    drivetrain: v.drivetrain, driveOther: v.driveOther, tech: v.tech, notes: v.notes };
+  if (rf && rf.reportId) spec.reportId = rf.reportId;
+  busyBtn(form.querySelector('[type="submit"]'), call("saveRobotReport", token, spec)).then(function () {
+    rf = null; toast("Robot info saved."); reloadTeam();
+  }, function (e) { if (e.code !== "AUTH") showErr(form, e); });
+}
+/** The team list changed (watchlist): refetch it now if it is on screen beside us, else on the next visit. */
+function reloadTeamList() {
+  delete cache.teams;
+  if (splitView() && $("#main").getAttribute("data-split") === "teams") fetchView({ name: "teams" }, viewSeq, true);
+}
+function wnSubmit(form) {
+  var c = cache[viewKey(view)], t = c && c.team; if (!t) return;
+  busyBtn(form.querySelector('[type="submit"]'), call("setWatchNote", token, t.team, form.elements.note.value)).then(function (r) {
+    t.note = r.note; form.elements.note.value = r.note; toast("Note saved."); reloadTeamList();
+  }, fail);
+}
+function reloadTeam() {
+  var v = view; if (v.name !== "team") return;
+  delete cache.teams;
+  call("getTeam", token, v.team).then(function (res) { cache[viewKey(v)] = res; if (view === v) drawTeam(res); }, fail);
+}
+function rrFromReport(r) {
+  var v = { eventCode: r.eventCode, tech: r.tech, notes: r.notes };
+  RR_FIELDS.forEach(function (f) {
+    var x = r[f[0]], list = rrOptions[f[0]] || [];
+    if (list.indexOf(x) >= 0) v[f[0]] = x; else { v[f[0]] = "Other"; v[f[2]] = x; }
+  });
+  return v;
+}
+function teamAct(act, b) {
+  var c = cache[viewKey(view)], t = c && c.team;
+  if (act === "rr-new" && t) {
+    var seen = t.events.filter(function (e) { return Date.parse(e.startAt) <= Date.now(); })[0];   // the latest event that has started
+    rf = { team: t.team, reportId: null, v: { eventCode: seen ? seen.eventCode : "" } };
+    drawTeam(c); var s = $("#f-rr select"); if (s) s.focus();
+  }
+  else if (act === "rr-cancel" && t) { rf = null; drawTeam(c); }
+  else if (act === "rr-edit" && t) {
+    var r = t.reports.filter(function (x) { return x.reportId === b.getAttribute("data-rid"); })[0];
+    if (!r) return;
+    rf = { team: t.team, reportId: r.reportId, v: rrFromReport(r) };
+    drawTeam(c);
+    var f = $("#f-rr"); if (f) f.scrollIntoView({ block: "nearest" });
+  }
+  else if (act === "rr-del") {
+    if (!confirm(b.textContent === "Remove" ? "Remove this report for everyone?" : "Delete your report?")) return;
+    busyBtn(b, call("deleteRobotReport", token, b.getAttribute("data-rid"))).then(function () { toast("Report deleted."); reloadTeam(); }, fail);
+  }
+  else if (act === "tm-mode") { tmMode = b.getAttribute("data-mode"); if (cache.teams) drawTeams(cache.teams); }
+  else if (act === "wl-toggle" && t) {
+    var on = !t.watching;
+    busyBtn(b, call("watchTeam", token, t.team, on)).then(function (r) {
+      t.watching = r.watching; if (!r.watching) t.note = "";
+      if (view.name === "team" && view.team === t.team) drawTeam(c);
+      toast(r.watching ? t.team + " is on your watchlist." : t.team + " is off your watchlist.");
+      reloadTeamList();
+    }, fail);
+  }
+  else if (act === "pd-sort") { pdSort = b.getAttribute("data-sort"); if (cache.predict) drawPredict(cache.predict); }
+}
+
+/* predictor */
+function pdModels(d) {
+  var opr = {}, elo = {};
+  d.ratings.forEach(function (r) { opr[r.team] = r.opr; elo[r.team] = r.elo; });
+  return { opr: { opr: opr, mean: d.model.mean, sigma: d.model.sigma }, elo: { elo: elo, eloStart: d.model.eloStart } };
+}
+function pctCalled(s) { return s.total ? Math.round(100 * s.right / s.total) + "%" : "–"; }
+function favTxt(p) { return p >= 0.5 ? "Red " + pct(p) : "Blue " + pct(1 - p); }
+function pdOut() {
+  var d = cache.predict, el = $("#pd-out");
+  if (!d || !el) return;
+  var known = {}; d.ratings.forEach(function (r) { known[r.team] = true; });
+  var notes = [], red = [], blue = [];
+  [["red", red], ["blue", blue]].forEach(function (s) {
+    pd[s[0]].forEach(function (raw) {
+      if (!String(raw).trim()) return;
+      var t = normT(raw);
+      if (!t) { notes.push(esc(raw) + " isn't a team number."); return; }
+      if (!known[t]) notes.push(esc(t) + " has no rated matches yet, so it counts as an average team.");
+      s[1].push(t);
+    });
+  });
+  if (!red.length || !blue.length) { el.innerHTML = '<p class="sub" style="margin:0">Pick at least one team on each side.</p>' + (notes.length ? '<p class="bad">' + notes.join(" ") + "</p>" : ""); return; }
+  var m = pdModels(d), po = predOpr(m.opr, red, blue), pe = predElo(m.elo, red, blue);
+  function card(name, p, extra) {
+    return '<div class="card"><div class="row"><span class="big">' + favTxt(p) + "</span><span>" + name + '</span></div><div class="bar2" role="img" aria-label="Red ' + pct(p) + ", Blue " + pct(1 - p) + '"><i style="width:' + (p * 100).toFixed(1) + '%"></i></div><div class="row sub"><span>Red ' + red.join(" ") + '</span><span class="meta">Blue ' + blue.join(" ") + "</span></div>" + (extra || "") + "</div>";
+  }
+  el.innerHTML = card("OPR", po.pRed, '<div class="sub">Predicted score: Red ' + fmt(po.red) + " – " + fmt(po.blue) + " Blue</div>") + card("Elo", pe.pRed) +
+    (notes.length ? '<p class="sub" style="margin:0">' + notes.join(" ") + "</p>" : "");
+}
+function drawPredict(d) {
+  var s = d.stats;
+  var rows = d.ratings.slice().sort(function (a, b) { return pdSort === "elo" ? b.elo - a.elo : b.opr - a.opr; }).slice(0, 30);
+  function inp(side, i) {
+    return '<input class="team" data-pd="' + side + i + '" list="pd-list" autocomplete="off" autocapitalize="characters" aria-label="' + (side === "red" ? "Red" : "Blue") + " team " + (i + 1) + '" placeholder="Team ' + (i + 1) + '" value="' + esc(pd[side][i]) + '">';
+  }
+  detailEl().innerHTML = '<div id="pdv" class="stack">' +
+    '<button class="back" type="button" data-act="teams-back">← Teams</button><h2>Match predictor</h2>' +
+    (s.updatedAt ? "" : '<div class="banner info">Ratings aren\'t built yet. They update every morning at 05:30 HKT.</div>') +
+    '<datalist id="pd-list">' + d.ratings.map(function (r) { return '<option value="' + esc(r.team) + '">'; }).join("") + "</datalist>" +
+    '<div class="pd"><div class="pd-al"><h3>Red alliance</h3>' + inp("red", 0) + inp("red", 1) + '</div><div class="pd-al"><h3>Blue alliance</h3>' + inp("blue", 0) + inp("blue", 1) + "</div></div>" +
+    '<div id="pd-out" class="stack" style="gap:10px"></div>' +
+    '<section class="stack" style="gap:8px"><h3>How good are the models?</h3>' +
+    '<div class="stats"><div class="stat"><div class="v">' + pctCalled(s.opr) + '</div><div class="k">OPR called</div></div><div class="stat"><div class="v">' + pctCalled(s.elo) + '</div><div class="k">Elo called</div></div><div class="stat"><div class="v">' + fmt(s.matches) + '</div><div class="k">Matches</div></div></div>' +
+    '<p class="sub" style="margin:0">Each past match was predicted using only events that had already finished, then checked. OPR called ' + fmt(s.opr.right) + " of " + fmt(s.opr.total) + " winners (Brier " + s.opr.brier.toFixed(3) + "), Elo " + fmt(s.elo.right) + " of " + fmt(s.elo.total) + " (Brier " + s.elo.brier.toFixed(3) + "). Lower Brier is better; a coin flip scores 0.250." +
+    (s.updatedAt ? " From " + fmt(s.events) + " events, updated " + esc(hkFull(s.updatedAt)) + "." : "") + "</p>" +
+    '<ul class="rules"><li><b>OPR</b> estimates the points each team adds to its alliance. Predicted score = the two teams added up; the win chance allows for how far off past predictions were.</li>' +
+    "<li><b>Elo</b> only looks at wins and losses. Everyone starts at 1500 and gains or loses points after every match.</li></ul></section>" +
+    '<section class="stack" style="gap:8px"><h3>Top rated</h3><div class="seg" role="group" aria-label="Sort by"><button type="button" data-act="pd-sort" data-sort="opr" class="buy ' + (pdSort === "opr" ? "on" : "") + '">By OPR</button><button type="button" data-act="pd-sort" data-sort="elo" class="buy ' + (pdSort === "elo" ? "on" : "") + '">By Elo</button></div>' +
+    '<table><thead><tr><th>#</th><th>Team</th><th class="num">OPR</th><th class="num">Elo</th><th class="num">W-L-T</th></tr></thead><tbody>' +
+    (rows.length ? rows.map(function (r, i) { return '<tr><td class="rank">' + (i + 1) + "</td><td>" + tmLink(r.team) + '</td><td class="num">' + num1(r.opr) + '</td><td class="num">' + fmt(r.elo) + '</td><td class="num">' + recTxt(r) + "</td></tr>"; }).join("") : '<tr><td colspan="5">No ratings yet.</td></tr>') +
+    "</tbody></table></section></div>";
+  pdOut();
+  markSelected();
+}
+
+/* event matches */
+function called(p, m) {
+  if (!p || m.blind || !m.scored || m.redScore === m.blueScore || (m.redScore === 0 && m.blueScore === 0)) return 0;
+  if (p.pRed === 0.5) return 0.5;
+  return (p.pRed > 0.5) === (m.redScore > m.blueScore) ? 1 : -1;
+}
+function calledMark(c) { return c === 1 ? ' <span class="up" aria-label="right">✓</span>' : c === -1 ? ' <span class="dn" aria-label="wrong">✗</span>' : ""; }
+function drawMatches(d) {
+  var ms = d.matches, tally = { opr: [0, 0], elo: [0, 0] };
+  ms.forEach(function (m) {
+    ["opr", "elo"].forEach(function (k) { var c = called(m[k], m); if (c) { tally[k][1]++; if (c > 0) tally[k][0] += c; } });
+  });
+  var divs = {}; ms.forEach(function (m) { divs[m.division] = true; });
+  var multi = Object.keys(divs).length > 1, h = "", lastHead = "";
+  ms.forEach(function (m) {
+    var head = (multi ? m.division + " · " : "") + (ROUND_NAMES[m.round] || "Round " + m.round);
+    if (head !== lastHead) { h += '<h3 class="mt-h">' + esc(head) + "</h3>"; lastHead = head; }
+    var redW = m.scored && m.redScore > m.blueScore, blueW = m.scored && m.blueScore > m.redScore;
+    var co = called(m.opr, m), ce = called(m.elo, m);
+    h += '<div class="card mt"><div class="row"><b>' + esc(m.label) + "</b>" + (m.ts ? '<span class="meta">' + esc(hkFmt(m.ts, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })) + "</span>" : "") + "</div>" +
+      '<div class="mt-al' + (redW ? " w" : "") + '"><span class="k">Red</span><span class="tms">' + m.red.map(function (x) { return tmLink(x); }).join(" ") + '</span><span class="sc">' + (m.scored ? esc(m.redScore) : "") + "</span></div>" +
+      '<div class="mt-al' + (blueW ? " w" : "") + '"><span class="k">Blue</span><span class="tms">' + m.blue.map(function (x) { return tmLink(x); }).join(" ") + '</span><span class="sc">' + (m.scored ? esc(m.blueScore) : "") + "</span></div>" +
+      '<div class="sub">' + (m.blind ? "No earlier matches to predict from." : (m.opr ? "OPR " + favTxt(m.opr.pRed) + calledMark(co) + " (" + fmt(m.opr.red) + "–" + fmt(m.opr.blue) + ")" : "OPR –") + " · " + (m.elo ? "Elo " + favTxt(m.elo.pRed) + calledMark(ce) : "Elo –")) + "</div></div>";
+  });
+  detailEl().innerHTML = '<div id="mtv" class="stack">' +
+    '<button class="back" type="button" data-act="mt-back">← Back</button>' +
+    '<div><div class="evhead"><h2>' + esc(d.event.name) + '</h2><span class="code">' + esc(d.event.eventCode) + "</span>" + (d.live ? '<span class="chip open">Live</span>' : "") + "</div><h3>" + esc(eventWhen(d.event)) + "</h3></div>" +
+    '<div class="stats"><div class="stat"><div class="v">' + (tally.opr[1] ? fmt(tally.opr[0]) + "/" + tally.opr[1] : "–") + '</div><div class="k">OPR called</div></div><div class="stat"><div class="v">' + (tally.elo[1] ? fmt(tally.elo[0]) + "/" + tally.elo[1] : "–") + '</div><div class="k">Elo called</div></div><div class="stat"><div class="v">' + ms.length + '</div><div class="k">Matches</div></div></div>' +
+    '<p class="sub" style="margin:-12px 0 0">Predictions for finished events were made from earlier events only. Matches added today use the latest ratings. Percentages are the favourite\'s chance to win.</p>' +
+    (ms.length ? h : '<p class="loading">No matches yet. The schedule shows up on events.vex.com on the day.</p>') + "</div>";
+}
+
 /* ---------- one delegated handler for the app body ---------- */
 $("#main").addEventListener("click", function (e) {
   var b = e.target.closest("[data-act]"); if (!b || b.disabled) return;
@@ -1686,19 +2188,40 @@ $("#main").addEventListener("click", function (e) {
   else if (act === "quick") { setAmt(b.getAttribute("data-q")); updateQuote(); }
   else if (act === "confirm") doTrade();
   else if (act === "bracket") go({ name: "bracket", code: b.getAttribute("data-code") });
+  else if (act === "tm-open") go({ name: "team", team: b.getAttribute("data-team") });
+  else if (act === "predict") go({ name: "predict" });
+  else if (act === "teams-back") go({ name: "teams" });
+  else if (act === "matches") go({ name: "matches", code: b.getAttribute("data-code"), tab: tabOf(view), back: view });
+  else if (act === "mt-back") go(view.back || listViewOf(view));
+  else if (act.indexOf("rr-") === 0 || act.indexOf("pd-") === 0 || act.indexOf("wl-") === 0 || act === "tm-mode") teamAct(act, b);
   else if (act.indexOf("bkp-") === 0) bkAct(act, b);
   else if (act.indexOf("sg-") === 0) sgAct(act, b);
   else adminAct(act, b);
 });
-$("#main").addEventListener("submit", function (e) { e.preventDefault(); if (e.target.id === "f-sg") sgSubmit(e.target); else adminSubmit(e.target); });
+$("#main").addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (e.target.id === "f-sg") sgSubmit(e.target);
+  else if (e.target.id === "f-ts") teamSearch(e.target);
+  else if (e.target.id === "f-rr") rrSubmit(e.target);
+  else if (e.target.id === "f-wn") wnSubmit(e.target);
+  else adminSubmit(e.target);
+});
+$("#main").addEventListener("toggle", function (e) {
+  var k = e.target.getAttribute && e.target.getAttribute("data-mt");
+  if (k) mtOpen[k] = e.target.open;
+}, true);
 $("#main").addEventListener("change", function (e) {
   var id = e.target.id;
+  if (e.target.closest && e.target.closest("#f-rr")) { rrSync(e.target.closest("#f-rr"), e.target); return; }
   if (id === "sg-event" || id === "sg-kind" || id === "sg-all") { sgSync(); return; }
   if (e.target.getAttribute && e.target.getAttribute("data-bk-size") !== null) { bkRows(e.target.closest("form")); return; }
   if (id === "nm-tpl" || id === "nm-event" || id === "nm-kind") prefill(id === "nm-tpl" ? "tpl" : id);
 });
 $("#main").addEventListener("input", function (e) {
   var id = e.target.id;
+  if (id === "ts-q") { tmFilter = e.target.value; if (cache.teams) drawTeams(cache.teams); return; }
+  if (e.target.getAttribute && e.target.getAttribute("data-pd")) { var pk = e.target.getAttribute("data-pd"); pd[pk.slice(0, -1)][Number(pk.slice(-1))] = e.target.value; pdOut(); return; }
+  if (e.target.closest && e.target.closest("#f-rr")) { rrSync(e.target.closest("#f-rr"), e.target); return; }
   if (id === "nm-a" || id === "nm-b2" || id === "nm-n") prefill(id);
   else if (id === "rs-text") $("#rs-go").disabled = e.target.value.trim() !== "RESET";
 });
@@ -1905,6 +2428,7 @@ $("#signout").addEventListener("click", function () {
   showLogin();
 });
 $("#tab-markets").addEventListener("click", function () { go({ name: "markets" }); });
+$("#tab-teams").addEventListener("click", function () { go({ name: "teams" }); });
 $("#tab-portfolio").addEventListener("click", function () { go({ name: "portfolio" }); });
 $("#tab-leaders").addEventListener("click", function () { go({ name: "leaders" }); });
 $("#tab-admin").addEventListener("click", function () { if (me && me.isAdmin) go({ name: "admin" }); });
