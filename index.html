@@ -1826,7 +1826,7 @@ function teamRow(t) {
     '<div class="row"><b class="mono">' + esc(t.team) + '</b><span class="tnm">' + esc(t.name) + "</span>" +
     (t.reports ? '<span class="chip">' + t.reports + " robot report" + (t.reports === 1 ? "" : "s") + "</span>" : "") + "</div>" +
     (t.organisation ? '<div class="sub">' + esc(t.organisation) + "</div>" : "") +
-    '<div class="tst">' + (r ? "<span>OPR <b>" + num1(r.opr) + "</b></span><span>Elo <b>" + fmt(r.elo) + "</b></span><span>W-L-T <b>" + recTxt(r) + "</b></span>"
+    '<div class="tst">' + (r ? "<span>OPR <b>" + num1(r.opr) + "</b></span><span>Elo <b>" + fmt(r.chessElo) + "</b></span><span>W-L-T <b>" + recTxt(r) + "</b></span>"
       : "<span>Not rated yet</span>") + "</div></button>";
 }
 function watchRow(w) {
@@ -1836,7 +1836,7 @@ function watchRow(w) {
   return '<div class="wwrap"><button class="card tap trow" type="button" data-act="tm-open" data-team="' + esc(w.team) + '">' +
     '<div class="row"><b class="mono">★ ' + esc(w.team) + '</b><span class="tnm">' + esc(w.name) + "</span></div>" +
     (w.organisation ? '<div class="sub">' + esc(w.organisation) + "</div>" : "") +
-    '<div class="tst">' + (r ? "<span>OPR <b>" + num1(r.opr) + "</b></span><span>Elo <b>" + fmt(r.elo) + "</b></span><span>W-L-T <b>" + recTxt(r) + "</b></span>" : "<span>Not rated yet</span>") + "</div>" +
+    '<div class="tst">' + (r ? "<span>OPR <b>" + num1(r.opr) + "</b></span><span>Elo <b>" + fmt(r.chessElo) + "</b></span><span>W-L-T <b>" + recTxt(r) + "</b></span>" : "<span>Not rated yet</span>") + "</div>" +
     '<dl class="kv wkv"><dt>Next</dt><dd>' + (ne ? esc(ne.name) + ' <span class="sub">' + esc(eventWhen(ne)) + "</span>" : '<span class="sub">No upcoming event we know of</span>') + "</dd>" +
     "<dt>Robot</dt><dd>" + (rep ? esc(robot) + ' <span class="sub">' + esc(rep.eventName || rep.eventCode) + "</span>" : '<span class="sub">No robot info yet</span>') + "</dd></dl>" +
     (w.note ? '<div class="wnote"><span class="vh">Your note: </span>' + esc(w.note) + "</div>" : "") + "</button>" +
@@ -1963,7 +1963,7 @@ function drawTeam(res) {
   var who = [t.name, t.organisation].filter(Boolean).join(" · "), more = [place, t.grade, t.robotName ? "Robot: " + t.robotName : ""].filter(Boolean).join(" · ");
   var stats = '<div class="stats">' + [
     [r ? num1(r.opr) : "–", "OPR"], [r ? num1(r.dpr) : "–", "DPR"], [r ? num1(r.ccwm) : "–", "CCWM"],
-    [r ? fmt(r.elo) : "–", "Elo"], [recTxt(r), "W-L-T"], [t.skills ? fmt(t.skills.total) : "–", "Best skills"]
+    [r ? fmt(r.chessElo) : "–", "Elo"], [recTxt(r), "W-L-T"], [t.skills ? fmt(t.skills.total) : "–", "Best skills"]
   ].map(function (x) { return '<div class="stat"><div class="v">' + esc(x[0]) + '</div><div class="k">' + x[1] + "</div></div>"; }).join("") + "</div>";
   var robot = '<section class="stack" style="gap:10px"><div class="evhead"><h3>Robot</h3>' + (rf ? "" : '<button class="back bk-link" type="button" data-act="rr-new">Add robot info</button>') + "</div>" +
     (rf ? rrFormHTML(t) : "") +
@@ -2124,10 +2124,10 @@ function drawPredict(d) {
     '<p class="sub" style="margin:0">Each past match was predicted using only events that had already finished, then checked. OPR called ' + fmt(s.opr.right) + " of " + fmt(s.opr.total) + " winners (Brier " + s.opr.brier.toFixed(3) + "), Elo " + fmt(s.elo.right) + " of " + fmt(s.elo.total) + " (Brier " + s.elo.brier.toFixed(3) + "). Lower Brier is better; a coin flip scores 0.250." +
     (s.updatedAt ? " From " + fmt(s.events) + " events, updated " + esc(hkFull(s.updatedAt)) + "." : "") + "</p>" +
     '<ul class="rules"><li><b>OPR</b> estimates the points each team adds to its alliance. Predicted score = the two teams added up; the win chance allows for how far off past predictions were.</li>' +
-    "<li><b>Elo</b> only looks at wins and losses. Everyone starts at 1500 and gains or loses points after every match.</li></ul></section>" +
+    "<li><b>Elo</b> only looks at wins and losses: every team gains or loses points after every match, more for beating a stronger alliance. It is shown on chess.com's rapid scale by rank: the middle team is about 700, the top 10% 1500 and up, the top 1% 2000 and up.</li></ul></section>" +
     '<section class="stack" style="gap:8px"><h3>Top rated</h3><div class="seg" role="group" aria-label="Sort by"><button type="button" data-act="pd-sort" data-sort="opr" class="buy ' + (pdSort === "opr" ? "on" : "") + '">By OPR</button><button type="button" data-act="pd-sort" data-sort="elo" class="buy ' + (pdSort === "elo" ? "on" : "") + '">By Elo</button></div>' +
     '<table><thead><tr><th>#</th><th>Team</th><th class="num">OPR</th><th class="num">Elo</th><th class="num">W-L-T</th></tr></thead><tbody>' +
-    (rows.length ? rows.map(function (r, i) { return '<tr><td class="rank">' + (i + 1) + "</td><td>" + tmLink(r.team) + '</td><td class="num">' + num1(r.opr) + '</td><td class="num">' + fmt(r.elo) + '</td><td class="num">' + recTxt(r) + "</td></tr>"; }).join("") : '<tr><td colspan="5">No ratings yet.</td></tr>') +
+    (rows.length ? rows.map(function (r, i) { return '<tr><td class="rank">' + (i + 1) + "</td><td>" + tmLink(r.team) + '</td><td class="num">' + num1(r.opr) + '</td><td class="num">' + fmt(r.chessElo) + '</td><td class="num">' + recTxt(r) + "</td></tr>"; }).join("") : '<tr><td colspan="5">No ratings yet.</td></tr>') +
     "</tbody></table></section></div>";
   pdOut();
   markSelected();
